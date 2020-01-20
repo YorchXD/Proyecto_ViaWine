@@ -2,6 +2,7 @@
 #define Entrada 8
 #define Salida  9
 #define Cajas   10
+#define pallets 11
 
   int cant = 0;
   unsigned long tiempo1 = 0;
