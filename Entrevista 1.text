@@ -1,0 +1,76 @@
+Consultas para la pagina web (entrevista 15 de enero)
+
+Resumen: Se sabe que es una empresa vitivinicola, y que el problema se encuentra en el proceso de produccion, es por ello que las preguntas iran enfocada en esta área para conocer como funciona. 
+
+Item 1: Comprendiendo y evaluando el problema
+
+	¿Cómo determinan el éxito de la producción?
+	¿Que problemas interfieren con el éxito de la produccion?
+
+	Para cada problema:
+		¿Por qué existe este problema?
+		¿Como lo resuelven ahora?
+		¿Como le gustaria que se resolviera?
+
+Item 2: Conociendo la aplicacion
+	
+	La solucion de los registro de datos se puede realizar a traves de una aplicación web, entonces:
+
+	¿Qué información se necesita guardar en el sistema y a que corresponde cada información?
+	¿Qué funciones debe poseer el sistema y cual seria el fin de estas?
+	¿Actualmente, qué sistema o mecanismo se usa para lo que se quiere?
+	¿El sistema tendrá comunicación con otros sistemas?, ¿Cuales serian?
+	¿La aplicación solo se utilizará en un equipo o se estará accediendo desde varios equipos/dispositivos a la vez?
+	¿Cuantos usuarios utilzarán la aplicación? /¿Quienes usarán la aplicación?
+	Si la aplicación es usada por más de un usuario, ¿Qué privilegios tiene cada usuario?
+	¿Que podrá visualizar cada usuario?
+	¿Cuantos items requiere la pagina? ¿Cuales son?
+	¿Que tipo de contenido va a tener cada ítem?
+	¿Existe un ítem más importante que otro? 
+
+
+Resumen de Problemas: 
+	no se sabe la velocidad de producion
+	Causasa de detencion del proceso
+
+
+Propuesta de solucion: se registraran los datos de  entrada y salida de una botella en etiquetado, guardando la fecha y hora de cada acontecimiento. Estos datos son registrado en la base de datos
+
+1.- Ingresar la planificacion al sistema
+2.- Lectura de la planificacion desde los dispositivos ubicados en la cinta
+3.- Registro de lecturas de produccion de botellas en la etapa de etiquetado (fecha y hora de inicio y fin de etiquetado)
+4.- Registro de lecturas de empaque de botellas (registro de fecha y hora)
+5.- Monitoreo de estos procesos desde la plataforma web
+
+Dado al proceso anterior, ¿Cual es la finalidad de obtener estos datos? (probablemente diga que es para realizar reportes)
+Si no dice que tipo de reportes requiere se pregunta: ¿se requiere que se realicen reportes de estos datos? / ¿Qué tipo de reportes?
+
+
+NOTA: se requiere la planificacion de los pedidos... un ejemplo (ojala enviar esa planificación)
+
+
+
+
+
+Conversacion de día viernes 10 de enero
+
+
+charts de google -> generar graficos de la informacion historia guardada en la bd
+
+*La aplicación que se puede observar en la plataforma se obtendrá directamente desde la arduino.
+*Por otra parte esta información se debe guardar en un servidor local para realizar reportes historicos (podría anclarse a la plataforma web pero de momento se debe procesar estos datos con PA)
+
+
+
+Single sign on
+Averiguar iot
+Aplicación de proceso en pantalla (tiempo real)
+
+Las placas arduinos solo obtendran la informacion de los sensores y las enviarán a (?)
+
+
+1. del segundo sensor se envia el contador de botella
+2. luego se procede a enviar el proceso de caja
+3. la velocidad
+
+la api debe hacer dos llamadas una para las botellas que enviará 2 datos y otra para las cajas
