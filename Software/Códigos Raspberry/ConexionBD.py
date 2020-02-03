@@ -20,7 +20,7 @@ try:
     cursor.execute("SELECT TOP (10)* FROM [BD_100].[dbo].[ODBC NUEVA SEMANA FINANCIADA]") 
     row = cursor.fetchone() 
     while row: 
-        print(row)
+        print(row[4])
         row = cursor.fetchone()
     # OK! conexión exitosa
 except Exception as e:
