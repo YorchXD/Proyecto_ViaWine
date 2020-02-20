@@ -1,5 +1,4 @@
-USE [Automatizacion_ViaWine]
-GO
+
 
 INSERT INTO [dbo].[Orden]
            ([ordenFabricacion]
@@ -61,4 +60,3 @@ INSERT INTO [dbo].[Orden]
            ,[formatoCaja])
      VALUES
            (26254, 'DIRECTO', 'KANBAN', '14002618-18', 'Oveja Negra Rva NI Cabernet Franc Carmenere 2018 Corcho 12x750 LAT-H', 9600, 800, '2020-01-23', '15:15:24', '18:08:24', '12x750' )
-GO

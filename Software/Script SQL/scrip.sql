@@ -18,7 +18,7 @@ CREATE TABLE Orden (
     horaInicio Time (0),
     horaTermino Time (0),
     formatoCaja VARCHAR(256) NOT NULL,
-    estado Integer NOT NULL,
+    estado Integer DEFAULT ((0)) NOT NULL,
     PRIMARY KEY (ordenFabricacion)
 );
 
@@ -56,7 +56,6 @@ CREATE TABLE CantBotellas (
 );
 
 ALTER TABLE Botellas ADD FOREIGN KEY (refOrden) REFERENCES Orden(ordenFabricacion);
-ALTER TABLE [dbo].[Orden] ADD  CONSTRAINT [DF_Orden_estdo]  DEFAULT ((0)) FOR [estdo]
 ALTER TABLE Cajas ADD FOREIGN KEY (refOrden) REFERENCES Orden(ordenFabricacion);
 ALTER TABLE CanCajas ADD FOREIGN KEY (refOrden) REFERENCES Orden(ordenFabricacion);
 ALTER TABLE CantBotellas ADD FOREIGN KEY (refOrden) REFERENCES Orden(ordenFabricacion);
