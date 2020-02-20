@@ -1,0 +1,133 @@
+﻿@model IEnumerable<ViaWines_Automatizacion.Models.Orden>
+
+@{
+    ViewData["Title"] = "Planificación";
+}
+
+<section class="content-header">
+    <h1 calss="col-xs-12">
+        Planificación
+        <small>Del día</small>
+    </h1>
+
+    @using (Html.BeginForm("Planificacion", "Planificacion", FormMethod.Post, new { @style = "border:none" }))
+    {
+        <div class="datepicker-in-title">
+            <div class="input-group date input-group-sm" style="width: 200px;">
+                <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                </div>
+                <input type="text" class="form-control pull-right" id="datepicker" name="fecha">
+                <div class="input-group-btn">
+                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+        </div>
+    }
+    </section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="tabla" class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Secuencia</th>
+                                <th>Orden</th>
+                                <th>Version</th>
+                                <th>Cliente</th>
+                                <th>SKU</th>
+                                <th>Descripción</th>
+                                <th>Cant. Botellas</th>
+                                <th>Cant. Cajas</th>
+                                <th>Fecha Fabricación</th>
+                                <th>Hora de inicio</th>
+                                <th>Hora de término</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Secuencia)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.OrdenFabricacion)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Version)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Cliente)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.SKU)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Descripcion)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.BotellasPlanificadas)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CajasPlanificadas)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FechaFabricacion)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.HoraInicioPlanificada)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.HoraTerminoPlanificada)
+                                        </td>
+
+                                        <td>
+                                            @{
+                                                switch (item.Estado)
+                                                {
+                                                    case 0:
+                                                        <span class="label label-default">No iniciado</span>
+                                                        break;
+                                                    case 1:
+                                                        <span class="label label-primary">En proceso</span>
+                                                        break;
+                                                    case 2:
+                                                        <span class="label label-warning">Pausa</span>
+                                                        break;
+                                                    case 3:
+                                                        <span class="label label-danger">Pendiente</span>
+                                                        break;
+                                                    default:
+                                                        <span class="label label-success">Finalizado</span>
+                                                        break;
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
+
