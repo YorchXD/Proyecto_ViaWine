@@ -1,6 +1,3 @@
-USE [Automatizacion_ViaWine]
-GO
-
 
 
 /*##############################################Crear##########################################*/
@@ -210,13 +207,9 @@ CREATE PROCEDURE [dbo].[Leer_CantBotellas]
     ORDER BY hora;
 GO
 
-
-
-
-
 /*##############################################Actualizar##########################################*/
 /****** Object:  StoredProcedure [dbo].[Actualizar_Orden]    Script Date: 28/01/2020 9:48:37 ******/
-DROP PROCEDURE [dbo].[Actualizar_Orden]
+DROP PROCEDURE [dbo].[Actualizar_Estado_Orden]
 GO
 
 /****** Object:  StoredProcedure [dbo].[Actualizar_Orden]    Script Date: 28/01/2020 9:48:37 ******/
@@ -225,7 +218,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Actualizar_Estado_Orden] 
     @OrdenFabricacion Integer, @Estado Integer 
@@ -276,20 +268,3 @@ CREATE PROCEDURE [dbo].[Actualizar_HoraTermino_Orden]
     SET horaTermino = @HoraTermino
     WHERE ordenFabricacion = @OrdenFabricacion;
 GO
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
