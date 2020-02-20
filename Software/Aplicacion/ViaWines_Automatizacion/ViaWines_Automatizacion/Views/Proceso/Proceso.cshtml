@@ -1,0 +1,370 @@
+﻿@model IEnumerable<ViaWines_Automatizacion.Models.Orden>
+
+@{
+    ViewData["Title"] = "Detalle del Problema";
+
+}
+
+
+
+<section class="content-header">
+    <div class="">
+        <h1>
+            Proceso
+            <small>del pedido</small>
+        </h1>
+    </div>
+    <div class="row">
+        @using (Html.BeginForm("Proceso", "Proceso", FormMethod.Post, new { @style = "border:none" }))
+        {
+            <div class="col-xs-12 col-md-6">
+                <div class="input-group date ">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" class="form-control pull-right" id="datepicker" name="fecha">
+                    <div class="input-group-btn">
+                        <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+        <div class="col-xs-12 col-md-6">
+            <select class="form-control select2" id="numeroOrden" onchange="mostrarOrden()">
+
+                @if (Model != null)
+                {
+                    <option disabled selected>Seleccione una orden</option>
+
+                    @foreach (var item in Model)
+                    {
+                        @if (item.Estado == 1)
+                        {
+                            <option value="@item.OrdenFabricacion" selected>@item.OrdenFabricacion</option>
+                        }
+                        else
+                        {
+                            <option value="@item.OrdenFabricacion">@item.OrdenFabricacion</option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+    </div>
+        
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-aqua">
+                <div class="inner">
+                    <br>
+                    <h3>150</h3>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-bag"></i>
+                </div>
+                <p class="small-box-footer">Cajas finalizadas</p>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-green">
+                <div class="inner">
+                    <br>
+                    <h3>53<sup style="font-size: 20px">%</sup></h3>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-stats-bars"></i>
+                </div>
+                <p class="small-box-footer"> Botellas finalizadas</p>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-yellow">
+                <div class="inner">
+                    <br>
+                    <h3>44</h3>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-person-add"></i>
+                </div>
+                <p class="small-box-footer"> Cantidad de cajas por minuto</p>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-red">
+                <div class="inner">
+                    <br>
+                    <h3>65</h3>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-pie-graph"></i>
+                </div>
+                <p class="small-box-footer">Cantidad de botella por minuto</p>
+            </div>
+        </div>
+        <!-- ./col -->
+    </div>
+    <!-- /.row -->
+    <!-- Small boxes (Stat box) -->
+    <!--div class="row">
+
+    </div-->
+    <!-- /.row -->
+
+    <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+            <p>
+                <button type="button" class="btn btn-block bg-purple" data-toggle="modal" data-target="#modal-inicio">Inicio</button>
+            </p>
+            <p>
+                <button type="button" class="btn btn-block bg-orange" data-toggle="modal" data-target="#modal-pausar">Pausar</button>
+            </p>
+            <p>
+                <button type="button" class="btn btn-block bg-olive" data-toggle="modal" data-target="#modal-finalizar">Terminar</button>
+            </p>
+        </div>
+        <!-- ./col -->
+
+        <div class="col-lg-9 col-md-8 col-sm-8 col-xs-6">
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <i class="fa fa-text-width"></i>
+                    <h3 class="box-title">Descripción de la orden</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <dl class="dl-horizontal">
+                        <dt>SKU</dt>
+                        <dd id="SKU"></dd>
+                        <dt>Descripción del producto</dt>
+                        <dd id="descripcionProducto"></dd>
+                        <dt>Cantidad de cajas planificadas</dt>
+                        <dd id="cantCajasPlan"></dd>
+                        <dt>Cantidad de botellas planificadas</dt>
+                        <dd id="cantBotellasPlan"></dd>
+                        <dt>Hora de inicio planificada</dt>
+                        <dd id="horaInicioPlan"></dd>
+                        <dt>Hora de término planificada</dt>
+                        <dd id="horaTerminoPlan"></dd>
+                        <dt>Fecha planificada</dt>
+                        <dd id="fechaPlan"></dd>
+
+                    </dl>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- ./col -->
+
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Monitoreo de etiquetado de botellas</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th style="width: 10px">#</th>
+                            <th>Hora de inicio</th>
+                            <th>Hora de término</th>
+                        </tr>
+                        <tr>
+                            <td>1.</td>
+                            <td>8:40</td>
+                            <td>8:45</td>
+                        </tr>
+                        <tr>
+                            <td>2.</td>
+                            <td>8:40</td>
+                            <td>8:46</td>
+                        </tr>
+                        <tr>
+                            <td>3.</td>
+                            <td>8:41</td>
+                            <td>8:46</td>
+                        </tr>
+                        <tr>
+                            <td>4.</td>
+                            <td>8:41</td>
+                            <td>8:46</td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer clearfix">
+                    <ul class="pagination pagination-sm no-margin pull-right">
+                        <li><a href="#">&laquo;</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+
+        <div class="col-md-6">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Monitoreo de cajas</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th style="width: 10px">#</th>
+                            <th>Hora de finalización</th>
+                        </tr>
+                        <tr>
+                            <td>1.</td>
+                            <td>9:00</td>
+                        </tr>
+                        <tr>
+                            <td>2.</td>
+                            <td>9:00</td>
+                        </tr>
+                        <tr>
+                            <td>3.</td>
+                            <td>9:01</td>
+                        </tr>
+                        <tr>
+                            <td>4.</td>
+                            <td>9:01</td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer clearfix">
+                    <ul class="pagination pagination-sm no-margin pull-right">
+                        <li><a href="#">&laquo;</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+
+    <div class="modal fade" id="modal-inicio">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-purple">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Iniciar el proceso de producción</h4>
+                </div>
+                <div class="modal-body">
+                    <p>¿Seguro que desea inicializar el proceso de producción?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
+    <div class="modal fade" id="modal-pausar">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-orange">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Proceso en pausa</h4>
+                </div>
+                <div class="modal-body">
+                    <p>One fine body&hellip;</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
+
+    <div class="modal fade" id="modal-finalizar">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-olive">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Finalizar proceso</h4>
+                </div>
+                <div class="modal-body">
+                    <p>¿Está seguro de finalizar el proceso de producción?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+</section>
+
+
+
+<script>
+    function mostrarOrden()
+    {
+        var ordenSelect = document.getElementById("numeroOrden");
+        var optionSelected = ordenSelect.options[ordenSelect.selectedIndex].value;
+
+        var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model,Newtonsoft.Json.Formatting.Indented));
+
+        for (var i = 0; i < modelo.length; i++)
+        {
+            if (modelo[i]["OrdenFabricacion"] == optionSelected)
+            {
+                document.getElementById("SKU").innerHTML = modelo[i]["SKU"];
+                document.getElementById("descripcionProducto").innerHTML = modelo[i]["Descripcion"];
+                document.getElementById("cantCajasPlan").innerHTML = modelo[i]["CajasPlanificadas"];
+                document.getElementById("cantBotellasPlan").innerHTML = modelo[i]["BotellasPlanificadas"];
+                document.getElementById("horaInicioPlan").innerHTML = (modelo[i]["HoraInicioPlanificada"]).split('T')[1];
+                document.getElementById("horaTerminoPlan").innerHTML = (modelo[i]["HoraTerminoPlanificada"]).split('T')[1];
+                document.getElementById("fechaPlan").innerHTML = (modelo[i]["FechaFabricacion"]).split('T')[0];
+            }
+        }
+    }
+</script>
