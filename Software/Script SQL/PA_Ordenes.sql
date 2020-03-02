@@ -207,6 +207,27 @@ CREATE PROCEDURE [dbo].[Leer_CantBotellas]
     ORDER BY hora;
 GO
 
+
+/****** Object:  StoredProcedure [dbo].[Leer_Ordenes_Iniciadas]    Script Date: 02/03/2020 9:48:37 ******/
+DROP PROCEDURE [dbo].[Leer_Ordenes_Iniciadas]
+GO
+
+/****** Object:  StoredProcedure [dbo].[Leer_Ordenes_Iniciadas]    Script Date: 02/03/2020 9:48:37 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE PROCEDURE [dbo].[Leer_Ordenes_Iniciadas] 
+    AS    
+    SELECT * 
+    FROM Orden 
+    WHERE estado = '1'
+GO
+
+
 /*##############################################Actualizar##########################################*/
 /****** Object:  StoredProcedure [dbo].[Actualizar_Orden]    Script Date: 28/01/2020 9:48:37 ******/
 DROP PROCEDURE [dbo].[Actualizar_Estado_Orden]

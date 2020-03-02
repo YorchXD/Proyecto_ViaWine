@@ -160,7 +160,7 @@
 
                     <li>
                         <a class="nav-link active" asp-area="" asp-controller="Problemas" asp-action="Problemas">
-                            <i class="fa fa-th"></i> <span>Problemas</span>
+                            <i class="fa fa-th"></i> <span>Incidentes</span>
                         </a>
                     </li>
 
@@ -202,7 +202,6 @@
             <strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">AdminLTE</a>.</strong> All rights
             reserved.
         </footer-->
-
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark" style="display: none;">
             <!-- Create the tabs -->
@@ -406,6 +405,7 @@
     <script>
         $.widget.bridge('uibutton', $.ui.button);
     </script>
+
     <!-- Bootstrap 3.3.7 -->
     <script src="~/AdminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- Morris.js charts -->
@@ -424,6 +424,7 @@
     <!-- datepicker -->
     <script src="~/AdminLTE/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
     <script src="~/AdminLTE/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.es.min.js"></script>
+
     <!-- Bootstrap WYSIHTML5 -->
     <script src="~/AdminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
     <!-- Slimscroll -->
@@ -545,17 +546,17 @@
                 "Diciembre"
             ],
             "firstDay": 1,
-            "format": "MM/DD/YYYY hh:mm A"
+            "format": "YYYY-MM-DD hh:mm A"
         };
 
         $(function () {
             //Initialize Select2 Elements
             $('.select2').select2()
 
-            //Datemask dd/mm/yyyy
-            $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-            //Datemask2 mm/dd/yyyy
-            $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+            //Datemask 'yyyy-mm-dd'
+            $('#datemask').inputmask('yyyy-mm-dd', { 'placeholder': 'yyyy-mm-dd' })
+            //Datemask2 'yyyy-mm-dd'
+            $('#datemask2').inputmask('yyyy-mm-dd', { 'placeholder': 'yyyy-mm-dd' })
             //Money Euro
             $('[data-mask]').inputmask()
 
@@ -637,11 +638,6 @@
             border-radius: 2px;
         }
     </style>
-
-    
-
-
-
 
 
 </body>

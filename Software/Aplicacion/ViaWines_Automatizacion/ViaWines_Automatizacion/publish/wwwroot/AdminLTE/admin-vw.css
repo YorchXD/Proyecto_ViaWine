@@ -1,0 +1,153 @@
+span.logo-lg {
+    background-image: url(https://viawines.com/wp-content/uploads/2018/11/logo_blanco.png);
+    background-size: 95%;
+    background-repeat: no-repeat;
+    background-position: left center;
+    height: 100px;
+}
+
+.skin-blue .main-header .logo {
+    background-color: rgba(65, 65, 66, 0) !important;
+    font-size: 0;
+    overflow: visible;
+}
+
+nav.navbar.navbar-static-top {
+    background: #560f3d!important;
+}
+
+.skin-blue .wrapper, .skin-blue .main-sidebar, .skin-blue .left-side {
+    background-color: rgb(35, 35, 35);
+}
+
+footer.main-footer {
+    display: none;
+}
+
+.small-box.bg-aqua {
+    background-color: rgba(12, 12, 12, 0) !important;
+    height: auto !important;
+}
+
+.icon {}
+
+i.ion.ion-bag {
+    background-image: url(https://image.flaticon.com/icons/svg/1007/1007912.svg);
+}
+
+.icon i.ion {
+    background-repeat: no-repeat;
+    /* padding: 10px; */
+    background-size: 92%;
+    background-position: left center;
+    background-color: rgba(230, 230, 230, 0);
+    /* top: 24px; */
+    width: 54px;
+    height: 54px;
+    /* border-radius: 50%; */
+    margin-top: 1px;
+    /* margin-right: 15px; */
+    /* border: 2px solid #ffffff; */
+    display: block;
+    left: 0;
+}
+
+.icon i.ion:before {
+    opacity: 0;
+}
+
+.small-box > .small-box-footer {
+    text-align: left;
+    /* padding-left: 10px; */
+    background: hsla(0, 0%, 0%, 0) !important;
+    color: #ff72c1 !important;
+}
+
+.content-wrapper {
+    background-color: rgb(222, 222, 222);
+}
+
+.content-header > h1 {
+    color: #57103c;
+    font-size: 30px;
+}
+
+.sidebar-menu > li > a > .fa, .sidebar-menu > li > a > .glyphicon, .sidebar-menu > li > a > .ion {
+    color: #bf076e;
+}
+
+.small-box h3 {
+    font-size: 50px;
+    font-weight: 100;
+    margin: 0;
+}
+
+section.content.resumen-actual {
+    /* background-image: url(https://images.pexels.com/photos/1005639/pexels-photo-1005639.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260); */
+    padding: 40px;
+    margin: 5px 15px;
+    background: #464646;
+    position: relative;
+}
+section.content.resumen-actual:before {content: "";background-image: url(https://images.pexels.com/photos/1005639/pexels-photo-1005639.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260);display: block;top: 0;width: 100%;height: 100%;position: absolute;left: 0;opacity: .1;}
+
+.small-box .icon {
+    position: absolute;
+    top: 0px;
+    right: 10px;
+    z-index: 0;
+    font-size: 90px;
+    color: rgba(0, 0, 0, 0.15);
+    transition: all 0.3s linear 0s;
+    left: -1px;
+    right: auto;
+}
+.inner br {
+    display: none;
+}
+.small-box  .inner {
+    height: auto !important;
+    padding: 0 !important;
+    padding-left: 64px !important;
+}
+.content-header > h1 > small {
+    font-size: 18px;
+    display: inline-block;
+    padding-left: 4px;
+    font-weight: 400;
+}
+i.ion.ion-stats-bars {background-image: url(https://entel.tiboxlab.cl/tu-negocio-digital/wp-content/uploads/2020/02/1614221.svg);}
+
+.small-box.bg-green {
+    background: none !important;
+}
+
+.small-box.bg-yellow {
+    background: none !important;
+}
+
+.small-box.bg-red {
+    background: none !important;
+}
+
+i.ion.ion-person-add {
+    background-image: url(https://entel.tiboxlab.cl/tu-negocio-digital/wp-content/uploads/2020/02/1007912.svg);
+}
+
+i.ion.ion-pie-graph {
+    background-image: url(https://entel.tiboxlab.cl/tu-negocio-digital/wp-content/uploads/2020/02/1614221222.svg);
+}
+
+ul.nav.nav-tabs.pull-right.ui-sortable-handle {
+}
+
+.nav-tabs-custom > .nav-tabs > li.header {
+}
+
+ul.sidebar-menu.tree {
+    /* margin-top: 25px; */
+}
+
+aside.main-sidebar {
+    padding-top: 100px;
+}

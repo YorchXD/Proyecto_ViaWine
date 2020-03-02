@@ -22,7 +22,7 @@
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                    <input type="text" class="form-control pull-right" id="datepicker" name="fecha">
+                    <input type="text" class="form-control pull-right" id="datepicker" name="fecha" onload="obtenerFecha()">
                     <div class="input-group-btn">
                         <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                     </div>
@@ -33,7 +33,7 @@
 
         <div class="col-xs-12 col-md-6">
             <select class="form-control select2" id="numeroOrden" onchange="mostrarOrden()">
-                <option disabled selected>Seleccione una orden</option>
+                <option disabled selected value="null">Seleccione una orden</option>
 
                 @if (Model != null)
                 {
@@ -52,7 +52,7 @@
             </select>
         </div>
     </div>
-        
+
 </section>
 
 <section class="content">
@@ -76,7 +76,7 @@
             <div class="small-box">
                 <div class="inner">
                     <br>
-                    <h3>53<sup style="font-size: 20px">%</sup></h3>
+                    <h3>900</h3>
                 </div>
                 <div class="icon">
                     <i class="ion ion-stats-bars"></i>
@@ -90,7 +90,7 @@
             <div class="small-box">
                 <div class="inner">
                     <br>
-                    <h3>44</h3>
+                    <h3>20</h3>
                 </div>
                 <div class="icon">
                     <i class="ion ion-person-add"></i>
@@ -104,7 +104,7 @@
             <div class="small-box">
                 <div class="inner">
                     <br>
-                    <h3>65</h3>
+                    <h3>120</h3>
                 </div>
                 <div class="icon">
                     <i class="ion ion-pie-graph"></i>
@@ -124,7 +124,7 @@
     <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
             <p>
-                <button type="button" class="btn btn-block bg-purple" data-toggle="modal" data-target="#modal-inicio">Inicio</button>
+                <button type="button" class="btn btn-block bg-purple" onclick="exist_proces_ini()">Inicio</button>
             </p>
             <p>
                 <button type="button" class="btn btn-block bg-orange" data-toggle="modal" data-target="#modal-pausar">Pausar</button>
@@ -158,6 +158,8 @@
                         <dd id="horaTerminoPlan"></dd>
                         <dt>Fecha planificada</dt>
                         <dd id="fechaPlan"></dd>
+                        <dt>Estado</dt>
+                        <dd id="estado"></dd>
 
                     </dl>
                 </div>
@@ -276,14 +278,14 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">Iniciar el proceso de producción</h4>
+                    <h4 class="modal-title" id="title-ini-process">Iniciar el proceso de producción</h4>
                 </div>
                 <div class="modal-body">
-                    <p>¿Seguro que desea inicializar el proceso de producción?</p>
+                    <p id="body-ini-process">¿Seguro que desea inicializar el proceso de producción?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn bg-black">Aceptar</button>
+                    <button type="button" class="btn bg-black" onclick="IniciarProceso()">Aceptar</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -340,30 +342,109 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
+
+
+
+    <div class="modal fade" id="modal-alerta">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-purple">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Falló iniciar proceso</h4>
+                </div>
+                <div class="modal-body">
+                    <p>No se puede iniciar proceso dado que existe otro ejecutandose</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-black" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 </section>
 
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$(document).ready(function () {
+    var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model,Newtonsoft.Json.Formatting.Indented));
+    var fecha = (modelo[0]["FechaFabricacion"]).split('T')[0];
+    $("#datepicker").datepicker({ format: 'yyyy-mm-dd' }).val(fecha);
+});
+</script>
 
 <script>
-    function mostrarOrden()
-    {
-        var ordenSelect = document.getElementById("numeroOrden");
-        var optionSelected = ordenSelect.options[ordenSelect.selectedIndex].value;
-
-        var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model,Newtonsoft.Json.Formatting.Indented));
-
-        for (var i = 0; i < modelo.length; i++)
+function IniciarProceso() {
+    var fecha = $("#datepicker").val();
+    var orden = $("#numeroOrden").val();
+    var datos = {
+        Orden: orden,
+        Estado: 1,
+        Fecha: fecha
+    };
+    $.ajax(
         {
-            if (modelo[i]["OrdenFabricacion"] == optionSelected)
+            url: '/Proceso/Proceso',
+            data: datos,
+            dataType: 'json; charset=utf-8',
+            type: 'POST',
+            success: function (data)
             {
-                document.getElementById("SKU").innerHTML = modelo[i]["SKU"];
-                document.getElementById("descripcionProducto").innerHTML = modelo[i]["Descripcion"];
-                document.getElementById("cantCajasPlan").innerHTML = modelo[i]["CajasPlanificadas"];
-                document.getElementById("cantBotellasPlan").innerHTML = modelo[i]["BotellasPlanificadas"];
-                document.getElementById("horaInicioPlan").innerHTML = (modelo[i]["HoraInicioPlanificada"]).split('T')[1];
-                document.getElementById("horaTerminoPlan").innerHTML = (modelo[i]["HoraTerminoPlanificada"]).split('T')[1];
-                document.getElementById("fechaPlan").innerHTML = (modelo[i]["FechaFabricacion"]).split('T')[0];
-            }
+                alert('Success');
+            },
+        });
+    $('#modal-inicio').modal('hide');
+}
+
+</script>
+<script>
+function mostrarOrden()
+{
+    var ordenSelect = document.getElementById("numeroOrden");
+    var optionSelected = ordenSelect.options[ordenSelect.selectedIndex].value;
+
+    var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model,Newtonsoft.Json.Formatting.Indented));
+
+    for (var i = 0; i < modelo.length; i++)
+    {
+        if (modelo[i]["OrdenFabricacion"] == optionSelected)
+        {
+            document.getElementById("SKU").innerHTML = modelo[i]["SKU"];
+            document.getElementById("descripcionProducto").innerHTML = modelo[i]["Descripcion"];
+            document.getElementById("cantCajasPlan").innerHTML = modelo[i]["CajasPlanificadas"];
+            document.getElementById("cantBotellasPlan").innerHTML = modelo[i]["BotellasPlanificadas"];
+            document.getElementById("horaInicioPlan").innerHTML = (modelo[i]["HoraInicioPlanificada"]).split('T')[1];
+            document.getElementById("horaTerminoPlan").innerHTML = (modelo[i]["HoraTerminoPlanificada"]).split('T')[1];
+            document.getElementById("fechaPlan").innerHTML = (modelo[i]["FechaFabricacion"]).split('T')[0];
+            document.getElementById("estado").innerHTML = modelo[i]["Estado"];
         }
+    }
+    }
+</script>
+
+<script>
+    function exist_proces_ini()
+    {
+        $.ajax
+        (
+            {
+                url: '/Proceso/Exit_proces_ini',
+                data: {},
+                dataType: 'json; charset=utf-8',
+                type: 'POST',
+                    success: function (data) {
+                        $('#title-ini-process').
+                        $("#modal-inicio").modal("show");
+                    },
+                    error: function () {
+                        $("#modal-alerta").modal("show");
+                    },
+            }
+        );
     }
 </script>
