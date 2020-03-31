@@ -1,0 +1,122 @@
+Usuarios
+->2 usuarios
+->Página de proceso es para el jefe de linea
+
+Página principal
+
+->% de avance (gráfico)
+->botellas hora
+->cajas hora
+
+->Sección para los clientes
+    ->Seleccionar la orden de venta
+        ->Visualizar el detalle
+        ->Status (planificada, fabricacda o cerrada)
+        ->Orden de venta->% de cumplimiento (avance)
+        ->Fecha de "Stacking" (qué día se va)
+        ->Fecha de proceso
+        ->Fecha de salida
+
+Página de planificación
+
+->La programación anterior estan cerradas por lo que solo se deben visualizarlas del dia actual en adelante.
+->Agregar estado de avance a la sección de planificación
+->Comparación de lo planificado con lo real
+
+Página de incidentes
+
+-> Cambiar la seleccion de rango de fecha por solo el día
+->La vista actual no es por orden sino que por incidencia en el dia y qué fue lo que ocurrio
+-> Visualizar en que orden ocurrieron las incidencias (es una segunda derivada para ellos)
+-> Actualmente su vista principal es el día y qué pasó en el día
+->Vista de incidencias debe ser:
+    ->día
+        ->incidencia
+            ->Ordenes
+            ->Un totalizador
+
+Pagina de proceso
+
+->Al momento de pausar:
+    ->Area responsable
+    ->Causa (lOpi)
+-> Actividad
+    ->Clasidicacion (código de detencion) y tipo de actividad
+    ->Área responsable
+->Si no hay producción y por ejemplo, fueron a almorzar, se debe registrar esa detención
+->Todo tipo de detención se debe informar
+
+Nuevo
+
+->Etapa 1
+    ->Guardar los procesos realizados 
+    ->Historial de las ordenes realizadas para futuros reportes
+
+->Etapa 2
+    Lote: Indice operacional de e los equipos
+    ->Permite ver:
+        *Eficiencia
+        *Eficacia
+        *Disponiblidad técnica de las maquinas
+        *Entre Otras
+    
+    ->Quieren que se vaya retroalimentndo a medida que se va complementando con formularios
+    
+    ->El excel tiene las incidencias y se le asigna el área de la incidencia . Despues se calculan los tiemmpos asciados a esa incidencia
+        ->Levantar un gráfico por:
+            *Área
+            *Cantidad de tiempo muerto por área
+            *% total del día, de la semana
+
+    -> Merma acuulada del vino granel
+        ->A medida que se vaya cerrando la orden, se muestre la merma. Esto se debe realizar junto con la gente de "ISI O EASY (algo asi le entendí)" para no esperar el informe hasta fin de mes con estos datos.
+    
+    ->Partir con el vino y despues con el insumo
+
+->Otras
+    ->Cuando la maquina está detenida por 2 minutos mostrar alerta para ingresar la causa del paro
+    ->Tipo de incidente por área
+    ->Página para ver historial de los pedidos finalizados anterior(acumulado del mes)
+    ->Cajas despachadas
+    ->Pagina de graficos
+        ->grafico de tiempos muertos
+    ->Poner la frecuencia
+        ->Por ejemplo fala etiquetadora
+            ->10 fallos en el mes
+            ->total de trabajo: 20 días
+            ->Horas consumidas: xx
+        ->Esto ayuda a enfocarse en las fallas mas reiterativas
+    
+    ->% de cumplimiento de lo planificado vs fabricado
+    ->% de cumplimiento diaro, semanal, mensual
+    ->Cajas programadas
+    ->Cajas fabricadas
+    ->Cantidad de botelas terminadas
+    ->El conteo de botella se hace de forma general(independiente de las caracteristicas de la botellas)
+
+    ->Quieren ver unos indicadores que se obtienen a traves de fórmulas
+    ->Los indicadores estan asociados a una fecha de inicio y término
+    ->La idea es ver  que pasa en el día, la semana o mes con respecto a la detencion de lineas
+    ->Este resumen l quieren para realizar análisis
+    ->% de incidencia de cada uno de los tiempos de detencion en la semana, la cantidad de hora de cada una y la incidencia o % de peso de cada una
+        ->Semana por semana
+        ->Resumen del mes
+        -> Por clasificacion
+            ->Visul de detalle
+            ->Ejemplo: Fallas de equipos
+                        *Muestra un resumen
+                        *Muestra el detalle (de la semana acumulada por área)
+                        *Muestra el % de peso
+
+
+Dudas
+->El boton posponer ¿se debe asociar a una causa?
+
+Finalidad de la aplicación: El proyecto está pensado para lis tiempos muertos. 
+
+Ellos deben enviar:
+->Informe de orden de ventas con lo que quieren ver
+->Archivo de incidencias (OPI)
+->Gráficos de la página principal
+->Cumplimiento del programa
+->Gráfico que quieren ver (graficos de OPI 2da etapa)
