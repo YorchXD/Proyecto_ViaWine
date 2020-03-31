@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Administrador.WIN-I6PNSJ93H28\\Desktop\\Proyecto_ViaWine\\Software\\Aplicacion\\ViaWines_Automatizacion\\ViaWines_Automatizacion\\ViaWines_Automatizacion.csproj": {}
+    "D:\\Repositorios\\Proyecto_ViaWine\\Software\\Aplicacion\\ViaWines_Automatizacion\\ViaWines_Automatizacion\\ViaWines_Automatizacion.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Administrador.WIN-I6PNSJ93H28\\Desktop\\Proyecto_ViaWine\\Software\\Aplicacion\\ViaWines_Automatizacion\\ViaWines_Automatizacion\\ViaWines_Automatizacion.csproj": {
+    "D:\\Repositorios\\Proyecto_ViaWine\\Software\\Aplicacion\\ViaWines_Automatizacion\\ViaWines_Automatizacion\\ViaWines_Automatizacion.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Administrador.WIN-I6PNSJ93H28\\Desktop\\Proyecto_ViaWine\\Software\\Aplicacion\\ViaWines_Automatizacion\\ViaWines_Automatizacion\\ViaWines_Automatizacion.csproj",
+        "projectUniqueName": "D:\\Repositorios\\Proyecto_ViaWine\\Software\\Aplicacion\\ViaWines_Automatizacion\\ViaWines_Automatizacion\\ViaWines_Automatizacion.csproj",
         "projectName": "ViaWines_Automatizacion",
-        "projectPath": "C:\\Users\\Administrador.WIN-I6PNSJ93H28\\Desktop\\Proyecto_ViaWine\\Software\\Aplicacion\\ViaWines_Automatizacion\\ViaWines_Automatizacion\\ViaWines_Automatizacion.csproj",
-        "packagesPath": "C:\\Users\\Administrador.WIN-I6PNSJ93H28\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Administrador.WIN-I6PNSJ93H28\\Desktop\\Proyecto_ViaWine\\Software\\Aplicacion\\ViaWines_Automatizacion\\ViaWines_Automatizacion\\obj\\",
+        "projectPath": "D:\\Repositorios\\Proyecto_ViaWine\\Software\\Aplicacion\\ViaWines_Automatizacion\\ViaWines_Automatizacion\\ViaWines_Automatizacion.csproj",
+        "packagesPath": "C:\\Users\\yorch\\.nuget\\packages\\",
+        "outputPath": "D:\\Repositorios\\Proyecto_ViaWine\\Software\\Aplicacion\\ViaWines_Automatizacion\\ViaWines_Automatizacion\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\Administrador.WIN-I6PNSJ93H28\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\yorch\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -64,10 +64,16 @@
             }
           },
           "imports": [
-            "net461"
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
           ],
           "assetTargetFallback": true,
-          "warn": true
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.102\\RuntimeIdentifierGraph.json"
         }
       }
     }

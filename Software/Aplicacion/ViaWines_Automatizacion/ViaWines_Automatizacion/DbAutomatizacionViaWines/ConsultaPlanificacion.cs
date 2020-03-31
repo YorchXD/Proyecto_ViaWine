@@ -31,13 +31,16 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                             SKU = prodData["sku"].ToString(),
                             Descripcion = prodData["descripcionSKU"].ToString(),
                             BotellasPlanificadas = Convert.ToInt32(prodData["botellasPlanificadas"]),
+                            BotellasFabricadas = 0,
                             CajasPlanificadas = Convert.ToInt32(prodData["cajasPlanificadas"]),
+                            CajasFabricadas = 0,
                             FechaFabricacion = Convert.ToDateTime(prodData["fechaFabricacion"]),
                             HoraInicioPlanificada = Convert.ToDateTime(prodData["horaInicioPlanificada"].ToString()),
                             HoraTerminoPlanificada = Convert.ToDateTime(prodData["horaTerminoPlanificada"].ToString()),
                             FormatoCaja = prodData["formatoCaja"].ToString(),
                             Estado = Convert.ToInt32(prodData["estado"]),
-                            Secuencia = Convert.ToInt32(prodData["secuencia"])
+                            Secuencia = Convert.ToInt32(prodData["secuencia"]),
+                            PorcentajeAvance = 0
                         };
 
                         ordenes.Add(orden);

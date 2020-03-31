@@ -15,7 +15,9 @@ namespace ViaWines_Automatizacion.Models
         public string SKU { get; set; }
         public string Descripcion { get; set; }
         public int BotellasPlanificadas { get; set; }
+        public int BotellasFabricadas { get; set; }
         public int CajasPlanificadas { get; set; }
+        public int CajasFabricadas { get; set; }
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime FechaFabricacion { get; set; }
         [DisplayFormat(DataFormatString = "{0:HH:mm:ss}", ApplyFormatInEditMode = true)]
@@ -29,5 +31,6 @@ namespace ViaWines_Automatizacion.Models
         public String FormatoCaja { get; set; }
         public int Estado { get; set; }
         public int Secuencia { get; set; }
+        public double PorcentajeAvance { get; set; }
     }
 }

@@ -43,11 +43,14 @@
                                 <th>SKU</th>
                                 <th>Descripción</th>
                                 <th>Cant. Botellas</th>
+                                <th>Cant. Botellas Fabricadas</th>
                                 <th>Cant. Cajas</th>
+                                <th>Cant. Cajas Fabricadas</th>
                                 <th>Fecha Fabricación</th>
                                 <th>Hora de inicio</th>
                                 <th>Hora de término</th>
                                 <th>Estado</th>
+                                <th>% de avance</th>
                             </tr>
                         </thead>
 
@@ -56,66 +59,93 @@
                             {
                                 @foreach (var item in Model)
                                 {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Secuencia)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.OrdenFabricacion)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Version)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Cliente)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.SKU)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Descripcion)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.BotellasPlanificadas)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.CajasPlanificadas)
-                                        </td>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Secuencia)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.OrdenFabricacion)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Version)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Cliente)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SKU)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Descripcion)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.BotellasPlanificadas)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.BotellasFabricadas)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CajasPlanificadas)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CajasFabricadas)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FechaFabricacion)
+                                </td>
 
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.FechaFabricacion)
-                                        </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.HoraInicioPlanificada)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.HoraTerminoPlanificada)
+                                </td>
 
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.HoraInicioPlanificada)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.HoraTerminoPlanificada)
-                                        </td>
-
-                                        <td>
-                                            @{
-                                                switch (item.Estado)
-                                                {
-                                                    case 0:
-                                                        <span class="label label-default">No iniciado</span>
-                                                        break;
-                                                    case 1:
-                                                        <span class="label label-primary">En proceso</span>
-                                                        break;
-                                                    case 2:
-                                                        <span class="label label-warning">Pausa</span>
-                                                        break;
-                                                    case 3:
-                                                        <span class="label label-danger">Pendiente</span>
-                                                        break;
-                                                    default:
-                                                        <span class="label label-success">Finalizado</span>
-                                                        break;
-                                                }
-                                            }
-                                        </td>
-                                    </tr>
+                                <td>
+                                    @{
+                                        switch (item.Estado)
+                                        {
+                                            case 0:
+                                                <span class="label label-default">No iniciado</span>
+                                                break;
+                                            case 1:
+                                                <span class="label label-primary">En proceso</span>
+                                                break;
+                                            case 2:
+                                                <span class="label label-warning">Pausa</span>
+                                                break;
+                                            case 3:
+                                                <span class="label label-danger">Pendiente</span>
+                                                break;
+                                            default:
+                                                <span class="label label-success">Finalizado</span>
+                                                break;
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        switch (item.Estado)
+                                        {
+                                            case 0:
+                                                <span class="label label-default">@Html.DisplayFor(modelItem => item.PorcentajeAvance)</span>
+                                                break;
+                                            case 1:
+                                                <span class="label label-primary">@Html.DisplayFor(modelItem => item.PorcentajeAvance)</span>
+                                                break;
+                                            case 2:
+                                                <span class="label label-warning">@Html.DisplayFor(modelItem => item.PorcentajeAvance)</span>
+                                                break;
+                                            case 3:
+                                                <span class="label label-danger">@Html.DisplayFor(modelItem => item.PorcentajeAvance)</span>
+                                                break;
+                                            default:
+                                                <span class="label label-success">@Html.DisplayFor(modelItem => item.PorcentajeAvance)</span>
+                                                break;
+                                        }
+                                    }
+                                </td>
+                            </tr>
                                 }
                             }
                         </tbody>

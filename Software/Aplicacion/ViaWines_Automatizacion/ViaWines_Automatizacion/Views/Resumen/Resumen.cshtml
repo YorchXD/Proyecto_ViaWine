@@ -82,12 +82,12 @@
             <div class="nav-tabs-custom">
                 <!-- Tabs within a box -->
                 <ul class="nav nav-tabs pull-right">
-                    <li class="pull-left header"><i class="fa fa-inbox"></i> Sales</li>
+                    <li class="pull-left header"><i class="fa fa-inbox"></i> Cajas por hora</li>
                 </ul>
                 <div class="tab-content no-padding">
                     <!-- Morris chart - Sales -->
-                    <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;"></div>
-                    <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;"></div>
+                    <!--div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;"></div-->
+                    <div id="chartdiv"></div>
                 </div>
             </div>
             <!-- /.nav-tabs-custom -->
@@ -186,7 +186,7 @@
                 </div>
                 <div class="icon">
                     <i class="ion ion-person-add"></i>
-                    
+
                 </div>
                 <p class="small-box-footer"> Cajas Finalizadas</p>
             </div>
@@ -307,3 +307,93 @@
     </div>
 </section>
 
+<!-- Styles -->
+<style>
+    #chartdiv {
+        width: 100%;
+        height: 500px;
+    }
+</style>
+
+<!-- Resources -->
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/dataviz.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+
+<!-- Chart code -->
+<script>
+am4core.ready(function() {
+
+// Themes begin
+am4core.useTheme(am4themes_dataviz);
+am4core.useTheme(am4themes_animated);
+// Themes end
+
+// Create chart
+var chart = am4core.create("chartdiv", am4charts.XYChart);
+chart.paddingRight = 20;
+
+chart.data = generateChartData();
+
+var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+dateAxis.baseInterval = {
+  "timeUnit": "minute",
+  "count": 1
+};
+dateAxis.tooltipDateFormat = "HH:mm, d MMMM";
+
+var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+valueAxis.tooltip.disabled = true;
+valueAxis.title.text = "Cantidad de cajas";
+valueAxis.renderer.ticks.template.disabled = true;
+
+var series = chart.series.push(new am4charts.LineSeries());
+series.dataFields.dateX = "fecha";
+series.dataFields.valueY = "cajas";
+series.tooltipText = "Cajas: [bold]{valueY}[/]";
+series.fillOpacity = 0.3;
+
+var bullet = series.bullets.push(new am4charts.CircleBullet());
+bullet.circle.radius = 6;
+bullet.circle.fill = am4core.color("#fff");
+bullet.circle.strokeWidth = 3;
+
+
+chart.cursor = new am4charts.XYCursor();
+chart.cursor.lineY.opacity = 0;
+chart.scrollbarX = new am4charts.XYChartScrollbar();
+chart.scrollbarX.series.push(series);
+
+
+dateAxis.start = 0.8;
+dateAxis.keepSelection = true;
+
+
+
+function generateChartData() {
+    var chartData = [];
+    // obtiene la fecha actual
+    var firstDate = new Date();
+    // obtiene la hora de 500 min antes
+    firstDate.setMinutes(firstDate.getDate() - 500);
+
+    // genera 500 instancias de datos 
+    var cajas = 500;
+    for (var i = 0; i < 500; i+=30) {
+        var nuevaFecha = new Date(firstDate);
+        // genera el minto en que se obtiene la caja
+        nuevaFecha.setMinutes(nuevaFecha.getMinutes() + i);
+        // genera un numero random que sera el numero de cjas por hora
+        cajas += Math.round((Math.random()<0.5?1:-1)*Math.random()*10);
+        // agrega los datos a un arreglo
+        chartData.push({
+            fecha: nuevaFecha,
+            cajas: cajas
+        });
+    }
+    return chartData;
+}
+
+}); // end am4core.ready()
+</script>
