@@ -2136,13 +2136,13 @@ a:focus {
 .progress-description,
 .info-box-text {
   display: block;
-  font-size: 14px;
-  white-space: nowrap;
+  font-size: 13px;
+  //white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .info-box-text {
-  text-transform: uppercase;
+  text-transform: none;
 }
 .info-box-more {
   display: block;
@@ -5625,11 +5625,12 @@ nav.navbar.navbar-static-top {
     background-color: rgb(35, 35, 35);
 }
 
-/*footer.main-footer {
+/* este debe ir comentado si o si
+footer.main-footer {
     display: none;
 }*/
 
-.small-box.bg-aqua {
+/*.small-box.bg-aqua {
     background-color: rgba(12, 12, 12, 0) !important;
     height: auto !important;
 }
@@ -5643,17 +5644,12 @@ i.ion.ion-bag {
 
 .icon i.ion {
     background-repeat: no-repeat;
-    /* padding: 10px; */
     background-size: 92%;
     background-position: left center;
     background-color: rgba(230, 230, 230, 0);
-    /* top: 24px; */
     width: 54px;
     height: 54px;
-    /* border-radius: 50%; */
     margin-top: 1px;
-    /* margin-right: 15px; */
-    /* border: 2px solid #ffffff; */
     display: block;
     left: 10px;
 }
@@ -5664,10 +5660,9 @@ i.ion.ion-bag {
 
 .small-box > .small-box-footer {
     text-align: left;
-    /* padding-left: 10px; */
     background: hsla(0, 0%, 0%, 0) !important;
     color: #797979 !important;
-}
+}*/
 
 .content-wrapper {
     background-color: rgb(222, 222, 222);
@@ -5708,7 +5703,7 @@ section.content.resumen-actual {
         opacity: .1;
     }
 
-.small-box .icon {
+/*.small-box .icon {
     position: absolute;
     top: 8px;
     right: 10px;
@@ -5726,7 +5721,6 @@ section.content.resumen-actual {
 
 .small-box .inner {
     height: auto !important;
-    /* padding: 0 !important; */
     padding-left: 70px !important;
     border: 1px solid #bfbfbf;
     color: #615a5a;
@@ -5762,7 +5756,7 @@ i.ion.ion-person-add {
 
 i.ion.ion-pie-graph {
     background-image: url(https://entel.tiboxlab.cl/tu-negocio-digital/wp-content/uploads/2020/02/1614221222.svg);
-}
+}*/
 
 button.btn.btn-block.bg-purple {
     background: #57103c !important;
@@ -5797,7 +5791,7 @@ aside.main-sidebar {
 ul.dropdown-menu {
 }
 
-section.content.resumen-actual .small-box > .small-box-footer {
+/*section.content.resumen-actual .small-box > .small-box-footer {
     color: #ff72c1 !important;
 }
 
@@ -5805,17 +5799,16 @@ section.content.resumen-actual .inner {
     color: #ffffff;
     background: rgba(255, 255, 255, 0.13);
     border: 1px solid rgba(251, 251, 251, 0.41);
-}
+}*/
 
 .box-header {
     background: #f1f1f1;
-    /* color: white; */
     font-size: 15px;
 }
 
-.skin-blue .main-header .navbar .sidebar-toggle:hover {
+/*.skin-blue .main-header .navbar .sidebar-toggle:hover {
     background-color: rgb(97, 97, 97);
-}
+}*/
 
 .modal-header.bg-purple {
     background: #57103c !important;

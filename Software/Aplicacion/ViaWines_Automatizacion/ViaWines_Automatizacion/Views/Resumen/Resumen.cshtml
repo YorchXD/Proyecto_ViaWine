@@ -14,139 +14,136 @@
 <section class="content resumen-actual">
 
     <!--Resumen del proceso actual-->
+    
     <div class="row">
-        <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box">
-                <div class="inner">
-                    <br>
-                    <h3>150</h3>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-bag"></i>
-                </div>
-                <p class="small-box-footer">Cajas finalizadas</p>
-            </div>
+        <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+            <p>
+                <br />
+                <dl class="dl-horizontal" style="color:white">
+                    <dt>Orden de fabricación</dt>
+                    <dd id="of">26501</dd>
+                    <dt>SKU</dt>
+                    <dd id="SKU">14004817-19</dd>
+                    <dt>N° de prioridad</dt>
+                    <dd id="numeroPrioridad">3</dd>
+                    <dt>Hora de inicio planificada</dt>
+                    <dd id="horaInicioPlan">8:30</dd>
+                    <dt>Hora de término planificada</dt>
+                    <dd id="horaTerminoPlan">9:50</dd>
+                </dl>
+            </p>
         </div>
         <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <!-- small box -->
-            <div class="small-box">
+            <div class="small-box bg-gray">
                 <div class="inner">
-                    <br>
-                    <h3>900</h3>
-                    <!--h3>53<sup style="font-size: 20px">%</sup></h3-->
+                    <h3>53<sup style="font-size: 20px">%</sup></h3>
+                    <p>Avance del proceso</p>
                 </div>
                 <div class="icon">
                     <i class="ion ion-stats-bars"></i>
                 </div>
-                <p class="small-box-footer"> Botellas finalizadas</p>
+                <a href="#" class="small-box-footer">
+                    More info <i class="fa fa-arrow-circle-right"></i>
+                </a>
             </div>
         </div>
         <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box">
-                <div class="inner">
-                    <br>
-                    <h3>20</h3>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-gray">
+                <span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Botellas finalizadas</span>
+                    <span class="info-box-number">900</span>
+
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 70%"></div>
+                    </div>
+                    <span class="progress-description">
+                        70% de avance
+                    </span>
                 </div>
-                <div class="icon">
-                    <i class="ion ion-person-add"></i>
-                </div>
-                <p class="small-box-footer"> Cantidad de cajas por minuto</p>
+                <!-- /.info-box-content -->
             </div>
+            <!-- /.info-box -->
         </div>
         <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box">
-                <div class="inner">
-                    <br>
-                    <h3>120</h3>
+
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-gray">
+                <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Cajas finalizadas</span>
+                    <span class="info-box-number">150</span>
+
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 70%"></div>
+                    </div>
+                    <span class="progress-description">
+                        70% de avance
+                    </span>
                 </div>
-                <div class="icon">
-                    <i class="ion ion-pie-graph"></i>
-                </div>
-                <p class="small-box-footer">Cantidad de botella por minuto</p>
+                <!-- /.info-box-content -->
             </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- ./col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon"><i class="fa fa-star-o"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Cantidad de botella por minuto</span>
+                    <span class="info-box-number">120</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- ./col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon"><i class="fa fa-files-o"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Cantidad de cajas por minuto</span>
+                    <span class="info-box-number">20</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
         </div>
         <!-- ./col -->
     </div>
     <!-- /.row -->
     <!-- Main row -->
     <div class="row">
-        <!-- Left col -->
+
+
         <section class="col-xs-12 connectedSortable">
             <!-- Custom tabs (Charts with tabs)-->
             <div class="nav-tabs-custom">
                 <!-- Tabs within a box -->
                 <ul class="nav nav-tabs pull-right">
-                    <li class="pull-left header"><i class="fa fa-inbox"></i> Cajas por hora</li>
+                    <li class="pull-left header"><i class="fa fa-inbox"></i> Cantidad de botellas y cajas por hora</li>
                 </ul>
                 <div class="tab-content no-padding">
                     <!-- Morris chart - Sales -->
-                    <!--div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;"></div-->
-                    <div id="chartdiv"></div>
+                    <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 200px;"></div>
                 </div>
             </div>
             <!-- /.nav-tabs-custom -->
-
         </section>
-        <!-- /.Left col -->
-        <!-- right col (We are only adding the ID to make the widgets sortable)-->
-        <section class="col-lg-5 connectedSortable" style="display: none">
+        <!-- Left col -->
 
-            <!-- Map box -->
-            <div class="box box-solid bg-light-blue-gradient">
-                <div class="box-header">
-                    <!-- tools box -->
-                    <div class="pull-right box-tools">
-                        <button type="button" class="btn btn-primary btn-sm daterange pull-right" data-toggle="tooltip"
-                                title="Date range">
-                            <i class="fa fa-calendar"></i>
-                        </button>
-                        <button type="button" class="btn btn-primary btn-sm pull-right" data-widget="collapse"
-                                data-toggle="tooltip" title="Collapse" style="margin-right: 5px;">
-                            <i class="fa fa-minus"></i>
-                        </button>
-                    </div>
-                    <!-- /. tools -->
 
-                    <i class="fa fa-map-marker"></i>
 
-                    <h3 class="box-title">
-                        Visitors
-                    </h3>
-                </div>
-                <div class="box-body">
-                    <div id="world-map" style="height: 250px; width: 100%;"></div>
-                </div>
-                <!-- /.box-body-->
-                <div class="box-footer no-border">
-                    <div class="row">
-                        <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
-                            <div id="sparkline-1"></div>
-                            <div class="knob-label">Visitors</div>
-                        </div>
-                        <!-- ./col -->
-                        <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
-                            <div id="sparkline-2"></div>
-                            <div class="knob-label">Online</div>
-                        </div>
-                        <!-- ./col -->
-                        <div class="col-xs-4 text-center">
-                            <div id="sparkline-3"></div>
-                            <div class="knob-label">Exists</div>
-                        </div>
-                        <!-- ./col -->
-                    </div>
-                    <!-- /.row -->
-                </div>
-            </div>
-            <!-- /.box -->
-        </section>
-        <!-- right col -->
+
     </div>
     <!-- /.row (main row) -->
 </section>
@@ -163,48 +160,107 @@
 <!-- Main content -->
 <section class="content">
     <div class="row">
-        <div class="col-lg-4 col-xs-6">
-            <!-- small box -->
-            <div class="small-box">
-                <div class="inner">
-                    <br>
-                    <h3>150</h3>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-bag"></i>
-                </div>
-                <p class="small-box-footer">Ordenes finalizadas</p>
-            </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-4 col-xs-6">
-            <!-- small box -->
-            <div class="small-box">
-                <div class="inner">
-                    <br>
-                    <h3>5</h3>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-person-add"></i>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-gray">
+                <span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
 
+                <div class="info-box-content">
+                    <span class="info-box-text">Botellas finalizadas</span>
+                    <span class="info-box-number">900</span>
+
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 15%"></div>
+                    </div>
+                    <span class="progress-description">
+                        15% de avance
+                    </span>
                 </div>
-                <p class="small-box-footer"> Cajas Finalizadas</p>
+                <!-- /.info-box-content -->
             </div>
+            <!-- /.info-box -->
         </div>
         <!-- ./col -->
-        <div class="col-lg-4 col-xs-6">
-            <!-- small box -->
-            <div class="small-box">
-                <div class="inner">
-                    <br>
-                    <h3>44</h3>
+
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-gray">
+                <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Cajas finalizadas</span>
+                    <span class="info-box-number">150</span>
+
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 10%"></div>
+                    </div>
+                    <span class="progress-description">
+                        10% de avance
+                    </span>
                 </div>
-                <div class="icon">
-                    <i class="ion ion-stats-bars"></i>
-                </div>
-                <p class="small-box-footer"> Botellas Finalizadas</p>
+                <!-- /.info-box-content -->
             </div>
+            <!-- /.info-box -->
         </div>
+        <!-- ./col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-gray">
+                <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Ordenes Finalizadas</span>
+                    <span class="info-box-number">0</span>
+
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 0%"></div>
+                    </div>
+                    <span class="progress-description">
+                        0% de avance
+                    </span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-gray">
+                <span class="info-box-icon"><i class="fa fa-comments-o"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Avance por hora</span>
+                    <br />
+                    <!--span class="info-box-number">30</span-->
+
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 5%"></div>
+                    </div>
+                    <span class="progress-description">
+                        5% de avance
+                    </span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+    </div>
+
+    <div class="row">
+        <section class="col-xs-12 connectedSortable">
+            <!-- Custom tabs (Charts with tabs)-->
+            <div class="nav-tabs-custom">
+                <!-- Tabs within a box -->
+                <ul class="nav nav-tabs pull-right">
+                    <li class="pull-left header"><i class="fa fa-inbox"></i> Cajas por hora</li>
+                </ul>
+                <div class="tab-content no-padding">
+                    <!-- Morris chart - Sales -->
+                    <!--div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;"></div-->
+                    <div id="chartdiv"></div>
+                </div>
+            </div>
+            <!-- /.nav-tabs-custom -->
+        </section>
+        <!-- /.Left col -->
     </div>
 
     <div class="row">
@@ -241,7 +297,7 @@
                             <td>2</td>
                             <td>3254698</td>
                             <td>Good Price Corporation S.A.S.</td>
-                            <td><span class="label label-danger">Rechazada</span></td>
+                            <td><span class="label label-danger">Pospuesta</span></td>
                             <td>
                                 <div class="progress progress-xs">
                                     <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
