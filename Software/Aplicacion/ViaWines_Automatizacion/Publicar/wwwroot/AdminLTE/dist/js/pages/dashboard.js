@@ -127,7 +127,61 @@ $(function () {
 
   /* Morris.js Charts */
   // Sales chart
-  var area = new Morris.Area({
+
+    var area = new Morris.Area({
+
+        element: 'revenue-chart',
+
+        data: [
+            { hours: '00:00', a: 793, b: 729 },
+            { hours: '01:00', a: 524, b: 537 },
+            { hours: '02:00', a: 337, b: 347 },
+            { hours: '03:00', a: 272, b: 213 },
+            { hours: '04:00', a: 176, b: 169 },
+            { hours: '05:00', a: 174, b: 147 },
+            { hours: '06:00', a: 212, b: 193 },
+            { hours: '07:00', a: 341, b: 294 },
+            { hours: '08:00', a: 551, b: 501 },
+            { hours: '09:00', a: 724, b: 692 },
+            { hours: '10:00', a: 880, b: 896 },
+            { hours: '11:00', a: 955, b: 1004 },
+            { hours: '12:00', a: 1053, b: 1142 },
+            { hours: '13:00', a: 1063, b: 1150 },
+            { hours: '14:00', a: 92, b: 1123 },
+            { hours: '15:00', a: 0, b: 1151 },
+            { hours: '16:00', a: 0, b: 1222 },
+            { hours: '17:00', a: 0, b: 1155 },
+            { hours: '18:00', a: 0, b: 1246 },
+            { hours: '19:00', a: 0, b: 1100 },
+            { hours: '20:00', a: 0, b: 1199 },
+            { hours: '21:00', a: 0, b: 1395 },
+            { hours: '22:00', a: 0, b: 1361 },
+            { hours: '23:00', a: 0, b: 1005 },
+        ],
+        // The name of the data record attribute that contains x-values.
+        xkey: 'hours',
+        // A list of names of data record attributes that contain y-values.
+        ykeys: ['a', 'b'],
+        // Labels for the ykeys -- will be displayed when you hover over the
+        // chart.
+        labels: ['Cajas', 'Botellas'],
+        lineColors: ['#7A7A64','#222D32'],
+        hideHover: 'auto',
+        parseTime: false,
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+  /*var area = new Morris.Area({
     element   : 'revenue-chart',
     resize    : true,
     data      : [
@@ -145,9 +199,11 @@ $(function () {
     xkey      : 'y',
     ykeys     : ['item1', 'item2'],
     labels    : ['Item 1', 'Item 2'],
+    
     lineColors: ['#a0d0e0', '#3c8dbc'],
     hideHover : 'auto'
-  });
+  });*/
+
   var line = new Morris.Line({
     element          : 'line-chart',
     resize           : true,

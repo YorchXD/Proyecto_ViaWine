@@ -27,7 +27,7 @@ namespace ViaWines_Automatizacion.Controllers
             return View(ordenes);
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public JsonResult Proceso(int Orden, int Estado, string Fecha)//ActualizarOrden orden)
         {
             int actualizacion = ConsultaProceso.ActualizarEstadoOrden(Orden, Estado);
@@ -37,7 +37,7 @@ namespace ViaWines_Automatizacion.Controllers
                 return Json(true);
             }
             return Json(false);
-        }
+        }*/
 
         [HttpPost]
         public JsonResult Exit_proces_ini()//ActualizarOrden orden)
