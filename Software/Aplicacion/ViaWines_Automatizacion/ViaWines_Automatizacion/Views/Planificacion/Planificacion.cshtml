@@ -5,26 +5,34 @@
 }
 
 <section class="content-header">
-    <h1 calss="col-xs-12">
-        Planificación
-        <small>Del día</small>
-    </h1>
-
-    @using (Html.BeginForm("Planificacion", "Planificacion", FormMethod.Post, new { @style = "border:none" }))
-    {
-        <div class="datepicker-in-title">
-            <div class="input-group date input-group-sm" style="width: 200px;">
-                <div class="input-group-addon">
-                    <i class="fa fa-calendar"></i>
-                </div>
-                <input type="text" class="form-control pull-right" id="datepicker" name="fecha">
-                <div class="input-group-btn">
-                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                </div>
-            </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-8">
+            <h1>
+                Planificación
+                <small>Del día</small>
+            </h1>
         </div>
-    }
-    </section>
+
+        <div class="col-xs-12 col-md-4" style="margin-top:19px">
+            @using (Html.BeginForm("Planificacion", "Planificacion", FormMethod.Post))
+            {
+                <div class="datepicker">
+                    <div class="input-group date input-group-sm">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <input type="text" class="form-control pull-right" id="datepicker" name="fecha">
+                        <div class="input-group-btn">
+                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    
+    
+</section>
 
 <!-- Main content -->
 <section class="content">

@@ -17,7 +17,7 @@
             <div class="box box-widget widget-user">
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-olive-active">
-                    <h3 class="widget-user-username">Oveja Negra Rva Carmenere Merlot 2019 Corcho 12x750 MEXICO</h3>
+                    <h3 class="widget-user-username">Solicitud de ventana de mantenimiento programada y no programada, puede ser realizada por personal de linea, area tecnica o un tercero.</h3>
                     <!--h5 class="widget-user-desc">Founder &amp; CEO</h5-->
                 </div>
                 <div class="widget-user-image">
@@ -27,15 +27,15 @@
                     <div class="row">
                         <div class="col-sm-4 border-right">
                             <div class="description-block">
-                                <h5 class="description-header">5462649</h5>
-                                <span class="description-text">OF</span>
+                                <h5 class="description-header">58</h5>
+                                <span class="description-text">Código</span>
                             </div>
                             <!-- /.description-block -->
                         </div>
                         <!-- /.col -->
                         <div class="col-sm-4 border-right">
                             <div class="description-block">
-                                <h5 class="description-header">17-01-2020</h5>
+                                <h5 class="description-header">23-04-2020</h5>
                                 <span class="description-text">Fecha</span>
                             </div>
                             <!-- /.description-block -->
@@ -43,7 +43,7 @@
                         <!-- /.col -->
                         <div class="col-sm-4">
                             <div class="description-block">
-                                <h5 class="description-header">5</h5>
+                                <h5 class="description-header">1</h5>
                                 <span class="description-text">Cantidad de incidentes</span>
                             </div>
                             <!-- /.description-block -->
@@ -56,70 +56,50 @@
             <!-- /.widget-user -->
         </div>
         <!-- /.col -->
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="tabla" class="table table-bordered table-striped table-hover" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Orden</th>
+                                        <th>Hora Inicio</th>
+                                        <th>Hora Término</th>
+                                        <th>Tiempo total (min.)</th>
+                                        <th>Área</th>
+                                        <th>% de progreso al momento del incidente</th>
+                                        <th>Tipo de tiempo</th>
+                                        <th>Observación</th>
 
-        <div class="col-xs-12">
-            <div class="box">
-                <div class="box-header">
-                    <div class="box-tools">
-                        <div class="input-group input-group-sm hidden-xs" style="width: 150px;">
-                            <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+                                    </tr>
+                                </thead>
 
-                            <div class="input-group-btn">
-                                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                            </div>
+                                <tbody>
+                                    <tr>
+                                        <td>26328</td>
+                                        <td>9:00</td>
+                                        <td>9:05</td>
+                                        <td>5</td>
+                                        <td>Producción</td>
+                                        <td style="text-align:center"><span class="badge bg-light-blue">40%</span></td>
+                                        <td>Tiempos planeados</td>
+                                        <td>Sin observación</td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
                         </div>
+                        <!-- /.box-body -->
                     </div>
+                    <!-- /.box -->
                 </div>
-                <!-- /.box-header -->
-                <div class="box-body table-responsive no-padding">
-                    <table class="table table-hover">
-                        <tr>
-                            <th>ID</th>
-                            <th>Hora</th>
-                            <th>Área</th>
-                            <th>Causa</th>
-                            <th>% de progreso al momento del incidente</th>
-                        </tr>
-                        <tr>
-                            <td>1.</td>
-                            <td>9:00</td>
-                            <td>Etiquetado</td>
-                            <td>Error de formato en etiquetas</td>
-                            <td><span class="badge bg-light-blue">40%</span></td>
-                        </tr>
-                        <tr>
-                            <td>2.</td>
-                            <td>9:50</td>
-                            <td>Etiquetado</td>
-                            <td>Botella dañada</td>
-                            <td><span class="badge bg-light-blue">75%</span></td>
-                        </tr>
-                        <tr>
-                            <td>3.</td>
-                            <td>10:00</td>
-                            <td>Impresion de código</td>
-                            <td>Acumulación de cajas</td>
-                            <td><span class="badge bg-light-blue">80%</span></td>
-                        </tr>
-                        <tr>
-                            <td>4.</td>
-                            <td>10:10</td>
-                            <td>Sellado de cajas</td>
-                            <td>Acumulación de cajas</td>
-                            <td><span class="badge bg-light-blue">87%</span></td>
-                        </tr>
-                        <tr>
-                            <td>4.</td>
-                            <td>10:15</td>
-                            <td>Impresion de código</td>
-                            <td>Acumulación de cajas</td>
-                            <td><span class="badge bg-light-blue">90%</span></td>
-                        </tr>
-                    </table>
-                </div>
-                <!-- /.box-body -->
+                <!-- /.col -->
             </div>
-            <!-- /.box -->
-        </div>
+            <!-- /.row -->
+        </section>
     </div>
 </section>

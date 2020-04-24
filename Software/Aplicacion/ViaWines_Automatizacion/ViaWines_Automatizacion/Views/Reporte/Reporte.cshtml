@@ -1,0 +1,366 @@
+﻿@model IEnumerable<ViaWines_Automatizacion.Models.Orden>
+
+@{
+    ViewData["Title"] = "Reporte";
+
+}
+
+
+
+
+<section class="content-header">
+    <div class="">
+        <h1>
+            Reporte
+        </h1>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+            <select class="form-control select2" id="numeroOrden">
+                <option disabled selected value="null">Seleccione el tipo de reporte</option>
+                <option value="dia">Diaria</option>
+                <option value="semana">Semanal</option>
+                <option value="año">Anual</option>
+            </select>
+        </div>
+
+
+        <div class="col-xs-12 col-md-6">
+            <div class="input-group date ">
+                <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                </div>
+                <input type="text" class="form-control pull-right" id="datepicker" name="fecha" onload="obtenerFecha()">
+                <div class="input-group-btn">
+                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-4 col-sm-4 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon"><i class="fa fa-star-o"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Total</span>
+                    <span class="info-box-number">17</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- ./col -->
+
+        <div class="col-md-4 col-sm-4 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon"><i class="fa fa-star-o"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Tiempo total</span>
+                    <span class="info-box-number">14:01:30</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- ./col -->
+        <div class="col-md-4 col-sm-4 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon"><i class="fa fa-star-o"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Tiempo promedio</span>
+                    <span class="info-box-number">00:09:54</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- ./col -->
+    </div>
+    <!-- /.row -->
+    <!-- Small boxes (Stat box) -->
+
+
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon"><i class="fa fa-star-o"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">N° de ordenes</span>
+                    <span class="info-box-number">10</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- ./col -->
+
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon"><i class="fa fa-star-o"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">N° de ordenes completadas</span>
+                    <span class="info-box-number">8</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- ./col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon"><i class="fa fa-star-o"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">N° de ordenes pausadas</span>
+                    <span class="info-box-number">1</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- ./col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon"><i class="fa fa-star-o"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">N° de ordenes sin iniciar</span>
+                    <span class="info-box-number">1</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- ./col -->
+    </div>
+    <!-- /.row -->
+    <!-- Small boxes (Stat box) -->
+
+
+
+
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="tabla" class="table table-bordered table-striped table-hover" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Área</th>
+                                <th>Tipo de incidente</th>
+                                <th>Cantidad de incidentes</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>Bodega de insumos</td>
+                                <td>Paradas Externas</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>Calidad</td>
+                                <td>Rechazos y procesos</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>Enología</td>
+                                <td>Paradas Externas</td>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td>Laboratorio</td>
+                                <td>Tiempos de Cambio</td>
+                                <td>4</td>
+                            </tr>
+                            <tr>
+                                <td>Linea Producción</td>
+                                <td>Fallas de equipo</td>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>Mantención</td>
+                                <td>Tiempos Planeados</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>Maquila</td>
+                                <td>Tiempos de Producción</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>Prevención</td>
+                                <td>Paradas Externas</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>Producción</td>
+                                <td>NoNa</td>
+                                <td>1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+
+    <figure class="highcharts-figure">
+        <div id="container"></div>
+        <!--p class="highcharts-description">
+            Variable radius pie charts can be used to visualize a
+            second dimension in a pie chart. In this chart, the more
+            densely populated countries are drawn further out, while the
+            slice width is determined by the size of the country.
+        </p-->
+    </figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</section>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$(document).ready(function () {
+    var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model,Newtonsoft.Json.Formatting.Indented));
+    var fecha = (modelo[0]["FechaFabricacion"]).split('T')[0];
+    $("#datepicker").datepicker({ format: 'yyyy-mm-dd' }).val(fecha);
+});
+</script>
+
+
+<!--Gráfico-->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/variable-pie.js"></script>
+<!--script src="https://code.highcharts.com/modules/exporting.js"></script-->
+<!--script src="https://code.highcharts.com/modules/export-data.js"></script-->
+<!--script src="https://code.highcharts.com/modules/accessibility.js"></script-->
+
+
+
+<style>
+    #container {
+        height: 500px;
+    }
+
+    .highcharts-figure, .highcharts-data-table table {
+        /*min-width: 320px;
+        max-width: 700px;*/
+        width:100%;
+        margin: 1em auto;
+    }
+
+
+    .highcharts-data-table caption {
+        padding: 1em 0;
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    .highcharts-data-table th {
+        font-weight: 600;
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
+        background: #f8f8f8;
+    }
+
+    .highcharts-data-table tr:hover {
+        background: #f1f7ff;
+    }
+</style>
+
+
+<script>
+    Highcharts.chart('container', {
+        chart: {
+            type: 'variablepie'
+        },
+        title: {
+            text: 'Cantidad de incidentes por área'
+        },
+        tooltip: {
+            headerFormat: '',
+            pointFormat: '<span style="color:{point.color}">\u25CF</span> <b> {point.name}</b><br/>' +
+                'Cantidad de incientes: <b>{point.y}</b><br/>' +
+                'Porcentaje: <b>{point.z}</b><br/>'
+        },
+        series: [{
+            minPointSize: 10,
+            innerSize: '20%',
+            zMin: 0,
+            name: 'countries',
+            data: [{
+                name: 'Bodega insumos',
+                y: 1,
+                z: 5.9
+            }, {
+                name: 'Calidad',
+                y: 1,
+                z: 5.9
+            }, {
+                name: 'Enología',
+                y: 5,
+                z: 29.4
+            }, {
+                name: 'Laboratorio',
+                y: 4,
+                z: 23.5
+            }, {
+                name: 'Linea Producción',
+                y: 2,
+                z: 11.8
+            }, {
+                name: 'Mantención',
+                y: 1,
+                z: 5.9
+            }, {
+                name: 'Maquila',
+                y: 1,
+                z: 5.9
+            }, {
+                name: 'Prevención',
+                y: 1,
+                z: 5.9
+            }, {
+                name: 'Producción',
+                y: 1,
+                z: 5.9
+            }]
+        }]
+    });
+</script>
+
+<!--Fin gráfico-->

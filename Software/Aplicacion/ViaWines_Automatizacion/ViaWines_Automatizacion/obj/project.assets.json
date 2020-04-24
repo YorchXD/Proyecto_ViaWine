@@ -12949,8 +12949,7 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\yorch\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\yorch\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
@@ -12961,9 +12960,6 @@
       "packagesPath": "C:\\Users\\yorch\\.nuget\\packages\\",
       "outputPath": "D:\\Repositorios\\Proyecto_ViaWine\\Software\\Aplicacion\\ViaWines_Automatizacion\\ViaWines_Automatizacion\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
         "C:\\Users\\yorch\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -13021,7 +13017,7 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.102\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300-preview-015095\\RuntimeIdentifierGraph.json"
       }
     }
   }

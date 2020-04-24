@@ -198,3 +198,6 @@ D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\Via
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\Razor\Views\Shared\_ValidationScriptsPartial.cshtml.g.cs
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\Razor\Views\_ViewImports.cshtml.g.cs
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\Razor\Views\_ViewStart.cshtml.g.cs
+D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\ViaWines_Automatizacion.csproj.CoreCompileInputs.cache
+D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\ViaWines_Automatizacion.genruntimeconfig.cache
+D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\Razor\Views\Reporte\Reporte.cshtml.g.cs

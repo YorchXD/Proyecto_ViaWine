@@ -1,17 +1,132 @@
-﻿@{
+﻿@model IEnumerable<ViaWines_Automatizacion.Models.Orden>
+
+@{
     ViewData["Title"] = "Problemas en el proceso de producción";
 }
 
-<section class="content-header">
+<!--section class="content-header">
     <h1>
         Incidentes
         <small>en el proceso de produccion</small>
     </h1>
     <h6>Indicadores globales de detencion en desarrollo</h6>
+</section-->
+
+<section class="content-header">
+    <div class=" row col-xs-12">
+        <h1>
+            Incidentes
+            <small>Del día</small>
+        </h1>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+            <div class="input-group date ">
+                <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                </div>
+                <input type="text" class="form-control pull-right" id="datepicker" name="fecha" onload="obtenerFecha()">
+                <div class="input-group-btn">
+                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="col-xs-12 col-md-6">
+            <p>
+                <button type="button" class="btn btn-block bg-green" data-toggle="modal" data-target="#modal-agregar-incidente">Agregar incidente</button>
+            </p>
+        </div>
+    </div>
 </section>
+
+
 
 <!-- Main content -->
 <section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="tabla" class="table table-bordered table-striped table-hover" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Actividad</th>
+                                <th>Cantidad de incidentes</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td><a class="nav-link active" asp-area="" asp-controller="Problemas" asp-action="DetalleProblema">58</a></td>
+                                <td>Solicitud de ventana de mantenimiento programada y no programada, puede ser realizada por personal de linea, area tecnica o un tercero.</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td><a class="nav-link active" asp-area="" asp-controller="Problemas" asp-action="DetalleProblema">22</a></td>
+                                <td>Horas que resulta de sumar los domingos y festivos no trabajados en el mes</td>
+                                <td>3</td>
+                            </tr>
+                            <!--@if (Model != null)
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.OrdenFabricacion)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Descripcion)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.BotellasPlanificadas)
+                                        </td>
+                                    </tr>
+                                }
+                            }-->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
+
+
+
+<div class="modal fade" id="modal-agregar-incidente">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-green">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Agregar incidente</h4>
+            </div>
+            <div class="modal-body">
+                <p>One fine body&hellip;</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn bg-black">Aceptar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<!-- Main content -->
+<!--section class="content">
 
     <div class="row">
         <div class="col-xs-12">
@@ -19,20 +134,18 @@
                 <div class="box-header">
 
                     <div class="box-tools">
-                        <!-- Date range -->
-                            <div class="input-group date input-group-sm" style="width: 200px;">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-                                <input type="text" class="form-control pull-right" id="datepicker" name="fecha">
-                                <div class="input-group-btn">
-                                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                                </div>
+                        <div class="input-group date input-group-sm" style="width: 200px;">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
                             </div>
+                            <input type="text" class="form-control pull-right" id="datepicker" name="fecha">
+                            <div class="input-group-btn">
+                                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- /.box-header -->
                 <div class="box-body">
                     <table class="table table-bordered">
                         <tr>
@@ -62,7 +175,6 @@
                         </tr>
                     </table>
                 </div>
-                <!-- /.box-body -->
                 <div class="box-footer clearfix">
                     <ul class="pagination pagination-sm no-margin pull-right">
                         <li><a href="#">&laquo;</a></li>
@@ -75,4 +187,4 @@
             </div>
         </div>
     </div>
-</section>
+</section-->
