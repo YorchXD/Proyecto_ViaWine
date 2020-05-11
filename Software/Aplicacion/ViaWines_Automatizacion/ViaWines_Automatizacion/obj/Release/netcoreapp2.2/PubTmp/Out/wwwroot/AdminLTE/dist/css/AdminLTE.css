@@ -5636,13 +5636,71 @@ footer.main-footer {
 }
 
 .icon {
+}*/
+
+/*i.ion.ion-bag*/
+i.ion.ion-stats-bars {
+    background-repeat: no-repeat;
+    background-image: url(/AdminLTE/dist/img/rising.svg);
+    background-position: center;
+    background-size: 100%;
+}
+.icon i.ion:before {
+    opacity: 0;
 }
 
-i.ion.ion-bag {
+
+
+i.fa.fa-bookmark-o {
+    background-repeat: no-repeat;
     background-image: url(https://image.flaticon.com/icons/svg/1007/1007912.svg);
+    background-position: center;
+    background-size: 110%;
 }
 
-.icon i.ion {
+.info-box-icon i.fa:before {
+    opacity: 0;
+}
+
+i.fa.fa-files-o {
+    background-image: url(https://entel.tiboxlab.cl/tu-negocio-digital/wp-content/uploads/2020/02/1007912.svg);
+    background-position: center;
+    background-size: 80%;
+    background-repeat: no-repeat;
+}
+
+i.fa.fa-star-o {
+    background-image: url(https://entel.tiboxlab.cl/tu-negocio-digital/wp-content/uploads/2020/02/1614221222.svg);
+    background-position: center;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+
+i.fa.fa-thumbs-o-up {
+    background-image: url(https://entel.tiboxlab.cl/tu-negocio-digital/wp-content/uploads/2020/02/1614221.svg);
+    background-position: center;
+    background-size: 110%;
+    background-repeat: no-repeat;
+}
+
+i.fa.fa-calendar {
+    background-repeat: no-repeat;
+    background-image: url(/AdminLTE/dist/img/order.svg);
+    background-position: center;
+    background-size: 100%;
+}
+
+i.fa.fa-comments-o {
+    background-repeat: no-repeat;
+    background-image: url(/AdminLTE/dist/img/avance-hora.svg);
+    background-position: center;
+    background-size: 100%;
+}
+
+
+
+/*.icon i.ion {
     background-repeat: no-repeat;
     background-size: 92%;
     background-position: left center;
@@ -5663,7 +5721,6 @@ i.ion.ion-bag {
     background: hsla(0, 0%, 0%, 0) !important;
     color: #797979 !important;
 }*/
-
 .content-wrapper {
     background-color: rgb(222, 222, 222);
 }

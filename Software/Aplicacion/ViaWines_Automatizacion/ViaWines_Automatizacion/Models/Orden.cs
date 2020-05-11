@@ -18,16 +18,16 @@ namespace ViaWines_Automatizacion.Models
         public int BotellasFabricadas { get; set; }
         public int CajasPlanificadas { get; set; }
         public int CajasFabricadas { get; set; }
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime FechaFabricacion { get; set; }
-        [DisplayFormat(DataFormatString = "{0:HH:mm:ss}", ApplyFormatInEditMode = true)]
-        public DateTime HoraInicioPlanificada { get; set; }
-        [DisplayFormat(DataFormatString = "{0:HH:mm:ss}", ApplyFormatInEditMode = true)]
-        public DateTime HoraTerminoPlanificada { get; set; }
-        [DisplayFormat(DataFormatString = "{0:HH:mm:ss}", ApplyFormatInEditMode = true)]
-        public DateTime HoraInicio { get; set; }
-        [DisplayFormat(DataFormatString = "{0:HH:mm:ss}", ApplyFormatInEditMode = true)]
-        public DateTime HoraTermino { get; set; }
+        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public String FechaFabricacion { get; set; }
+        //[DisplayFormat(DataFormatString = "{0:HH:mm:ss}", ApplyFormatInEditMode = true)]
+        public String HoraInicioPlanificada { get; set; }
+        //[DisplayFormat(DataFormatString = "{0:HH:mm:ss}", ApplyFormatInEditMode = true)]
+        public String HoraTerminoPlanificada { get; set; }
+        //[DisplayFormat(DataFormatString = "{0:HH:mm:ss}", ApplyFormatInEditMode = true)]
+        public String HoraInicio { get; set; }
+        //[DisplayFormat(DataFormatString = "{0:HH:mm:ss}", ApplyFormatInEditMode = true)]
+        public String HoraTermino { get; set; }
         public String FormatoCaja { get; set; }
         public int Estado { get; set; }
         public int Secuencia { get; set; }

@@ -10,7 +10,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
 {
     public class ContexDb
     {
-        private static string connStr = "server=190.171.160.83;database=Automatizacion_ViaWines;UID=sa;PASSWORD=J1h4m3b012*;";
+        private static string connStr = "server=190.171.160.83;database=Automatizacion_ViaWines2.0;UID=sa;PASSWORD=J1h4m3b012*;";
 
         public static DataSet GetDataSet(SqlCommand command)
         {

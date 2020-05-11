@@ -14,14 +14,14 @@ namespace ViaWines_Automatizacion.Controllers
         public IActionResult Proceso(DateTime fecha)
         {
             List<Orden> ordenes;
-            if (fecha.ToString("yyyy-MM-dd").Equals("0001-01-01"))
+            if (fecha.ToString("yyyy-MM-dd").Equals("0001-01-01") || DateTime.Now.ToString("yyyy-MM-dd").Equals(fecha.ToString("yyyy-MM-dd")))
             {
                 //ordenes = ConsultaPlanificacion.LeerOrdenes("2020-02-17");
-                ordenes = ConsultaPlanificacion.LeerOrdenes(DateTime.Now.ToString("yyyy-MM-dd"));
+                ordenes = ConsultaPlanificacion.LeerOrdenes(DateTime.Now.ToString("yyyy-MM-dd"), 1);
             }
             else
             {
-                ordenes = ConsultaPlanificacion.LeerOrdenes(fecha.ToString("yyyy-MM-dd"));
+                ordenes = ConsultaPlanificacion.LeerOrdenes(fecha.ToString("yyyy-MM-dd"), 2);
             }
 
             return View(ordenes);
@@ -48,8 +48,8 @@ namespace ViaWines_Automatizacion.Controllers
             //int actualizacion = -1;
             if (ordenes.Count>0)
             {
-                resultado.Titulo = "Falló iniciar proceso";
-                resultado.Contenido = "No se puede iniciar proceso dado que existe otro ejecutandose";
+                resultado.Titulo = "Iniciar proceso";
+                resultado.Contenido = "¿Está seguro que desea iniciar el proceso de la orden N°" + ordenes[0].OrdenFabricacion + " ?";
                 resultado.ExisteProceso = true;
             }
             else

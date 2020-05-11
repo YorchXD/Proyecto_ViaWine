@@ -4,7 +4,8 @@
     ViewData["Title"] = "Planificación";
 }
 
-<section class="content-header">
+
+<!--section class="content-header">
     <div class="row">
         <div class="col-xs-12 col-md-8">
             <h1>
@@ -30,16 +31,40 @@
             }
         </div>
     </div>
-    
-    
+</section-->
+
+
+<section class="content-header">
+    <div class="row">
+        <div class="col-xs-12 col-md-8">
+            <h1>
+                Planificación
+                <small>Del día</small>
+            </h1>
+        </div>
+
+        <div class="col-xs-12 col-md-4" style="margin-top:19px">
+            <div class="datepicker">
+                <div class="input-group date input-group-sm">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" class="form-control pull-right" id="datepicker" name="fecha" autocomplete="off">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default" id="obtenerOrdenes" onclick="buscarPlanificacion()"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
+
 <!-- Main content -->
-<section class="content">
+<!--section class="content">
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
-                <!-- /.box-header -->
                 <div class="box-body">
                     <table id="tabla" class="table table-bordered table-striped table-hover">
                         <thead>
@@ -159,6 +184,39 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+</section-->
+
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="tabla" class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Secuencia</th>
+                                <th>Orden</th>
+                                <th>Version</th>
+                                <th>Cliente</th>
+                                <th>SKU</th>
+                                <th>Descripción</th>
+                                <th>Cant. Botellas</th>
+                                <th>Cant. Botellas Fabricadas</th>
+                                <th>Cant. Cajas</th>
+                                <th>Cant. Cajas Fabricadas</th>
+                                <th>Fecha Fabricación</th>
+                                <th>Hora de inicio</th>
+                                <th>Hora de término</th>
+                                <th>Estado</th>
+                                <th>% de avance</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
                 <!-- /.box-body -->
             </div>
             <!-- /.box -->
@@ -168,4 +226,119 @@
     <!-- /.row -->
 </section>
 <!-- /.content -->
+<!-- datepicker -->
+<!--script src="~/AdminLTE/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/AdminLTE/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="~/AdminLTE/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.es.min.js"></script-->
+<!--link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></!-script>
+<script! src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script-->
 
+<!--script src="~/AdminLTE/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.es.min.js"></script-->
+
+
+
+
+<style>
+    .event a {
+        background-color: #560f3d !important;
+        color: #ffffff !important;
+    }
+</style>
+
+<script type="text/javascript" src="~/js/Planificacion.js"></script>
+<script>
+    $(document).ready(
+        planificacionDisponible1());
+</script>
+
+
+
+<script>
+    function buscarPlanificacion() {
+        var fecha = $("#datepicker").datepicker({ dateFormat: 'yy-mm-dd' }).val();
+        seleccionarBuscarPlanificacion(fecha);
+    }
+</script>
+
+<script>
+    //var fecha = "28/04/2020";
+    
+    $(document).ready(function () {
+        var fecha = new Date();
+        var dd = fecha.getDate();
+        var MM = fecha.getMonth() + 1;
+        var yyyy = fecha.getFullYear();
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+        if (MM < 10) {
+            MM = '0' + MM;
+        }
+        fecha = yyyy + '-' + MM + '-' + dd;
+        seleccionarBuscarPlanificacion(fecha);
+
+    });
+</script>
+
+
+
+<!--script>
+    $(document).ready(function () {
+        $('#tabla').DataTable({
+            'searching': true,
+            'ordering': true,
+            'info': false,
+            'autoWidth': true,
+            'paging': false,
+            'scrollX': true,
+            //retrieve: true,
+            'lengthChange': false,
+            //"processing": true,
+            'language': {
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Ultimo",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            },
+
+            'ajax': {
+                "url": "/Planificacion/GetPlanificacion",
+                "method": "POST",
+                "data": { fecha: "2020/04/28" },
+                "dataSrc": ""
+            },
+            'columns': [
+                { "data": "secuencia" },
+                { "data": "ordenFabricacion" },
+                { "data": "version" },
+                { "data": "cliente" },
+                { "data": "sku" },
+                { "data": "descripcion" },
+                { "data": "botellasPlanificadas" },
+                { "data": "botellasFabricadas" },
+                { "data": "cajasPlanificadas" },
+                { "data": "cajasFabricadas" },
+                { "data": "fechaFabricacion" },
+                { "data": "horaInicioPlanificada" },
+                { "data": "horaTerminoPlanificada" },
+                { "data": "estado" },
+                { "data": "porcentajeAvance" },
+            ]
+        });
+    });
+</script-->

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "JmfOIB6JM4QaiSK/6qsOGS2DoYa4mLcp7003oJCTcoFEdPNODHczTAIdYLSR2FQpqZ73J2SssZftryp30cWIYA==",
+  "dgSpecHash": "QJTeEx7UdnHgQG6xxfviBuimNV8XcynzKkIGAp8PGqTt8lsUcCpWmadaCKmxnVXNNWAKVicABtG02GtiITw7mg==",
   "success": true,
   "projectFilePath": "D:\\Repositorios\\Proyecto_ViaWine\\Software\\Aplicacion\\ViaWines_Automatizacion\\ViaWines_Automatizacion\\ViaWines_Automatizacion.csproj",
   "expectedPackageFiles": [
@@ -58,7 +58,7 @@
     "C:\\Users\\yorch\\.nuget\\packages\\microsoft.aspnetcore.mvc.abstractions\\2.2.0\\microsoft.aspnetcore.mvc.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\yorch\\.nuget\\packages\\microsoft.aspnetcore.mvc.analyzers\\2.2.0\\microsoft.aspnetcore.mvc.analyzers.2.2.0.nupkg.sha512",
     "C:\\Users\\yorch\\.nuget\\packages\\microsoft.aspnetcore.mvc.apiexplorer\\2.2.0\\microsoft.aspnetcore.mvc.apiexplorer.2.2.0.nupkg.sha512",
-    "C:\\Users\\yorch\\.nuget\\packages\\microsoft.aspnetcore.mvc.core\\2.2.0\\microsoft.aspnetcore.mvc.core.2.2.0.nupkg.sha512",
+    "C:\\Users\\yorch\\.nuget\\packages\\microsoft.aspnetcore.mvc.core\\2.2.5\\microsoft.aspnetcore.mvc.core.2.2.5.nupkg.sha512",
     "C:\\Users\\yorch\\.nuget\\packages\\microsoft.aspnetcore.mvc.cors\\2.2.0\\microsoft.aspnetcore.mvc.cors.2.2.0.nupkg.sha512",
     "C:\\Users\\yorch\\.nuget\\packages\\microsoft.aspnetcore.mvc.dataannotations\\2.2.0\\microsoft.aspnetcore.mvc.dataannotations.2.2.0.nupkg.sha512",
     "C:\\Users\\yorch\\.nuget\\packages\\microsoft.aspnetcore.mvc.formatters.json\\2.2.0\\microsoft.aspnetcore.mvc.formatters.json.2.2.0.nupkg.sha512",
