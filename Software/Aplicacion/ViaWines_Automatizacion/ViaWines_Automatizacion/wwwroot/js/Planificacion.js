@@ -31,7 +31,7 @@ function mostrarTablaOrdenes(fecha, opcion) {
         'ordering': true,
         'info': false,
         'autoWidth': true,
-        'paging': false,
+        'paging': true,
         'scrollX': true,
          'destroy': true,
         'lengthChange': false,

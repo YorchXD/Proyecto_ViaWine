@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\js\Planificacion.js" />
+    <None Include="wwwroot\js\planificacion.js" />
     <None Include="wwwroot\AdminLTE\dist\js\Proceso.js" />
     <None Include="wwwroot\AdminLTE\dist\js\Reporte.js" />
   </ItemGroup>
