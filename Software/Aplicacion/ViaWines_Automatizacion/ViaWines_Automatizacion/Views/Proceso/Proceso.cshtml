@@ -178,43 +178,15 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <table class="table table-bordered">
-                        <tr>
-                            <th style="width: 10px">#</th>
-                            <th>Hora de inicio</th>
-                            <th>Hora de término</th>
-                        </tr>
-                        <tr>
-                            <td>1.</td>
-                            <td>8:40</td>
-                            <td>8:45</td>
-                        </tr>
-                        <tr>
-                            <td>2.</td>
-                            <td>8:40</td>
-                            <td>8:46</td>
-                        </tr>
-                        <tr>
-                            <td>3.</td>
-                            <td>8:41</td>
-                            <td>8:46</td>
-                        </tr>
-                        <tr>
-                            <td>4.</td>
-                            <td>8:41</td>
-                            <td>8:46</td>
-                        </tr>
+                    <table id="tablaBotellas" class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th style="width: 10px">#</th>
+                                <th>Hora de inicio</th>
+                                <th>Hora de término</th>
+                            </tr>
+                        </thead>
                     </table>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer clearfix">
-                    <ul class="pagination pagination-sm no-margin pull-right">
-                        <li><a href="#">&laquo;</a></li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">&raquo;</a></li>
-                    </ul>
                 </div>
             </div>
             <!-- /.box -->
@@ -416,10 +388,8 @@
 
         var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model,Newtonsoft.Json.Formatting.Indented));
 
-        for (var i = 0; i < modelo.length; i++)
-        {
-            if (modelo[i]["Estado"] == 1)
-            {
+        for (var i = 0; i < modelo.length; i++) {
+            if (modelo[i]["Estado"] == 1) {
                 document.getElementById("SKU").innerHTML = modelo[i]["SKU"];
                 document.getElementById("descripcionProducto").innerHTML = modelo[i]["Descripcion"];
                 document.getElementById("cantCajasPlan").innerHTML = modelo[i]["CajasPlanificadas"];
@@ -447,5 +417,34 @@
             }
         }
 
-    })
+    });
+
+    $(document).ready(function () {
+        var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, Newtonsoft.Json.Formatting.Indented));
+        for (var i = 0; i < modelo.length; i++) {
+            if (modelo[i]["Estado"] == 1) {
+                monitoreoBotellas(modelo[i]["OrdenFabricacion"]);
+            }
+        }
+        
+    });
 </script>
+
+
+<script>
+    function actualizarTablaBotella() {
+        var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, Newtonsoft.Json.Formatting.Indented));
+        var ordenSelect = document.getElementById("numeroOrden");
+        var optionSelected = ordenSelect.options[ordenSelect.selectedIndex].value;
+        for (var i = 0; i < modelo.length; i++) {
+            if (modelo[i]["Estado"] == 1 && optionSelected == modelo[i]["OrdenFabricacion"]) {
+                monitoreoBotellas(modelo[i]["OrdenFabricacion"]);
+            }
+        }
+    }
+    setInterval(actualizarTablaBotella, 60000);
+</script>
+
+<!--script type="text/javascript">
+    setTimeout('actualizarTablaBotella()', 5000);
+</script-->

@@ -164,6 +164,15 @@ namespace ViaWines_Automatizacion.Controllers
             return Json(resultado);
         }
 
+        [HttpPost]
+        public JsonResult GetMonitoreoBotella(int OrdenFabricacion)
+        {
+            String fecha = "2020-05-13";
+            List<Botella> botellas = ConsultaProceso.LeerBotellas(fecha, OrdenFabricacion);
+            return Json(botellas);
+
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

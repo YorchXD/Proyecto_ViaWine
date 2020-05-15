@@ -62,7 +62,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
         /// <summary>
         /// Verifica si una orden que se encuentra pausada.
         /// </summary>
-        public static Boolean OrdenPausada(int Orden)
+        /*public static Boolean OrdenPausada(int Orden)
         {
             try
             {
@@ -80,13 +80,13 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                 Console.WriteLine(ex.ToString());
             }
             return false;
-        }
+        }*/
 
 
         /// <summary>
         /// Verifica si una orden que se encuentra pausada.
         /// </summary>
-        public static Boolean OrdenPospuesta(int Orden)
+        /*public static Boolean OrdenPospuesta(int Orden)
         {
             try
             {
@@ -104,12 +104,12 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                 Console.WriteLine(ex.ToString());
             }
             return false;
-        }
+        }*/
 
         /// <summary>
         /// Verifica si una orden que se encuentra pausada.
         /// </summary>
-        public static Boolean OrdenFinaliada(int Orden)
+        /*public static Boolean OrdenFinaliada(int Orden)
         {
             try
             {
@@ -127,12 +127,12 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                 Console.WriteLine(ex.ToString());
             }
             return false;
-        }
+        }*/
+
 
         /**
          * Obtiene las ordenes del día
          **/
-
         public static List<Orden> LeerOrdenes(String fecha)
         {
             try
@@ -166,6 +166,39 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                         ordenes.Add(orden);
                     }
                     return ordenes;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            return null;
+        }
+        public static List<Botella> LeerBotellas(String Fecha, int OrdenFabricacion)
+        {
+            try
+            {
+                var command = new SqlCommand() { CommandText = "Leer_Botellas", CommandType = System.Data.CommandType.StoredProcedure };
+                command.Parameters.Add(new SqlParameter() { ParameterName = "OrdenFabricacion", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
+                var datos = ContexDb.GetDataSet(command);
+                List<Botella> botellas = new List<Botella>();
+                if (datos.Tables[0].Rows.Count > 0)
+                {
+                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
+                    {
+                        var prodData = row;
+                        var orden = new Botella()
+                        {
+                            Id = Convert.ToInt32(prodData["id"]),
+                            HoraInicio = prodData["horaInicio"].ToString(),
+                            HoraTermino = prodData["horaTermino"].ToString()
+                        };
+
+                        botellas.Add(orden);
+                    }
+                    return botellas;
                 }
 
             }

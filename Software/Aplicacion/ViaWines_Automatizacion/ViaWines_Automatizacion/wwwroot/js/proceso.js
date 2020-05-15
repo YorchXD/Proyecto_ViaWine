@@ -123,8 +123,60 @@ function mostrarOrden(modelo) {
                 default:
                     document.getElementById("estado").innerHTML = 'Finalizada';
             }
+            monitoreoBotellas(modelo[i]["OrdenFabricacion"]);
 
         }
     }
 }
 
+function monitoreoBotellas(OrdenFabricacion) {
+    //var ordenSelect = document.getElementById("numeroOrden");
+    //var optionSelected = ordenSelect.options[ordenSelect.selectedIndex].value;
+    var datos = {
+        'OrdenFabricacion': OrdenFabricacion
+    };
+    $('#tablaBotellas').DataTable({
+        'searching': false,
+        'ordering': true,
+        'info': false,
+        'autoWidth': true,
+        'paging': true,
+        'scrollX': false,
+        'destroy': true,
+        'lengthChange': false,
+        'responsive': true,
+        //"processing": true,
+        'language': {
+            "decimal": "",
+            "emptyTable": "No hay información",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Entradas",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
+        },
+
+        'ajax': {
+            "url": "/Proceso/GetMonitoreoBotella",
+            "method": "POST",
+            "data": datos,
+            "dataSrc": ""
+        },
+        'columns': [
+            { "data": "id" },
+            { "data": "horaInicio" },
+            { "data": "horaTermino" },
+        ]
+    });
+}
