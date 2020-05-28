@@ -20,21 +20,6 @@ namespace ViaWines_Automatizacion.Controllers
             return View();
         }
 
-        /*public IActionResult Planificacion(DateTime fecha)
-        {
-            List<Orden> ordenes;
-            if (fecha.ToString("yyyy-MM-dd").Equals("0001-01-01"))
-            {
-                ordenes = ConsultaPlanificacion.LeerOrdenes(DateTime.Now.ToString("yyyy-MM-dd"));
-            }
-            else
-            {
-                ordenes = ConsultaPlanificacion.LeerOrdenes(fecha.ToString("yyyy-MM-dd"));
-            }
-
-            return View(ordenes);
-        }*/
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -46,14 +31,25 @@ namespace ViaWines_Automatizacion.Controllers
         public JsonResult GetPlanificacion(String fecha, int opcion)
         {
             List<Orden> ordenes = ConsultaPlanificacion.LeerOrdenes(fecha, opcion); 
-            return Json(ordenes);
+            if (ordenes!=null)
+            {
+                return Json(ordenes);
+            }
+            /*Manda un objeto vacio para que se active zero records y muestre que no hay información en la tabla*/
+            return Json(new object());
+            
         }
 
         [HttpGet]
         public JsonResult GetFechasPlanificacion()
         {
             List<String> fechas = ConsultaPlanificacion.LeerFechas();
-            return Json(fechas);
+            if(fechas!=null)
+            {
+                return Json(fechas);
+            }
+            return Json(new object());
+            
         }
 
 

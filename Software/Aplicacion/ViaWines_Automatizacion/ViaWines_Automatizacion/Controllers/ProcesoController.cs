@@ -96,12 +96,12 @@ namespace ViaWines_Automatizacion.Controllers
             Boolean iniciada = OrdenIniciada(Ordenes, OrdenFabricacion);
             Boolean pausada = OrdenPausada(Ordenes, OrdenFabricacion);
             Boolean pospuesta = OrdenPospuesta(Ordenes, OrdenFabricacion);
-            //Boolean finalizada = OrdenFinalizada(Ordenes, OrdenFabricacion);
+            Boolean finalizada = OrdenFinalizada(Ordenes, OrdenFabricacion);
             switch (OpcionAccion)
             {
                 /*Consulta si existe una orden iniciada o pausada*/
                 case 1:
-                    if (!ordenesIniciadas || pausada || pospuesta)
+                    if (!ordenesIniciadas && (!finalizada || pausada || pospuesta))
                     {
                         resultado.Titulo = "Iniciar proceso";
                         resultado.Contenido = "¿Está seguro que desea iniciar el proceso de la orden N°" + OrdenFabricacion + " ?";
@@ -110,7 +110,7 @@ namespace ViaWines_Automatizacion.Controllers
                     else
                     {
                         resultado.Titulo = "Falló iniciar proceso";
-                        resultado.Contenido = "No se puede iniciar proceso de la orden N°" + OrdenFabricacion + ". Puede que ya esté en ejecución o exista otra orden iniciada";
+                        resultado.Contenido = "No se puede iniciar proceso de la orden N°" + OrdenFabricacion + ". Puede que ya esté en ejecución, exista otra orden iniciada o esté finalizada.";
                         resultado.ExisteProceso = false;
                     }                        
                     break;
@@ -165,14 +165,101 @@ namespace ViaWines_Automatizacion.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetMonitoreoBotella(int OrdenFabricacion)
+        public JsonResult GetMonitoreoBotellas(int OrdenFabricacion)
+        {
+          String fecha = "2020-05-13";
+            List<Botella> botellas = ConsultaProceso.LeerBotellas(fecha, OrdenFabricacion);
+            if(botellas!=null)
+            {
+                return Json(botellas);
+            }
+            /*Manda un objeto vacio para que se active zero records y muestre que no hay información en la tabla*/
+            return Json(new Object());
+        }
+
+        [HttpPost]
+        public JsonResult GetMonitoreoCajas(int OrdenFabricacion)
         {
             String fecha = "2020-05-13";
-            List<Botella> botellas = ConsultaProceso.LeerBotellas(fecha, OrdenFabricacion);
-            return Json(botellas);
+            List<Caja> caja = ConsultaProceso.LeerCajas(fecha, OrdenFabricacion);
+            if(caja != null)
+            {
+                return Json(caja);
+            }
+            /*Manda un objeto vacio para que se active zero records y muestre que no hay información en la tabla*/
+            return Json(new Object());
+            
 
         }
 
+        [HttpPost]
+        public JsonResult GetCantCajas(int OrdenFabricacion)
+        {
+            String fecha = "2020-05-13";
+            List<Caja> caja = ConsultaProceso.LeerCajas(fecha, OrdenFabricacion);
+            List<Orden> ordenes = ConsultaProceso.LeerOrdenes(fecha);
+            int cajasPlanificadas = 0;
+            int cantCajas = 0;
+            double porcentaje = 0;
+            
+            if (caja != null)
+            {
+                cantCajas = caja.Count();
+                for (int i = 0; i<ordenes.Count(); i++)
+                {
+                    if(ordenes[i].OrdenFabricacion==OrdenFabricacion)
+                    {
+                        cajasPlanificadas = ordenes[i].CajasPlanificadas;
+                        break;
+                    }
+                }
+
+                porcentaje = (double)((cantCajas * 100.0) / cajasPlanificadas);
+
+            }
+
+            var datosCaja = new
+            {
+                CantCajas = cantCajas,
+                Porcentaje = Math.Round(porcentaje,2)
+            };
+
+            return Json(datosCaja);
+        }
+
+
+
+        [HttpPost]
+        public JsonResult GetCantBotellas(int OrdenFabricacion)
+        {
+            String fecha = "2020-05-13";
+            List<Botella> botellas = ConsultaProceso.LeerBotellas(fecha, OrdenFabricacion);
+            List<Orden> ordenes = ConsultaProceso.LeerOrdenes(fecha);
+            int botellasPlanificadas = 0;
+            int cantBotellas = 0;
+            double porcentaje = 0;
+
+            if (botellas!=null)
+            {
+                cantBotellas = botellas.Count();
+                for (int i = 0; i < ordenes.Count(); i++)
+                {
+                    if (ordenes[i].OrdenFabricacion == OrdenFabricacion)
+                    {
+                        botellasPlanificadas = ordenes[i].BotellasPlanificadas;
+                        break;
+                    }
+                }
+
+                porcentaje = (double)((cantBotellas * 100.0) / botellasPlanificadas);   
+            }
+            var datosBotella = new
+            {
+                CantBotellas = cantBotellas,
+                Porcentaje = Math.Round(porcentaje,2)
+            };
+            return Json(datosBotella);
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

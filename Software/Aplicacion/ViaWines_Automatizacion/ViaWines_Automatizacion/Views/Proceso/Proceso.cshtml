@@ -19,20 +19,20 @@
             <select class="form-control select2" id="numeroOrden" onchange="seleccionarOrden()">
                 <option disabled selected value="null">Seleccione una orden</option>
 
-                @if (Model != null)
-                {
-                    @foreach (var item in Model)
+                <!--@if (Model != null)
                     {
-                        @if (item.Estado == 1)
+                        @foreach (var item in Model)
                         {
-                            <option value="@item.OrdenFabricacion" selected>@item.OrdenFabricacion</option>
+                            @if (item.Estado == 1)
+                            {
+                                <option value="@item.OrdenFabricacion" selected>@item.OrdenFabricacion</option>
+                            }
+                            else
+                            {
+                                <option value="@item.OrdenFabricacion">@item.OrdenFabricacion</option>
+                            }
                         }
-                        else
-                        {
-                            <option value="@item.OrdenFabricacion">@item.OrdenFabricacion</option>
-                        }
-                    }
-                }
+                    }-->
             </select>
         </div>
     </div>
@@ -46,14 +46,12 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Botellas finalizadas</span>
-                    <span class="info-box-number">900</span>
+                    <span class="info-box-number" id="cantBotellas">-</span>
 
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 70%"></div>
+                    <div class="progress" id="progresoBotellas">
+                        <!--div class="progress-bar" style="width: 70%"></div-->
                     </div>
-                    <span class="progress-description">
-                        70% de avance
-                    </span>
+                    <span class="progress-description" id="porcentBotellas">-% de avance</span>
                 </div>
                 <!-- /.info-box-content -->
             </div>
@@ -67,13 +65,13 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Cajas finalizadas</span>
-                    <span class="info-box-number">150</span>
+                    <span class="info-box-number" id="cantCajas">-</span>
 
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 70%"></div>
+                    <div class="progress" id="progresoCajas">
+                        <!--div class="progress-bar" style="width: 70%"></div-->
                     </div>
-                    <span class="progress-description">
-                        70% de avance
+                    <span class="progress-description" id="porcentCajas">
+                        -% de avance
                     </span>
                 </div>
                 <!-- /.info-box-content -->
@@ -87,7 +85,7 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Cantidad de botella por minuto</span>
-                    <span class="info-box-number">120</span>
+                    <span class="info-box-number">-</span>
                 </div>
                 <!-- /.info-box-content -->
             </div>
@@ -100,7 +98,7 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Cantidad de cajas por minuto</span>
-                    <span class="info-box-number">20</span>
+                    <span class="info-box-number">-</span>
                 </div>
                 <!-- /.info-box-content -->
             </div>
@@ -200,38 +198,14 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <table class="table table-bordered">
-                        <tr>
-                            <th style="width: 10px">#</th>
-                            <th>Hora de finalización</th>
-                        </tr>
-                        <tr>
-                            <td>1.</td>
-                            <td>9:00</td>
-                        </tr>
-                        <tr>
-                            <td>2.</td>
-                            <td>9:00</td>
-                        </tr>
-                        <tr>
-                            <td>3.</td>
-                            <td>9:01</td>
-                        </tr>
-                        <tr>
-                            <td>4.</td>
-                            <td>9:01</td>
-                        </tr>
+                    <table id="tablaCajas" class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th style="width: 10px">#</th>
+                                <th>Hora de término</th>
+                            </tr>
+                        </thead>
                     </table>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer clearfix">
-                    <ul class="pagination pagination-sm no-margin pull-right">
-                        <li><a href="#">&laquo;</a></li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">&raquo;</a></li>
-                    </ul>
                 </div>
             </div>
             <!-- /.box -->
@@ -384,67 +358,45 @@
 
 
 <script>
-    $(document).ready(function () {
-
+    $(document).ready(function ()
+    {
         var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model,Newtonsoft.Json.Formatting.Indented));
-
-        for (var i = 0; i < modelo.length; i++) {
-            if (modelo[i]["Estado"] == 1) {
-                document.getElementById("SKU").innerHTML = modelo[i]["SKU"];
-                document.getElementById("descripcionProducto").innerHTML = modelo[i]["Descripcion"];
-                document.getElementById("cantCajasPlan").innerHTML = modelo[i]["CajasPlanificadas"];
-                document.getElementById("cantBotellasPlan").innerHTML = modelo[i]["BotellasPlanificadas"];
-                document.getElementById("horaInicioPlan").innerHTML = modelo[i]["HoraInicioPlanificada"];
-                document.getElementById("horaTerminoPlan").innerHTML = modelo[i]["HoraTerminoPlanificada"];
-                document.getElementById("fechaPlan").innerHTML = (modelo[i]["FechaFabricacion"]).split('T')[0];
-                switch (modelo[i]["Estado"]) {
-                    case 0:
-                        document.getElementById("estado").innerHTML = 'No iniciada';
-                        break;
-                    case 1:
-                        document.getElementById("estado").innerHTML = 'Iniciada';
-                        break;
-                    case 2:
-                        document.getElementById("estado").innerHTML = 'Pausada';
-                        break;
-                    case 3:
-                        document.getElementById("estado").innerHTML = 'Pospuesta';
-                        break;
-                    default:
-                        document.getElementById("estado").innerHTML = 'Finalizada';
-                }
-
-            }
-        }
-
+        iniciarOrdenesSelect(modelo);
+        $.fn.DataTable.ext.pager.numbers_length = 4;
     });
 
-    $(document).ready(function () {
-        var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, Newtonsoft.Json.Formatting.Indented));
-        for (var i = 0; i < modelo.length; i++) {
-            if (modelo[i]["Estado"] == 1) {
-                monitoreoBotellas(modelo[i]["OrdenFabricacion"]);
-            }
-        }
-        
-    });
 </script>
 
+<!--script>
+    $(document).ready(function ()
+    {
+        var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, Newtonsoft.Json.Formatting.Indented));
+        for (var i = 0; i < modelo.length; i++)
+        {
+            if (modelo[i]["Estado"] == 1)
+            {
+                monitoreoBotellas(modelo[i]["OrdenFabricacion"]);
+                monitoreoCajas(modelo[i]["OrdenFabricacion"]);
+            }
+        }
+    });
+</script-->
 
 <script>
-    function actualizarTablaBotella() {
+    function actualizarTablasMonitoreo() {
         var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, Newtonsoft.Json.Formatting.Indented));
         var ordenSelect = document.getElementById("numeroOrden");
-        var optionSelected = ordenSelect.options[ordenSelect.selectedIndex].value;
+        var numeroOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
         for (var i = 0; i < modelo.length; i++) {
-            if (modelo[i]["Estado"] == 1 && optionSelected == modelo[i]["OrdenFabricacion"]) {
-                monitoreoBotellas(modelo[i]["OrdenFabricacion"]);
+            if (modelo[i]["Estado"] == 1 && numeroOrden == modelo[i]["OrdenFabricacion"]) {
+                monitoreoBotellas(numeroOrden);
+                monitoreoCajas(numeroOrden);
+                indicadorCantCajas(numeroOrden);
+                indicadorCantBotellas(numeroOrden);
+                break;
             }
         }
     }
-    setInterval(actualizarTablaBotella, 60000);
+    setInterval(actualizarTablasMonitoreo, 60000);
 </script>
 
-<!--script type="text/javascript">
-    setTimeout('actualizarTablaBotella()', 5000);
-</script-->

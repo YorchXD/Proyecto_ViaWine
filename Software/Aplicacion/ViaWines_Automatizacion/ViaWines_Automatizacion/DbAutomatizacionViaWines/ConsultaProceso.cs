@@ -189,16 +189,49 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                     foreach (System.Data.DataRow row in datos.Tables[0].Rows)
                     {
                         var prodData = row;
-                        var orden = new Botella()
+                        var botella = new Botella()
                         {
                             Id = Convert.ToInt32(prodData["id"]),
                             HoraInicio = prodData["horaInicio"].ToString(),
                             HoraTermino = prodData["horaTermino"].ToString()
                         };
 
-                        botellas.Add(orden);
+                        botellas.Add(botella);
                     }
                     return botellas;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            return null;
+        }
+
+        public static List<Caja> LeerCajas(String Fecha, int OrdenFabricacion)
+        {
+            try
+            {
+                var command = new SqlCommand() { CommandText = "Leer_Cajas", CommandType = System.Data.CommandType.StoredProcedure };
+                command.Parameters.Add(new SqlParameter() { ParameterName = "OrdenFabricacion", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
+                var datos = ContexDb.GetDataSet(command);
+                List<Caja> cajas = new List<Caja>();
+                if (datos.Tables[0].Rows.Count > 0)
+                {
+                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
+                    {
+                        var prodData = row;
+                        var caja = new Caja()
+                        {
+                            Id = Convert.ToInt32(prodData["id"]),
+                            Hora = prodData["hora"].ToString()
+                        };
+
+                        cajas.Add(caja);
+                    }
+                    return cajas;
                 }
 
             }
