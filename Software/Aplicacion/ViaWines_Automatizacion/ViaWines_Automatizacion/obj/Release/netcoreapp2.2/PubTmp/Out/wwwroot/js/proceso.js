@@ -95,43 +95,65 @@ function exist_proces_ini(tipoAccion) {
 
 function mostrarOrden(modelo) {
     var ordenSelect = document.getElementById("numeroOrden");
-    var optionSelected = ordenSelect.options[ordenSelect.selectedIndex].value;
+    var numeroOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
     
+    for (var i = 0; i < modelo.length; i++)
+    {
+        if (modelo[i]["OrdenFabricacion"] == numeroOrden)
+        {
+            Orden(modelo[i]);
+            break;
+        }
+    }
+}
 
-    for (var i = 0; i < modelo.length; i++) {
-        if (modelo[i]["OrdenFabricacion"] == optionSelected) {
-            document.getElementById("SKU").innerHTML = modelo[i]["SKU"];
-            document.getElementById("descripcionProducto").innerHTML = modelo[i]["Descripcion"];
-            document.getElementById("cantCajasPlan").innerHTML = modelo[i]["CajasPlanificadas"];
-            document.getElementById("cantBotellasPlan").innerHTML = modelo[i]["BotellasPlanificadas"];
-            document.getElementById("horaInicioPlan").innerHTML = modelo[i]["HoraInicioPlanificada"];
-            document.getElementById("horaTerminoPlan").innerHTML = modelo[i]["HoraTerminoPlanificada"];
-            document.getElementById("fechaPlan").innerHTML = (modelo[i]["FechaFabricacion"]).split('T')[0];
-            switch (modelo[i]["Estado"]) {
-                case 0:
-                    document.getElementById("estado").innerHTML = 'No iniciada';
-                    break;
-                case 1:
-                    document.getElementById("estado").innerHTML = 'Iniciada';
-                    break;
-                case 2:
-                    document.getElementById("estado").innerHTML = 'Pausada';
-                    break;
-                case 3:
-                    document.getElementById("estado").innerHTML = 'Pospuesta';
-                    break;
-                default:
-                    document.getElementById("estado").innerHTML = 'Finalizada';
-            }
-            monitoreoBotellas(modelo[i]["OrdenFabricacion"]);
+function Orden(modelo)
+{
+    document.getElementById("SKU").innerHTML = modelo["SKU"];
+    document.getElementById("descripcionProducto").innerHTML = modelo["Descripcion"];
+    document.getElementById("cantCajasPlan").innerHTML = modelo["CajasPlanificadas"];
+    document.getElementById("cantBotellasPlan").innerHTML = modelo["BotellasPlanificadas"];
+    document.getElementById("horaInicioPlan").innerHTML = modelo["HoraInicioPlanificada"];
+    document.getElementById("horaTerminoPlan").innerHTML = modelo["HoraTerminoPlanificada"];
+    document.getElementById("fechaPlan").innerHTML = (modelo["FechaFabricacion"]).split('T')[0];
+    switch (modelo["Estado"]) {
+        case 0:
+            document.getElementById("estado").innerHTML = 'No iniciada';
+            break;
+        case 1:
+            document.getElementById("estado").innerHTML = 'Iniciada';
+            break;
+        case 2:
+            document.getElementById("estado").innerHTML = 'Pausada';
+            break;
+        case 3:
+            document.getElementById("estado").innerHTML = 'Pospuesta';
+            break;
+        default:
+            document.getElementById("estado").innerHTML = 'Finalizada';
+    }
+    monitoreoBotellas(modelo["OrdenFabricacion"]);
+    monitoreoCajas(modelo["OrdenFabricacion"]);
+    indicadorCantCajas(modelo["OrdenFabricacion"]);
+    indicadorCantBotellas(modelo["OrdenFabricacion"]);
+}
 
+function iniciarOrdenesSelect(modelo) {
+    for (var i = 0; i < modelo.length; i++)
+    {
+        if (modelo[i]["Estado"] == 1)
+        {
+            $('#numeroOrden').append("<option value='" + modelo[i]["OrdenFabricacion"] + "'selected>" + modelo[i]["OrdenFabricacion"] + "</option>");
+            Orden(modelo[i]);
+        }
+        else
+        {
+            $('#numeroOrden').append("<option value='" + modelo[i]["OrdenFabricacion"] + "'>" + modelo[i]["OrdenFabricacion"] + "</option>");
         }
     }
 }
 
 function monitoreoBotellas(OrdenFabricacion) {
-    //var ordenSelect = document.getElementById("numeroOrden");
-    //var optionSelected = ordenSelect.options[ordenSelect.selectedIndex].value;
     var datos = {
         'OrdenFabricacion': OrdenFabricacion
     };
@@ -145,6 +167,7 @@ function monitoreoBotellas(OrdenFabricacion) {
         'destroy': true,
         'lengthChange': false,
         'responsive': true,
+        'aaSorting': [[0, 'desc']],
         //"processing": true,
         'language': {
             "decimal": "",
@@ -161,22 +184,110 @@ function monitoreoBotellas(OrdenFabricacion) {
             "zeroRecords": "Sin resultados encontrados",
             "paginate": {
                 "first": "Primero",
-                "last": "Ultimo",
-                "next": "Siguiente",
-                "previous": "Anterior"
+                "last": "Último",
+                "next": ">",
+                "previous": "<"
             }
         },
 
         'ajax': {
-            "url": "/Proceso/GetMonitoreoBotella",
+            "url": "/Proceso/GetMonitoreoBotellas",
             "method": "POST",
             "data": datos,
             "dataSrc": ""
         },
         'columns': [
-            { "data": "id" },
-            { "data": "horaInicio" },
-            { "data": "horaTermino" },
+            { "data": "id", "defaultContent": "" },
+            { "data": "horaInicio", "defaultContent": "" },
+            { "data": "horaTermino", "defaultContent": "" },
         ]
     });
 }
+
+function monitoreoCajas(OrdenFabricacion) {
+    var datos = {
+        'OrdenFabricacion': OrdenFabricacion
+    };
+    $('#tablaCajas').DataTable({
+        'searching': false,
+        'ordering': true,
+        'info': false,
+        'autoWidth': true,
+        'paging': true,
+        'scrollX': false,
+        'destroy': true,
+        'lengthChange': false,
+        'responsive': true,
+        "serverSide": false,
+        "aaSorting": [[0, "desc"]],
+        //"processing": true,
+        'language': {
+            "decimal": "",
+            "emptyTable": "No hay información",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Entradas",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+                "first": "Primero",
+                "last": "Último",
+                "next": ">",
+                "previous": "<"
+            }
+        },
+        'ajax': {
+            "url": "/Proceso/GetMonitoreoCajas",
+            "method": "POST",
+            "data": datos,
+            "dataSrc": ""
+        },
+        'columns': [
+            { "data": "id"},
+            { "data": "hora"},
+        ], 
+    });
+}
+
+function indicadorCantCajas(OrdenFabricacion) {
+    var datos = {
+        'OrdenFabricacion': OrdenFabricacion
+    };
+    $.ajax({
+        url: "/Proceso/GetCantCajas",
+        method: "POST",
+        data: datos,
+        success: function (data) {
+            document.getElementById("cantCajas").innerHTML = data.cantCajas;
+            document.getElementById("progresoCajas").innerHTML = "<div class='progress-bar' style='width:" + data.porcentaje + "%'></div>";
+            document.getElementById("porcentCajas").innerHTML = "" + data.porcentaje + "% de avance";
+            console.log(data)
+        }
+    })
+}
+
+function indicadorCantBotellas(OrdenFabricacion) {
+    var datos = {
+        'OrdenFabricacion': OrdenFabricacion
+    };
+    $.ajax({
+        url: "/Proceso/GetCantBotellas",
+        method: "POST",
+        data: datos,
+        success: function (data) {
+            //$('#progresoBotella').append("<option value='" + modelo[i]["OrdenFabricacion"] + "'selected>" + modelo[i]["OrdenFabricacion"] + "</option>");
+            document.getElementById("cantBotellas").innerHTML = data.cantBotellas;
+            document.getElementById("progresoBotellas").innerHTML = "<div class='progress-bar' style='width:" + data.porcentaje + "%'></div>";
+            document.getElementById("porcentBotellas").innerHTML = "" + data.porcentaje + "% de avance";
+            
+            //<div class="progress-bar" style="width: 70%"></div>
+            console.log(data)
+        }
+    })
+}
+

@@ -13,7 +13,8 @@ namespace ViaWines_Automatizacion.Controllers
     {
         public IActionResult Proceso()
         {
-            List<Orden> ordenes = ConsultaProceso.LeerOrdenes("2020-05-13");
+            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
+            List<Orden> ordenes = ConsultaProceso.LeerOrdenes(fecha);
             return View(ordenes);
         }
 
@@ -91,7 +92,8 @@ namespace ViaWines_Automatizacion.Controllers
         public JsonResult Exit_proces_ini(int OpcionAccion, int OrdenFabricacion)//ActualizarOrden orden)
         {
             var resultado = new VistaModalIniciarProceso();
-            List<Orden> Ordenes = ConsultaProceso.LeerOrdenes("2020-05-13");
+            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
+            List<Orden> Ordenes = ConsultaProceso.LeerOrdenes(fecha);
             Boolean ordenesIniciadas = OrdenesIniciadas(Ordenes);
             Boolean iniciada = OrdenIniciada(Ordenes, OrdenFabricacion);
             Boolean pausada = OrdenPausada(Ordenes, OrdenFabricacion);
@@ -167,7 +169,8 @@ namespace ViaWines_Automatizacion.Controllers
         [HttpPost]
         public JsonResult GetMonitoreoBotellas(int OrdenFabricacion)
         {
-          String fecha = "2020-05-13";
+            //String fecha = "2020-05-13";
+            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
             List<Botella> botellas = ConsultaProceso.LeerBotellas(fecha, OrdenFabricacion);
             if(botellas!=null)
             {
@@ -180,7 +183,8 @@ namespace ViaWines_Automatizacion.Controllers
         [HttpPost]
         public JsonResult GetMonitoreoCajas(int OrdenFabricacion)
         {
-            String fecha = "2020-05-13";
+            //String fecha = "2020-05-13";
+            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
             List<Caja> caja = ConsultaProceso.LeerCajas(fecha, OrdenFabricacion);
             if(caja != null)
             {
@@ -195,7 +199,8 @@ namespace ViaWines_Automatizacion.Controllers
         [HttpPost]
         public JsonResult GetCantCajas(int OrdenFabricacion)
         {
-            String fecha = "2020-05-13";
+            //String fecha = "2020-05-13";
+            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
             List<Caja> caja = ConsultaProceso.LeerCajas(fecha, OrdenFabricacion);
             List<Orden> ordenes = ConsultaProceso.LeerOrdenes(fecha);
             int cajasPlanificadas = 0;
@@ -232,7 +237,8 @@ namespace ViaWines_Automatizacion.Controllers
         [HttpPost]
         public JsonResult GetCantBotellas(int OrdenFabricacion)
         {
-            String fecha = "2020-05-13";
+            //String fecha = "2020-05-13";
+            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
             List<Botella> botellas = ConsultaProceso.LeerBotellas(fecha, OrdenFabricacion);
             List<Orden> ordenes = ConsultaProceso.LeerOrdenes(fecha);
             int botellasPlanificadas = 0;

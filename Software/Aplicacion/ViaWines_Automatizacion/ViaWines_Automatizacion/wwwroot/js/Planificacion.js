@@ -1,27 +1,4 @@
-﻿/*function mostrarPlanificacion() {
-    $("#obtenerOrdenes").on("click", function () {
-        test();
-    });
-}*/
-
-
-/*function test() {
-    var fecha = $("#datepicker").val();
-    var datos = {
-        fecha: fecha
-    };
-    $.ajax({
-        method: "POST",
-        dataType: "json; charset = utf-8",
-        data: datos,
-        dataType: "json",
-        url: "/Planificacion/GetPlanificacion",
-    }).done(function (info) {
-        console.log(info);
-    });
-}*/
-
-function mostrarTablaOrdenes(fecha, opcion) {
+﻿function mostrarTablaOrdenes(fecha, opcion) {
     var datos = {
         'fecha': fecha,
         'opcion': opcion
@@ -143,29 +120,3 @@ function seleccionarBuscarPlanificacion(fecha) {
         mostrarTablaOrdenes(fecha, 2)
     }
 }
-
-
-
-/*function planificacionDisponible() {
-
-    // An array of dates
-    var eventDates = {};
-    eventDates[new Date('04/28/2020')] = new Date('04/28/2020');
-    eventDates[new Date('04/29/2020')] = new Date('04/29/2020');
-    eventDates[new Date('05/09/2020')] = new Date('05/07/2020');
-    eventDates[new Date('05/12/2020')] = new Date('05/12/2020');
-    eventDates[new Date('05/18/2020')] = new Date('05/18/2020');
-    eventDates[new Date('05/23/2020')] = new Date('05/23/2020')
-
-    // datepicker
-    $('#datepicker').datepicker({
-        beforeShowDay: function (date) {
-            var highlight = eventDates[date];
-            if (highlight) {
-                return [true, "event", 'Tooltip text'];
-            } else {
-                return [false, '', ''];
-            }
-        }
-    }).datepicker("setDate", new Date());
-}*/
