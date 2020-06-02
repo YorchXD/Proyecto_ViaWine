@@ -267,6 +267,18 @@ namespace ViaWines_Automatizacion.Controllers
             return Json(datosBotella);
         }
 
+
+        [HttpPost]
+        public JsonResult GetVelocidad(int OrdenFabricacion)
+        {
+            //String fecha = "2020-05-13";
+            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
+            String hora = DateTime.Now.AddMinutes(-1).ToString("HH:mm");
+            VelocidadProceso velocidad = ConsultaProceso.LeerVelocidad(fecha, hora, OrdenFabricacion);
+            return Json(velocidad);
+        }
+
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

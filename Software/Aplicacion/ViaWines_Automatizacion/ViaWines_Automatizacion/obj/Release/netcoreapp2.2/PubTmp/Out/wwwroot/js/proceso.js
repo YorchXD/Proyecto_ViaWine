@@ -196,6 +196,7 @@ function monitoreoBotellas(OrdenFabricacion) {
             "data": datos,
             "dataSrc": ""
         },
+
         'columns': [
             { "data": "id", "defaultContent": "" },
             { "data": "horaInicio", "defaultContent": "" },
@@ -280,14 +281,10 @@ function indicadorCantBotellas(OrdenFabricacion) {
         method: "POST",
         data: datos,
         success: function (data) {
-            //$('#progresoBotella').append("<option value='" + modelo[i]["OrdenFabricacion"] + "'selected>" + modelo[i]["OrdenFabricacion"] + "</option>");
             document.getElementById("cantBotellas").innerHTML = data.cantBotellas;
             document.getElementById("progresoBotellas").innerHTML = "<div class='progress-bar' style='width:" + data.porcentaje + "%'></div>";
             document.getElementById("porcentBotellas").innerHTML = "" + data.porcentaje + "% de avance";
-            
-            //<div class="progress-bar" style="width: 70%"></div>
             console.log(data)
         }
     })
 }
-

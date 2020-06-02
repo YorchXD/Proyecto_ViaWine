@@ -241,6 +241,43 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             }
             return null;
         }
+
+
+        public static VelocidadProceso LeerVelocidad(String Fecha, String Hora, int OrdenFabricacion)
+        {
+            try
+            {
+                var command = new SqlCommand() { CommandText = "Leer_Velocidad", CommandType = System.Data.CommandType.StoredProcedure };
+                command.Parameters.Add(new SqlParameter() { ParameterName = "RefOrden", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "Hora", Direction = System.Data.ParameterDirection.Input, Value = Hora });
+                var datos = ContexDb.GetDataSet(command);
+                VelocidadProceso velocidad = new VelocidadProceso() { Fecha = Fecha, Hora = Hora, cantBotellas = 0, cantCajas = 0 };
+                if (datos.Tables[0].Rows.Count > 0)
+                {
+                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
+                    {
+                        var prodData = row;
+                        if(prodData["cantBotellas"]!=null)
+                        {
+                            velocidad.cantBotellas = Convert.ToInt32(prodData["cantBotellas"]);
+                        }
+                            
+                        if (prodData["cantCajas"]!=null)
+                        {
+                            velocidad.cantCajas = Convert.ToInt32(prodData["cantCajas"]);
+                        }
+                    }
+                }
+                return velocidad;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            return null;
+        }
     }
 }
 

@@ -136,6 +136,7 @@ function Orden(modelo)
     monitoreoCajas(modelo["OrdenFabricacion"]);
     indicadorCantCajas(modelo["OrdenFabricacion"]);
     indicadorCantBotellas(modelo["OrdenFabricacion"]);
+    indicadoresVelocidad(modelo["OrdenFabricacion"]);
 }
 
 function iniciarOrdenesSelect(modelo) {
@@ -284,6 +285,22 @@ function indicadorCantBotellas(OrdenFabricacion) {
             document.getElementById("cantBotellas").innerHTML = data.cantBotellas;
             document.getElementById("progresoBotellas").innerHTML = "<div class='progress-bar' style='width:" + data.porcentaje + "%'></div>";
             document.getElementById("porcentBotellas").innerHTML = "" + data.porcentaje + "% de avance";
+            console.log(data)
+        }
+    })
+}
+
+function indicadoresVelocidad(OrdenFabricacion) {
+    var datos = {
+        'OrdenFabricacion': OrdenFabricacion
+    };
+    $.ajax({
+        url: "/Proceso/GetVelocidad",
+        method: "POST",
+        data: datos,
+        success: function (data) {
+            document.getElementById("cantBotellasMin").innerHTML = data.cantBotellas;
+            document.getElementById("cantCajasMin").innerHTML = data.cantCajas;
             console.log(data)
         }
     })

@@ -38,7 +38,7 @@
             "url": "/Planificacion/GetPlanificacion",
             "method": "POST",
             "data": datos,
-            "dataSrc": ""
+            "dataSrc": "",
         },
         'columns': [
             { "data": "secuencia" },
@@ -52,8 +52,8 @@
             { "data": "cajasPlanificadas" },
             { "data": "cajasFabricadas" },
             { "data": "fechaFabricacion" },
-            { "data": "horaInicioPlanificada" },
-            { "data": "horaTerminoPlanificada" },
+            { "data": "horaInicio" },
+            { "data": "horaTermino" },
             { "data": "estado" },
             { "data": "porcentajeAvance" },
         ]

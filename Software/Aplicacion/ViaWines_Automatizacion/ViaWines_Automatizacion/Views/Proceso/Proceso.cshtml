@@ -85,7 +85,7 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Cantidad de botella por minuto</span>
-                    <span class="info-box-number">-</span>
+                    <span class="info-box-number" id="cantBotellasMin">-</span>
                 </div>
                 <!-- /.info-box-content -->
             </div>
@@ -98,7 +98,7 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Cantidad de cajas por minuto</span>
-                    <span class="info-box-number">-</span>
+                    <span class="info-box-number" id="cantCajasMin">-</span>
                 </div>
                 <!-- /.info-box-content -->
             </div>
@@ -393,6 +393,7 @@
                 monitoreoCajas(numeroOrden);
                 indicadorCantCajas(numeroOrden);
                 indicadorCantBotellas(numeroOrden);
+                indicadoresVelocidad(numeroOrden)
                 break;
             }
         }
