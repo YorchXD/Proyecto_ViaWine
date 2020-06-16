@@ -54,13 +54,55 @@
             { "data": "fechaFabricacion" },
             { "data": "horaInicio" },
             { "data": "horaTermino" },
-            { "data": "estado" },
-            { "data": "porcentajeAvance" },
+            {
+                "data": "estado", "render": function (estado) {
+                    var estadoAux = "";
+                    switch (estado) {
+                        case 1:
+                            estadoAux = "<span class='label bg-purple'>Iniciada</span>"
+                            break;
+                        case 2:
+                            estadoAux = "<span class='label bg-orange'>Pausada</span>"
+                            break;
+                        case 3:
+                            estadoAux = "<span class='label bg-maroon'>Pospuesta</span>"
+                            break;
+                        case 4:
+                            estadoAux = "<span class='label bg-olive'>Finalizada</span>";
+                            break;
+                        default:
+                            estadoAux = "<span class='label bg-gray'>No iniciada</span>";
+                    }
+                    return estadoAux;
+                }
+            },
+            {
+                "render": function (data, type, full) {
+                    var porcentaje = "";
+                    switch (full.estado) {
+                        case 1:
+                            porcentaje = "<span class='label bg-purple'>" + full.porcentajeAvance + "%</span>";
+                            break;
+                        case 2:
+                            porcentaje = "<span class='label bg-orange'>" + full.porcentajeAvance + "%</span>";
+                            break;
+                        case 3:
+                            porcentaje = "<span class='label bg-maroon'>" + full.porcentajeAvance + "%</span>"
+                            break;
+                        case 4:
+                            porcentaje = "<span class='label bg-olive'>" + full.porcentajeAvance + "%</span>";
+                            break;
+                        default:
+                            porcentaje = "<span class='label bg-gray'>" + full.porcentajeAvance + "%</span>";
+                    }
+                    return porcentaje;
+                }
+            },
         ]
     });
 }
 
-function planificacionDisponible1() {
+function planificacionDisponible() {
     
     $.ajax({
         type: 'GET',
@@ -96,7 +138,8 @@ function planificacionDisponible1() {
 
 
 
-function seleccionarBuscarPlanificacion(fecha) {
+function seleccionarBuscarPlanificacion(fecha)
+{
     
     var hoy = new Date();
     var dd = hoy.getDate();

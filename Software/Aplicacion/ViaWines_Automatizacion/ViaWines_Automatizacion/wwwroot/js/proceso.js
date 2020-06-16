@@ -1,4 +1,5 @@
-﻿function Actualizar_Estado(estado) {
+﻿function Actualizar_Estado(estado)
+{
     var orden = $("#numeroOrden").val();
     var datos = {
         'OrdenFabricacion': orden,
@@ -38,7 +39,8 @@
         });
 }
 
-function exist_proces_ini(tipoAccion) {
+function exist_proces_ini(tipoAccion)
+{
     var orden = $("#numeroOrden").val();
     var datos = {
         'OrdenFabricacion': orden,
@@ -93,11 +95,12 @@ function exist_proces_ini(tipoAccion) {
     });
 }
 
-function mostrarOrden(modelo) {
+function mostrarOrden(modelo)
+{
     var ordenSelect = document.getElementById("numeroOrden");
     var numeroOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
     
-    for (var i = 0; i < modelo.length; i++)
+    for (var i = 0; modelo!=null && i < modelo.length; i++)
     {
         if (modelo[i]["OrdenFabricacion"] == numeroOrden)
         {
@@ -139,8 +142,9 @@ function Orden(modelo)
     indicadoresVelocidad(modelo["OrdenFabricacion"]);
 }
 
-function iniciarOrdenesSelect(modelo) {
-    for (var i = 0; i < modelo.length; i++)
+function iniciarOrdenesSelect(modelo)
+{
+    for (var i = 0; modelo!=null && i < modelo.length; i++)
     {
         if (modelo[i]["Estado"] == 1)
         {
@@ -154,7 +158,8 @@ function iniciarOrdenesSelect(modelo) {
     }
 }
 
-function monitoreoBotellas(OrdenFabricacion) {
+function monitoreoBotellas(OrdenFabricacion)
+{
     var datos = {
         'OrdenFabricacion': OrdenFabricacion
     };
@@ -206,7 +211,8 @@ function monitoreoBotellas(OrdenFabricacion) {
     });
 }
 
-function monitoreoCajas(OrdenFabricacion) {
+function monitoreoCajas(OrdenFabricacion)
+{
     var datos = {
         'OrdenFabricacion': OrdenFabricacion
     };
@@ -256,9 +262,11 @@ function monitoreoCajas(OrdenFabricacion) {
     });
 }
 
-function indicadorCantCajas(OrdenFabricacion) {
+function indicadorCantCajas(OrdenFabricacion, CajasPlanificadas)
+{
     var datos = {
-        'OrdenFabricacion': OrdenFabricacion
+        'OrdenFabricacion': OrdenFabricacion,
+        'CajasPlanificadas': CajasPlanificadas
     };
     $.ajax({
         url: "/Proceso/GetCantCajas",
@@ -273,9 +281,11 @@ function indicadorCantCajas(OrdenFabricacion) {
     })
 }
 
-function indicadorCantBotellas(OrdenFabricacion) {
+function indicadorCantBotellas(OrdenFabricacion, BotellasPlanificadas)
+{
     var datos = {
-        'OrdenFabricacion': OrdenFabricacion
+        'OrdenFabricacion': OrdenFabricacion,
+        'BotellasPlanificadas': BotellasPlanificadas
     };
     $.ajax({
         url: "/Proceso/GetCantBotellas",
@@ -290,7 +300,8 @@ function indicadorCantBotellas(OrdenFabricacion) {
     })
 }
 
-function indicadoresVelocidad(OrdenFabricacion) {
+function indicadoresVelocidad(OrdenFabricacion)
+{
     var datos = {
         'OrdenFabricacion': OrdenFabricacion
     };

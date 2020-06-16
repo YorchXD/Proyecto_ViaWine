@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ViaWines_Automatizacion.Models;
@@ -49,7 +48,6 @@ namespace ViaWines_Automatizacion.Controllers
                 return Json(fechas);
             }
             return Json(new object());
-            
         }
 
 

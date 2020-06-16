@@ -18,21 +18,6 @@
         <div class="col-xs-12 col-md-6">
             <select class="form-control select2" id="numeroOrden" onchange="seleccionarOrden()">
                 <option disabled selected value="null">Seleccione una orden</option>
-
-                <!--@if (Model != null)
-                    {
-                        @foreach (var item in Model)
-                        {
-                            @if (item.Estado == 1)
-                            {
-                                <option value="@item.OrdenFabricacion" selected>@item.OrdenFabricacion</option>
-                            }
-                            else
-                            {
-                                <option value="@item.OrdenFabricacion">@item.OrdenFabricacion</option>
-                            }
-                        }
-                    }-->
             </select>
         </div>
     </div>
@@ -364,35 +349,19 @@
         iniciarOrdenesSelect(modelo);
         $.fn.DataTable.ext.pager.numbers_length = 4;
     });
-
 </script>
-
-<!--script>
-    $(document).ready(function ()
-    {
-        var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, Newtonsoft.Json.Formatting.Indented));
-        for (var i = 0; i < modelo.length; i++)
-        {
-            if (modelo[i]["Estado"] == 1)
-            {
-                monitoreoBotellas(modelo[i]["OrdenFabricacion"]);
-                monitoreoCajas(modelo[i]["OrdenFabricacion"]);
-            }
-        }
-    });
-</script-->
 
 <script>
     function actualizarTablasMonitoreo() {
         var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, Newtonsoft.Json.Formatting.Indented));
         var ordenSelect = document.getElementById("numeroOrden");
         var numeroOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
-        for (var i = 0; i < modelo.length; i++) {
+        for (var i = 0; modelo!=null && i < modelo.length; i++) {
             if (modelo[i]["Estado"] == 1 && numeroOrden == modelo[i]["OrdenFabricacion"]) {
                 monitoreoBotellas(numeroOrden);
                 monitoreoCajas(numeroOrden);
-                indicadorCantCajas(numeroOrden);
-                indicadorCantBotellas(numeroOrden);
+                indicadorCantCajas(numeroOrden, modelo[i]["CajasPlanificadas"]);
+                indicadorCantBotellas(numeroOrden, modelo[i]["BotellasPlanificadas"]);
                 indicadoresVelocidad(numeroOrden)
                 break;
             }

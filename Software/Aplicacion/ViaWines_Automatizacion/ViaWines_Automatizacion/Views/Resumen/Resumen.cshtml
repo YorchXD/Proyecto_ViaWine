@@ -14,49 +14,49 @@
 <section class="content resumen-actual">
 
     <!--Resumen del proceso actual-->
-    
+
     <div class="row">
-        
-        <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="form-group">
-                <select class="form-control select2" id="numeroOrden" style="width: 100%;">
+                <select class="form-control select2" id="numeroOrden" onchange="seleccionarOrden()">
                     <option disabled selected value="null">Seleccione una orden</option>
-                    <option value="dia">26501</option>
-                    <option value="semana">26506</option>
-                    <option value="año">26511</option>
                 </select>
             </div>
             <p>
                 <dl class="dl-horizontal" style="color:white">
+                    <dt>Cliente</dt>
+                    <dd id="cliente">-</dd>
                     <dt>SKU</dt>
-                    <dd id="SKU">14004817-19</dd>
+                    <dd id="SKU">-</dd>
                     <dt>N° de prioridad</dt>
-                    <dd id="numeroPrioridad">3</dd>
-                    <dt>Hora de inicio planificada</dt>
-                    <dd id="horaInicioPlan">8:30</dd>
-                    <dt>Hora de término planificada</dt>
-                    <dd id="horaTerminoPlan">9:50</dd>
+                    <dd id="secuencia">-</dd>
+                    <dt>Cantidad de botellas planificadas</dt>
+                    <dd id="cantBotellasPlan">-</dd>
+                    <dt>Cantidad de cajas planificada</dt>
+                    <dd id="cantCajasPlan">-</dd>
+                    <dt>Estado</dt>
+                    <dd id="estado">-</dd>
                 </dl>
             </p>
         </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                <!-- small box -->
-                <div class="small-box bg-gray">
-                    <div class="inner">
-                        <h3>70<sup style="font-size: 20px">%</sup></h3>
-                        <p>Avance del proceso</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-stats-bars"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">
-                        More info <i class="fa fa-arrow-circle-right"></i>
-                    </a>
+        <!-- ./col -->
+        <!--div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <div class="small-box bg-gray">
+                <div class="inner">
+                    <h3>70<sup style="font-size: 20px">%</sup></h3>
+                    <p>Avance del proceso</p>
                 </div>
+                <div class="icon">
+                    <i class="ion ion-stats-bars"></i>
+                </div>
+                <a href="#" class="small-box-footer">
+                    More info <i class="fa fa-arrow-circle-right"></i>
+                </a>
             </div>
-            <!-- ./col -->
-        </div>
+        </div-->
+        <!-- ./col -->
+    </div>
     <div class="row">
         <div class="col-md-3 col-sm-6 col-xs-12">
             <div class="info-box bg-gray">
@@ -64,14 +64,12 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Botellas finalizadas</span>
-                    <span class="info-box-number">900</span>
+                    <span class="info-box-number" id="cantBotellas">-</span>
 
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 70%"></div>
+                    <div class="progress" id="progresoBotellas">
+                        <!--div class="progress-bar" style="width: 70%"></div-->
                     </div>
-                    <span class="progress-description">
-                        70% de avance
-                    </span>
+                    <span class="progress-description" id="porcentBotellas">-% de avance</span>
                 </div>
                 <!-- /.info-box-content -->
             </div>
@@ -85,13 +83,13 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Cajas finalizadas</span>
-                    <span class="info-box-number">150</span>
+                    <span class="info-box-number" id="cantCajas">-</span>
 
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 70%"></div>
+                    <div class="progress" id="progresoCajas">
+                        <!--div class="progress-bar" style="width: 70%"></div-->
                     </div>
-                    <span class="progress-description">
-                        70% de avance
+                    <span class="progress-description" id="porcentCajas">
+                        -% de avance
                     </span>
                 </div>
                 <!-- /.info-box-content -->
@@ -105,13 +103,12 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Cantidad de botella por minuto</span>
-                    <span class="info-box-number">120</span>
+                    <span class="info-box-number" id="cantBotellasMin">-</span>
                 </div>
                 <!-- /.info-box-content -->
             </div>
             <!-- /.info-box -->
         </div>
-
         <!-- ./col -->
         <div class="col-md-3 col-sm-6 col-xs-12">
             <div class="info-box">
@@ -119,7 +116,7 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Cantidad de cajas por minuto</span>
-                    <span class="info-box-number">20</span>
+                    <span class="info-box-number" id="cantCajasMin">-</span>
                 </div>
                 <!-- /.info-box-content -->
             </div>
@@ -130,8 +127,6 @@
     <!-- /.row -->
     <!-- Main row -->
     <div class="row">
-
-
         <section class="col-xs-12 connectedSortable">
             <!-- Custom tabs (Charts with tabs)-->
             <div class="nav-tabs-custom">
@@ -147,10 +142,6 @@
             <!-- /.nav-tabs-custom -->
         </section>
         <!-- Left col -->
-
-
-
-
     </div>
     <!-- /.row (main row) -->
 </section>
@@ -173,14 +164,12 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Botellas finalizadas</span>
-                    <span class="info-box-number">900</span>
+                    <span class="info-box-number" id="cantBotellasDia">-</span>
 
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 15%"></div>
+                    <div class="progress" id="progresoBotellasDia">
+                        <!--div class="progress-bar" style="width: 15%"></div-->
                     </div>
-                    <span class="progress-description">
-                        15% de avance
-                    </span>
+                    <span class="progress-description" id="porcentBotellasDia">-% de avance</span>
                 </div>
                 <!-- /.info-box-content -->
             </div>
@@ -194,55 +183,52 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Cajas finalizadas</span>
-                    <span class="info-box-number">150</span>
+                    <span class="info-box-number" id="cantCajasDia">-</span>
 
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 10%"></div>
+                    <div class="progress" id="progresoCajasDia">
+                        <!--div class="progress-bar" style="width: 70%"></div-->
                     </div>
-                    <span class="progress-description">
-                        10% de avance
-                    </span>
+                    <span class="progress-description" id="porcentCajasDia">-% de avance</span>
                 </div>
                 <!-- /.info-box-content -->
             </div>
             <!-- /.info-box -->
         </div>
         <!-- ./col -->
+
         <div class="col-md-3 col-sm-6 col-xs-12">
             <div class="info-box bg-gray">
                 <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
 
                 <div class="info-box-content">
                     <span class="info-box-text">Ordenes Finalizadas</span>
-                    <span class="info-box-number">0</span>
+                    <span class="info-box-number" id="cantOrdenesDia">-</span>
 
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 0%"></div>
+                    <div class="progress" id="progresoOrdenesDia">
+                        <!--div class="progress-bar" style="width: 0%"></div-->
                     </div>
-                    <span class="progress-description">
-                        0% de avance
-                    </span>
+                    <span class="progress-description" id="porcentOrdenesDia">-% de avance</span>
                 </div>
                 <!-- /.info-box-content -->
             </div>
             <!-- /.info-box -->
         </div>
         <!-- /.col -->
+
         <div class="col-md-3 col-sm-6 col-xs-12">
             <div class="info-box bg-gray">
                 <span class="info-box-icon"><i class="fa fa-comments-o"></i></span>
 
                 <div class="info-box-content">
                     <span class="info-box-text">Avance por hora</span>
-                    <br />
+                    <span class="info-box-number" id="porcentajePorHora">-%</span>
+
                     <!--span class="info-box-number">30</span-->
 
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 5%"></div>
+                    <div class="progress" id="progresoPorHora">
+                        <!--div class="progress-bar" style="width: 5%"></!div-->
                     </div>
-                    <span class="progress-description">
-                        5% de avance
-                    </span>
+                    <span class="progress-description" id="horaPorcentaje">Hora del avance: --:--</span>
                 </div>
                 <!-- /.info-box-content -->
             </div>
@@ -271,99 +257,25 @@
     </div>
 
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-md-12">
             <div class="box">
-                <div class="box-header">
+                <div class="box-header with-border">
                     <h3 class="box-title">Resumen de ordenes</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <table class="table table-bordered">
-                        <tr>
-                            <th>Prioridad</th>
-                            <th>Orden</th>
-                            <th>Cliente</th>
-                            <th>Estado</th>
-                            <th>Progreso</th>
-                            <th style="width: 40px">% del progres0</th>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>5462649</td>
-                            <td>Good Price Corporation S.A.S.</td>
-                            <td><span class="label label-success">Finalizada</span></td>
-                            <td>
-                                <div class="progress progress-xs progress-striped active">
-                                    <div class="progress-bar progress-bar-success" style="width: 100%"></div>
-                                </div>
-                            </td>
-                            <td><span class="badge bg-green">100%</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>2</td>
-                            <td>3254698</td>
-                            <td>Good Price Corporation S.A.S.</td>
-                            <td><span class="label label-danger">Pospuesta</span></td>
-                            <td>
-                                <div class="progress progress-xs">
-                                    <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                                </div>
-                            </td>
-                            <td><span class="badge bg-red">55%</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>3</td>
-                            <td>1234567</td>
-                            <td>Good Price Corporation S.A.S.</td>
-                            <td><span class="label label-primary">En proceso</span></td>
-                            <td>
-                                <div class="progress progress-xs progress-striped active">
-                                    <div class="progress-bar progress-bar-primary" style="width:75%"></div>
-                                </div>
-                            </td>
-                            <td><span class="badge bg-light-blue">75%</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>4</td>
-                            <td>3278541</td>
-                            <td>Good Price Corporation S.A.S.</td>
-                            <td><span class="label label-warning">Pendiente</span></td>
-                            <td>
-                                <div class="progress progress-xs progress-striped active">
-                                    <div class="progress-bar progress-bar-yellow" style="width: 0%"></div>
-                                </div>
-                            </td>
-                            <td><span class="badge bg-yellow">0%</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>5</td>
-                            <td>2647826</td>
-                            <td>Good Price Corporation S.A.S.</td>
-                            <td><span class="label label-warning">Pendiente</span></td>
-                            <td>
-                                <div class="progress progress-xs progress-striped active">
-                                    <div class="progress-bar progress-bar-yellow" style="width: 0%"></div>
-                                </div>
-                            </td>
-                            <td><span class="badge bg-yellow">0%</span></td>
-                        </tr>
-
-
+                    <table id="tabla" class="table table-bordered table-striped table-hover" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Prioridad</th>
+                                <th>Orden</th>
+                                <th>Cliente</th>
+                                <th>Estado</th>
+                                <th>Progreso</th>
+                                <th style="width: 40px">% del progreso</th>
+                            </tr>
+                        </thead>
                     </table>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer clearfix">
-                    <ul class="pagination pagination-sm no-margin pull-right">
-                        <li><a href="#">&laquo;</a></li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">&raquo;</a></li>
-                    </ul>
                 </div>
             </div>
         </div>
@@ -378,6 +290,61 @@
     }
 </style>
 
+
+<!--Acciones para las ordenes e indicadores-->
+<script type="text/javascript" src="~/js/resumen.js"></script>
+<script>
+    function seleccionarOrden() {
+        var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, Newtonsoft.Json.Formatting.Indented));
+        mostrarOrden(modelo);
+    }
+</script>
+
+<script>
+    $(document).ready(function ()
+    {
+        var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model,Newtonsoft.Json.Formatting.Indented));
+        iniciarOrdenesSelect(modelo);
+        indicadoresDia();
+        indicadorCantBotellasHora();
+        $.fn.DataTable.ext.pager.numbers_length = 4;
+        mostrarTablaOrdenes();
+    });
+</script>
+
+
+<script>
+    function actualizarIndicadores() {
+        var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, Newtonsoft.Json.Formatting.Indented));
+        var ordenSelect = document.getElementById("numeroOrden");
+        var numeroOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
+        for (var i = 0; modelo!=null && i < modelo.length; i++) {
+            if (modelo[i]["Estado"] == 1 && numeroOrden == modelo[i]["OrdenFabricacion"]) {
+                monitoreoBotellas(numeroOrden);
+                monitoreoCajas(numeroOrden);
+                indicadorCantCajas(numeroOrden, modelo[i]["CajasPlanificadas"]);
+                indicadorCantBotellas(numeroOrden, modelo[i]["BotellasPlanificadas"]);
+                indicadoresVelocidad(numeroOrden)
+                break;
+            }
+        }
+        indicadoresDia();
+    }
+    setInterval(actualizarIndicadores, 60000);
+
+    function actualizarIndicadorHora()
+    {
+        indicadorCantBotellasHora();
+    }
+    setInterval(actualizarIndicadorHora, 3600000);
+</script>
+
+
+
+
+
+
+
 <!-- Resources -->
 <script src="https://www.amcharts.com/lib/4/core.js"></script>
 <script src="https://www.amcharts.com/lib/4/charts.js"></script>
@@ -386,77 +353,77 @@
 
 <!-- Chart code -->
 <script>
-am4core.ready(function() {
+    am4core.ready(function () {
 
-// Themes begin
-am4core.useTheme(am4themes_dataviz);
-am4core.useTheme(am4themes_animated);
-// Themes end
+        // Themes begin
+        am4core.useTheme(am4themes_dataviz);
+        am4core.useTheme(am4themes_animated);
+        // Themes end
 
-// Create chart
-var chart = am4core.create("chartdiv", am4charts.XYChart);
-chart.paddingRight = 20;
+        // Create chart
+        var chart = am4core.create("chartdiv", am4charts.XYChart);
+        chart.paddingRight = 20;
 
-chart.data = generateChartData();
+        chart.data = generateChartData();
 
-var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-dateAxis.baseInterval = {
-  "timeUnit": "minute",
-  "count": 1
-};
-dateAxis.tooltipDateFormat = "HH:mm, d MMMM";
+        var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+        dateAxis.baseInterval = {
+            "timeUnit": "minute",
+            "count": 1
+        };
+        dateAxis.tooltipDateFormat = "HH:mm, d MMMM";
 
-var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-valueAxis.tooltip.disabled = true;
-valueAxis.title.text = "Cantidad de cajas";
-valueAxis.renderer.ticks.template.disabled = true;
+        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        valueAxis.tooltip.disabled = true;
+        valueAxis.title.text = "Cantidad de cajas";
+        valueAxis.renderer.ticks.template.disabled = true;
 
-var series = chart.series.push(new am4charts.LineSeries());
-series.dataFields.dateX = "fecha";
-series.dataFields.valueY = "cajas";
-series.tooltipText = "Cajas: [bold]{valueY}[/]";
-series.fillOpacity = 0.3;
+        var series = chart.series.push(new am4charts.LineSeries());
+        series.dataFields.dateX = "fecha";
+        series.dataFields.valueY = "cajas";
+        series.tooltipText = "Cajas: [bold]{valueY}[/]";
+        series.fillOpacity = 0.3;
 
-var bullet = series.bullets.push(new am4charts.CircleBullet());
-bullet.circle.radius = 6;
-bullet.circle.fill = am4core.color("#fff");
-bullet.circle.strokeWidth = 3;
-
-
-chart.cursor = new am4charts.XYCursor();
-chart.cursor.lineY.opacity = 0;
-chart.scrollbarX = new am4charts.XYChartScrollbar();
-chart.scrollbarX.series.push(series);
+        var bullet = series.bullets.push(new am4charts.CircleBullet());
+        bullet.circle.radius = 6;
+        bullet.circle.fill = am4core.color("#fff");
+        bullet.circle.strokeWidth = 3;
 
 
-dateAxis.start = 0.8;
-dateAxis.keepSelection = true;
+        chart.cursor = new am4charts.XYCursor();
+        chart.cursor.lineY.opacity = 0;
+        chart.scrollbarX = new am4charts.XYChartScrollbar();
+        chart.scrollbarX.series.push(series);
+
+
+        dateAxis.start = 0.8;
+        dateAxis.keepSelection = true;
 
 
 
-function generateChartData() {
-    var chartData = [];
-    // obtiene la fecha actual
-    var firstDate = new Date();
-    // obtiene la hora de 500 min antes
-    firstDate.setMinutes(firstDate.getDate() - 500);
+        function generateChartData() {
+            var chartData = [];
+            // obtiene la fecha actual
+            var firstDate = new Date();
+            // obtiene la hora de 500 min antes
+            firstDate.setMinutes(firstDate.getDate() - 500);
 
-    // genera 500 instancias de datos 
-    var cajas = 500;
-    for (var i = 0; i < 500; i+=30) {
-        var nuevaFecha = new Date(firstDate);
-        // genera el minto en que se obtiene la caja
-        nuevaFecha.setMinutes(nuevaFecha.getMinutes() + i);
-        // genera un numero random que sera el numero de cjas por hora
-        cajas += Math.round((Math.random()<0.5?1:-1)*Math.random()*10);
-        // agrega los datos a un arreglo
-        chartData.push({
-            fecha: nuevaFecha,
-            cajas: cajas
-        });
-    }
-    return chartData;
-}
+            // genera 500 instancias de datos
+            var cajas = 500;
+            for (var i = 0; i < 500; i += 30) {
+                var nuevaFecha = new Date(firstDate);
+                // genera el minto en que se obtiene la caja
+                nuevaFecha.setMinutes(nuevaFecha.getMinutes() + i);
+                // genera un numero random que sera el numero de cjas por hora
+                cajas += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
+                // agrega los datos a un arreglo
+                chartData.push({
+                    fecha: nuevaFecha,
+                    cajas: cajas
+                });
+            }
+            return chartData;
+        }
 
-}); // end am4core.ready()
+    }); // end am4core.ready()
 </script>

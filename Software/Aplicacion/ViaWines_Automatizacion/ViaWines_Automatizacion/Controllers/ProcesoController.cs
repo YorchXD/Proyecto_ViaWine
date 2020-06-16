@@ -197,29 +197,29 @@ namespace ViaWines_Automatizacion.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetCantCajas(int OrdenFabricacion)
+        public JsonResult GetCantCajas(int OrdenFabricacion, int CajasPlanificadas)
         {
             //String fecha = "2020-05-13";
             String fecha = DateTime.Now.ToString("yyyy-MM-dd");
             List<Caja> caja = ConsultaProceso.LeerCajas(fecha, OrdenFabricacion);
-            List<Orden> ordenes = ConsultaProceso.LeerOrdenes(fecha);
-            int cajasPlanificadas = 0;
+            //List<Orden> ordenes = ConsultaProceso.LeerOrdenes(fecha);
+            //int cajasPlanificadas = 0;
             int cantCajas = 0;
             double porcentaje = 0;
             
             if (caja != null)
             {
                 cantCajas = caja.Count();
-                for (int i = 0; i<ordenes.Count(); i++)
+                /*for (int i = 0; i<ordenes.Count(); i++)
                 {
                     if(ordenes[i].OrdenFabricacion==OrdenFabricacion)
                     {
                         cajasPlanificadas = ordenes[i].CajasPlanificadas;
                         break;
                     }
-                }
+                }*/
 
-                porcentaje = (double)((cantCajas * 100.0) / cajasPlanificadas);
+                porcentaje = (double)((cantCajas * 100.0) / CajasPlanificadas);
 
             }
 
@@ -235,29 +235,29 @@ namespace ViaWines_Automatizacion.Controllers
 
 
         [HttpPost]
-        public JsonResult GetCantBotellas(int OrdenFabricacion)
+        public JsonResult GetCantBotellas(int OrdenFabricacion, int BotellasPlanificadas)
         {
             //String fecha = "2020-05-13";
             String fecha = DateTime.Now.ToString("yyyy-MM-dd");
             List<Botella> botellas = ConsultaProceso.LeerBotellas(fecha, OrdenFabricacion);
-            List<Orden> ordenes = ConsultaProceso.LeerOrdenes(fecha);
-            int botellasPlanificadas = 0;
+            //List<Orden> ordenes = ConsultaProceso.LeerOrdenes(fecha);
+            //int botellasPlanificadas = 0;
             int cantBotellas = 0;
             double porcentaje = 0;
 
             if (botellas!=null)
             {
                 cantBotellas = botellas.Count();
-                for (int i = 0; i < ordenes.Count(); i++)
+                /*for (int i = 0; i < ordenes.Count(); i++)
                 {
                     if (ordenes[i].OrdenFabricacion == OrdenFabricacion)
                     {
                         botellasPlanificadas = ordenes[i].BotellasPlanificadas;
                         break;
                     }
-                }
+                }*/
 
-                porcentaje = (double)((cantBotellas * 100.0) / botellasPlanificadas);   
+                porcentaje = (double)((cantBotellas * 100.0) / BotellasPlanificadas);   
             }
             var datosBotella = new
             {
