@@ -137,9 +137,11 @@ function Orden(modelo)
     }
     monitoreoBotellas(modelo["OrdenFabricacion"]);
     monitoreoCajas(modelo["OrdenFabricacion"]);
-    indicadorCantCajas(modelo["OrdenFabricacion"]);
-    indicadorCantBotellas(modelo["OrdenFabricacion"]);
-    indicadoresVelocidad(modelo["OrdenFabricacion"]);
+    indicadorCantCajas(modelo["OrdenFabricacion"], modelo["CajasPlanificadas"]);
+    indicadorCantBotellas(modelo["OrdenFabricacion"], modelo["BotellasPlanificadas"]);
+    //indicadoresVelocidad(modelo["OrdenFabricacion"]);
+    indicadorVelocidadBotellas(modelo["OrdenFabricacion"]);
+    indicadorVelocidadCajas(modelo["OrdenFabricacion"]);
 }
 
 function iniciarOrdenesSelect(modelo)
@@ -300,7 +302,7 @@ function indicadorCantBotellas(OrdenFabricacion, BotellasPlanificadas)
     })
 }
 
-function indicadoresVelocidad(OrdenFabricacion)
+/*function indicadoresVelocidad(OrdenFabricacion)
 {
     var datos = {
         'OrdenFabricacion': OrdenFabricacion
@@ -312,6 +314,36 @@ function indicadoresVelocidad(OrdenFabricacion)
         success: function (data) {
             document.getElementById("cantBotellasMin").innerHTML = data.cantBotellas;
             document.getElementById("cantCajasMin").innerHTML = data.cantCajas;
+            console.log(data)
+        }
+    })
+}*/
+
+function indicadorVelocidadBotellas(OrdenFabricacion) {
+    var datos = {
+        'OrdenFabricacion': OrdenFabricacion
+    };
+    $.ajax({
+        url: "/Proceso/GetVelocidadBotellas",
+        method: "POST",
+        data: datos,
+        success: function (data) {
+            document.getElementById("cantBotellasMin").innerHTML = data;
+            console.log(data)
+        }
+    })
+}
+
+function indicadorVelocidadCajas(OrdenFabricacion) {
+    var datos = {
+        'OrdenFabricacion': OrdenFabricacion
+    };
+    $.ajax({
+        url: "/Proceso/GetVelocidadCajas",
+        method: "POST",
+        data: datos,
+        success: function (data) {
+            document.getElementById("cantCajasMin").innerHTML = data;
             console.log(data)
         }
     })

@@ -320,23 +320,25 @@
         var numeroOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
         for (var i = 0; modelo!=null && i < modelo.length; i++) {
             if (modelo[i]["Estado"] == 1 && numeroOrden == modelo[i]["OrdenFabricacion"]) {
-                monitoreoBotellas(numeroOrden);
-                monitoreoCajas(numeroOrden);
+                //monitoreoBotellas(numeroOrden);
+                //monitoreoCajas(numeroOrden);
                 indicadorCantCajas(numeroOrden, modelo[i]["CajasPlanificadas"]);
                 indicadorCantBotellas(numeroOrden, modelo[i]["BotellasPlanificadas"]);
-                indicadoresVelocidad(numeroOrden)
+                indicadorVelocidadBotellas(numeroOrden);
+                indicadorVelocidadCajas(numeroOrden);
+                //indicadoresVelocidad(numeroOrden)
                 break;
             }
         }
         indicadoresDia();
     }
-    setInterval(actualizarIndicadores, 60000);
+    setInterval(actualizarIndicadores, 60*1000);
 
     function actualizarIndicadorHora()
     {
         indicadorCantBotellasHora();
     }
-    setInterval(actualizarIndicadorHora, 3600000);
+    setInterval(actualizarIndicadorHora, 60*60*1000);
 </script>
 
 

@@ -14,6 +14,7 @@ namespace ViaWines_Automatizacion.Controllers
         public IActionResult Proceso()
         {
             String fecha = DateTime.Now.ToString("yyyy-MM-dd");
+            //String fecha = "2020-05-08";
             List<Orden> ordenes = ConsultaProceso.LeerOrdenes(fecha);
             return View(ordenes);
         }
@@ -21,6 +22,7 @@ namespace ViaWines_Automatizacion.Controllers
         [HttpPost]
         public JsonResult ActualizarEstadoProceso(int OrdenFabricacion, int Estado)//ActualizarOrden orden)
         {
+            ConsultaProceso.InsertarLogEstadoOrden(OrdenFabricacion, Estado);
             int actualizacion = ConsultaProceso.ActualizarEstadoOrden(OrdenFabricacion, Estado);
             if(actualizacion==1)
             {
@@ -92,6 +94,7 @@ namespace ViaWines_Automatizacion.Controllers
         public JsonResult Exit_proces_ini(int OpcionAccion, int OrdenFabricacion)//ActualizarOrden orden)
         {
             var resultado = new VistaModalIniciarProceso();
+            //String fecha = "2020-05-08";
             String fecha = DateTime.Now.ToString("yyyy-MM-dd");
             List<Orden> Ordenes = ConsultaProceso.LeerOrdenes(fecha);
             Boolean ordenesIniciadas = OrdenesIniciadas(Ordenes);
@@ -269,13 +272,31 @@ namespace ViaWines_Automatizacion.Controllers
 
 
         [HttpPost]
-        public JsonResult GetVelocidad(int OrdenFabricacion)
+        public JsonResult GetVelocidadBotellas(int OrdenFabricacion)
         {
             //String fecha = "2020-05-13";
             String fecha = DateTime.Now.ToString("yyyy-MM-dd");
             String hora = DateTime.Now.AddMinutes(-1).ToString("HH:mm");
-            VelocidadProceso velocidad = ConsultaProceso.LeerVelocidad(fecha, hora, OrdenFabricacion);
-            return Json(velocidad);
+            int cantBotellas = ConsultaProceso.LeerVelocidadBotellas(fecha, hora, OrdenFabricacion);
+            if (cantBotellas == -1)
+            {
+                cantBotellas = 0;
+            }
+            return Json(cantBotellas);
+        }
+
+        [HttpPost]
+        public JsonResult GetVelocidadCajas(int OrdenFabricacion)
+        {
+            //String fecha = "2020-05-13";
+            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
+            String hora = DateTime.Now.AddMinutes(-1).ToString("HH:mm");
+            int cantCajas = ConsultaProceso.LeerVelocidadCajas(fecha, hora, OrdenFabricacion);
+            if(cantCajas == -1)
+            {
+                cantCajas = 0;
+            }
+            return Json(cantCajas);
         }
 
 

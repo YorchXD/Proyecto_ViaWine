@@ -66,7 +66,7 @@ namespace ViaWines_Automatizacion.Controllers
             return Json(datosBotella);
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public JsonResult GetVelocidad(int OrdenFabricacion)
         {
             //String fecha = "2020-06-04";
@@ -74,7 +74,7 @@ namespace ViaWines_Automatizacion.Controllers
             String hora = DateTime.Now.AddMinutes(-1).ToString("HH:mm");
             VelocidadProceso velocidad = ConsultaResumen.LeerVelocidad(fecha, hora, OrdenFabricacion);
             return Json(velocidad);
-        }
+        }*/
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -219,5 +219,34 @@ namespace ViaWines_Automatizacion.Controllers
             return Json(CantBotellas);
 
         }*/
+
+
+        [HttpPost]
+        public JsonResult GetVelocidadBotellas(int OrdenFabricacion)
+        {
+            //String fecha = "2020-05-13";
+            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
+            String hora = DateTime.Now.AddMinutes(-1).ToString("HH:mm");
+            int cantBotellas = ConsultaProceso.LeerVelocidadBotellas(fecha, hora, OrdenFabricacion);
+            if (cantBotellas == -1)
+            {
+                cantBotellas = 0;
+            }
+            return Json(cantBotellas);
+        }
+
+        [HttpPost]
+        public JsonResult GetVelocidadCajas(int OrdenFabricacion)
+        {
+            //String fecha = "2020-05-13";
+            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
+            String hora = DateTime.Now.AddMinutes(-1).ToString("HH:mm");
+            int cantCajas = ConsultaProceso.LeerVelocidadCajas(fecha, hora, OrdenFabricacion);
+            if (cantCajas == -1)
+            {
+                cantCajas = 0;
+            }
+            return Json(cantCajas);
+        }
     }
 }

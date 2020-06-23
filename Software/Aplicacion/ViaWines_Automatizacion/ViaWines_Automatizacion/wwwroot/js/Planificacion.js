@@ -59,16 +59,16 @@
                     var estadoAux = "";
                     switch (estado) {
                         case 1:
-                            estadoAux = "<span class='label bg-purple'>Iniciada</span>"
+                            estadoAux = "<span class='label bg-start'>Iniciada</span>"
                             break;
                         case 2:
-                            estadoAux = "<span class='label bg-orange'>Pausada</span>"
+                            estadoAux = "<span class='label bg-pause'>Pausada</span>"
                             break;
                         case 3:
-                            estadoAux = "<span class='label bg-maroon'>Pospuesta</span>"
+                            estadoAux = "<span class='label bg-postpone'>Pospuesta</span>"
                             break;
                         case 4:
-                            estadoAux = "<span class='label bg-olive'>Finalizada</span>";
+                            estadoAux = "<span class='label bg-end'>Finalizada</span>";
                             break;
                         default:
                             estadoAux = "<span class='label bg-gray'>No iniciada</span>";
@@ -81,16 +81,16 @@
                     var porcentaje = "";
                     switch (full.estado) {
                         case 1:
-                            porcentaje = "<span class='label bg-purple'>" + full.porcentajeAvance + "%</span>";
+                            porcentaje = "<span class='label bg-start'>" + full.porcentajeAvance + "%</span>";
                             break;
                         case 2:
-                            porcentaje = "<span class='label bg-orange'>" + full.porcentajeAvance + "%</span>";
+                            porcentaje = "<span class='label bg-pause'>" + full.porcentajeAvance + "%</span>";
                             break;
                         case 3:
-                            porcentaje = "<span class='label bg-maroon'>" + full.porcentajeAvance + "%</span>"
+                            porcentaje = "<span class='label bg-postpone'>" + full.porcentajeAvance + "%</span>"
                             break;
                         case 4:
-                            porcentaje = "<span class='label bg-olive'>" + full.porcentajeAvance + "%</span>";
+                            porcentaje = "<span class='label bg-end'>" + full.porcentajeAvance + "%</span>";
                             break;
                         default:
                             porcentaje = "<span class='label bg-gray'>" + full.porcentajeAvance + "%</span>";

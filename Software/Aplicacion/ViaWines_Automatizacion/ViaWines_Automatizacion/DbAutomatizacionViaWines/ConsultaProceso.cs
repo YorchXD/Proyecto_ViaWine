@@ -26,6 +26,35 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             return -1;
         }
 
+        public static void InsertarLogEstadoOrden(int OrdenFabricacion, int Estado)
+        {
+            string fecha = DateTime.Today.ToString("yyyy-MM-dd");
+            string hora = DateTime.Now.ToString("HH:mm:ss");
+            string evento = "";
+
+            switch (Estado)
+            {
+                case 1:
+                    evento = "Se ha iniciado la orden numero " + OrdenFabricacion;
+                    break;
+                case 2:
+                    evento = "Se ha pausado la orden numero " + OrdenFabricacion;
+                    break;
+                case 3:
+                    evento = "Se ha pospuesto la orden numero " + OrdenFabricacion;
+                    break;
+                case 4:
+                    evento = "Se ha finalizado la orden numero " + OrdenFabricacion;
+                    break;
+            }
+
+            var command = new SqlCommand() { CommandText = "InsertarLog", CommandType = System.Data.CommandType.StoredProcedure };
+            command.Parameters.Add(new SqlParameter() { ParameterName = "fecha", Direction = System.Data.ParameterDirection.Input, Value = fecha });
+            command.Parameters.Add(new SqlParameter() { ParameterName = "hora", Direction = System.Data.ParameterDirection.Input, Value = hora });
+            command.Parameters.Add(new SqlParameter() { ParameterName = "evento", Direction = System.Data.ParameterDirection.Input, Value = evento });
+            ContexDb.ExecuteProcedure(command);
+        }
+
         /// <summary>
         /// Obtiene las ordenes que se encuentren iniciadas.
         /// </summary>
@@ -242,17 +271,16 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             return null;
         }
 
-
-        public static VelocidadProceso LeerVelocidad(String Fecha, String Hora, int OrdenFabricacion)
+        public static int LeerVelocidadBotellas(String Fecha, String Hora, int OrdenFabricacion)
         {
             try
             {
-                var command = new SqlCommand() { CommandText = "Leer_Velocidad", CommandType = System.Data.CommandType.StoredProcedure };
+                var command = new SqlCommand() { CommandText = "Leer_Velocidad_Botellas", CommandType = System.Data.CommandType.StoredProcedure };
                 command.Parameters.Add(new SqlParameter() { ParameterName = "RefOrden", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
                 command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
                 command.Parameters.Add(new SqlParameter() { ParameterName = "Hora", Direction = System.Data.ParameterDirection.Input, Value = Hora });
                 var datos = ContexDb.GetDataSet(command);
-                VelocidadProceso velocidad = new VelocidadProceso() { Fecha = Fecha, Hora = Hora, cantBotellas = 0, cantCajas = 0 };
+                int cantBotellasMin = 0;
                 if (datos.Tables[0].Rows.Count > 0)
                 {
                     foreach (System.Data.DataRow row in datos.Tables[0].Rows)
@@ -260,23 +288,49 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                         var prodData = row;
                         if(prodData["cantBotellas"]!=null)
                         {
-                            velocidad.cantBotellas = Convert.ToInt32(prodData["cantBotellas"]);
-                        }
-                            
-                        if (prodData["cantCajas"]!=null)
-                        {
-                            velocidad.cantCajas = Convert.ToInt32(prodData["cantCajas"]);
+                            cantBotellasMin = Convert.ToInt32(prodData["cantBotellas"]);
                         }
                     }
                 }
-                return velocidad;
+                return cantBotellasMin;
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
-            return null;
+            return -1;
+        }
+
+        public static int LeerVelocidadCajas(String Fecha, String Hora, int OrdenFabricacion)
+        {
+            try
+            {
+                var command = new SqlCommand() { CommandText = "Leer_Velocidad_Cajas", CommandType = System.Data.CommandType.StoredProcedure };
+                command.Parameters.Add(new SqlParameter() { ParameterName = "RefOrden", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "Hora", Direction = System.Data.ParameterDirection.Input, Value = Hora });
+                var datos = ContexDb.GetDataSet(command);
+                int cantCajasMin = 0;
+                if (datos.Tables[0].Rows.Count > 0)
+                {
+                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
+                    {
+                        var prodData = row;
+                        if (prodData["cantCajas"] != null)
+                        {
+                            cantCajasMin = Convert.ToInt32(prodData["cantCajas"]);
+                        }
+                    }
+                }
+                return cantCajasMin;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            return -1;
         }
     }
 }

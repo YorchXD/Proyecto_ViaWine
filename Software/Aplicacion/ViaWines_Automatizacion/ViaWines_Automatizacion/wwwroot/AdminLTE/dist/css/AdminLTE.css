@@ -5878,3 +5878,24 @@ section.content.resumen-actual .inner {
 .modal-header.bg-olive {
     background: #78981a !important;
 }
+
+button.btn.btn-block.bg-purple {
+    background: #57103c !important;
+}
+
+.bg-start 
+{
+    background: #57103c !important;
+}
+
+.bg-pause {
+    background: #ea9409 !important;
+}
+
+.bg-postpone {
+    background: #D81B60 !important;
+}
+
+.bg-end {
+    background: #78981a !important;
+}

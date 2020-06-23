@@ -59,7 +59,9 @@ function Orden(modelo) {
     //monitoreoCajas(modelo["OrdenFabricacion"]);
     indicadorCantCajas(modelo["OrdenFabricacion"], modelo["CajasPlanificadas"]);
     indicadorCantBotellas(modelo["OrdenFabricacion"], modelo["BotellasPlanificadas"]);
-    indicadoresVelocidad(modelo["OrdenFabricacion"]);
+    indicadorVelocidadBotellas(modelo["OrdenFabricacion"]);
+    indicadorVelocidadCajas(modelo["OrdenFabricacion"]);
+    //indicadoresVelocidad(modelo["OrdenFabricacion"]);
 }
 
 function indicadorCantCajas(OrdenFabricacion, CajasPlanificadas)
@@ -232,16 +234,16 @@ function mostrarTablaOrdenes() {
                     var estadoAux = "";
                     switch (estado) {
                         case 1:
-                            estadoAux = "<span class='label bg-purple'>Iniciada</span>"
+                            estadoAux = "<span class='label bg-start'>Iniciada</span>"
                             break;
                         case 2:
-                            estadoAux = "<span class='label bg-orange'>Pausada</span>"
+                            estadoAux = "<span class='label bg-pause'>Pausada</span>"
                             break;
                         case 3:
-                            estadoAux = "<span class='label bg-maroon'>Pospuesta</span>"
+                            estadoAux = "<span class='label bg-postpone'>Pospuesta</span>"
                             break;
                         case 4:
-                            estadoAux = "<span class='label bg-olive'>Finalizada</span>";
+                            estadoAux = "<span class='label bg-end'>Finalizada</span>";
                             break;
                         default:
                             estadoAux = "<span class='label bg-gray'>No iniciada</span>";
@@ -255,22 +257,22 @@ function mostrarTablaOrdenes() {
                     switch (full.estado) {
                         case 1:
                             progreso = "<div class='progress progress-xs progress-striped active'>" +
-                                "<div class='progress-bar bg-purple' style='width: " + full.porcentajeAvance + "%'></div>" +
+                                "<div class='progress-bar bg-start' style='width: " + full.porcentajeAvance + "%'></div>" +
                                 "</div>";
                             break;
                         case 2:
                             progreso = "<div class='progress progress-xs progress-striped active'>" +
-                                "<div class='progress-bar bg-orange' style='width: " + full.porcentajeAvance + "%'></div>" +
+                                "<div class='progress-bar bg-pause' style='width: " + full.porcentajeAvance + "%'></div>" +
                                 "</div>";
                             break;
                         case 3:
                             progreso = "<div class='progress progress-xs progress-striped active'>" +
-                                "<div class='progress-bar bg-maroon' style='width: " + full.porcentajeAvance + "%'></div>" +
+                                "<div class='progress-bar bg-postpone' style='width: " + full.porcentajeAvance + "%'></div>" +
                                 "</div>";
                             break;
                         case 4:
                             progreso = "<div class='progress progress-xs progress-striped active'>" +
-                                "<div class='progress-bar bg-olive' style='width: " + full.porcentajeAvance + "%'></div>" +
+                                "<div class='progress-bar bg-end' style='width: " + full.porcentajeAvance + "%'></div>" +
                                 "</div>";
                             break;
                         default:
@@ -287,16 +289,16 @@ function mostrarTablaOrdenes() {
                     var porcentaje = "";
                     switch (full.estado) {
                         case 1:
-                            porcentaje = "<span class='label bg-purple'>" + full.porcentajeAvance + "%</span>";
+                            porcentaje = "<span class='label bg-start'>" + full.porcentajeAvance + "%</span>";
                             break;
                         case 2:
-                            porcentaje = "<span class='label bg-orange'>" + full.porcentajeAvance + "%</span>";
+                            porcentaje = "<span class='label bg-pause'>" + full.porcentajeAvance + "%</span>";
                             break;
                         case 3:
-                            porcentaje = "<span class='label bg-maroon'>" + full.porcentajeAvance + "%</span>"
+                            porcentaje = "<span class='label bg-postpone'>" + full.porcentajeAvance + "%</span>"
                             break;
                         case 4:
-                            porcentaje = "<span class='label bg-olive'>" + full.porcentajeAvance + "%</span>";
+                            porcentaje = "<span class='label bg-end'>" + full.porcentajeAvance + "%</span>";
                             break;
                         default:
                             porcentaje = "<span class='label bg-gray'>" + full.porcentajeAvance + "%</span>";
@@ -306,4 +308,34 @@ function mostrarTablaOrdenes() {
             },
         ]
     });
+}
+
+function indicadorVelocidadBotellas(OrdenFabricacion) {
+    var datos = {
+        'OrdenFabricacion': OrdenFabricacion
+    };
+    $.ajax({
+        url: "/Resumen/GetVelocidadBotellas",
+        method: "POST",
+        data: datos,
+        success: function (data) {
+            document.getElementById("cantBotellasMin").innerHTML = data;
+            console.log(data)
+        }
+    })
+}
+
+function indicadorVelocidadCajas(OrdenFabricacion) {
+    var datos = {
+        'OrdenFabricacion': OrdenFabricacion
+    };
+    $.ajax({
+        url: "/Resumen/GetVelocidadCajas",
+        method: "POST",
+        data: datos,
+        success: function (data) {
+            document.getElementById("cantCajasMin").innerHTML = data;
+            console.log(data)
+        }
+    })
 }
