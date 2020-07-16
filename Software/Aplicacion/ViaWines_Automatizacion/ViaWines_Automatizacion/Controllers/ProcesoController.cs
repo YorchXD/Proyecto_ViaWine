@@ -340,13 +340,6 @@ namespace ViaWines_Automatizacion.Controllers
             return Json(cantCajas);
         }*/
 
-        public Boolean EsOrdenIniciada(int OrdenFabricacion)
-        {
-            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
-            List<Orden> Ordenes = ConsultaProceso.LeerOrdenes(fecha);
-            return OrdenIniciada(Ordenes, OrdenFabricacion);
-        }
-
         [HttpPost]
         public JsonResult GetMonitoreoMateriales(int OrdenFabricacion)
         {

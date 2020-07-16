@@ -71,7 +71,8 @@
             <div class="box">
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <table id="tabla" class="table table-bordered table-striped table-hover">
+                    <!--table id="tabla" class="table table-bordered table-striped table-hover display-1 nowrap"-->
+                    <table id="tabla" class="table table-bordered display dt-responsive" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th>Secuencia</th>
@@ -85,8 +86,8 @@
                                 <th>Cant. Cajas</th>
                                 <th>Cant. Cajas Fabricadas</th>
                                 <th>Fecha Fabricación</th>
-                                <th>Hora de inicio</th>
-                                <th>Hora de término</th>
+                                <th>Fecha y hora de inicio</th>
+                                <th>Fecha y hora de término</th>
                                 <th>Estado</th>
                                 <th>% de avance</th>
                             </tr>
@@ -163,14 +164,7 @@
 </section>
 <!-- /.content -->
 
-<!-- datepicker -->
-<!--script src="~/AdminLTE/bower_components/jquery/dist/jquery.min.js"></script>
-<script src="~/AdminLTE/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-<script src="~/AdminLTE/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.es.min.js"></script-->
-<!--link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-1.12.4.js"></!-script>
-<script! src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script-->
-<!--script src="~/AdminLTE/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.es.min.js"></script-->
+
 
 
 <style>
@@ -200,7 +194,6 @@
         height: 340px;
         text-align: center;
         border-radius: 30px;
-
         position: absolute;
         top: 50%;
         left: 50%;
@@ -215,6 +208,11 @@
     }
 </style>
 
+<script src="https://unpkg.com/moment"></script>
+<!--   Datatables-->
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
+<!-- extension responsive -->
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 <script type="text/javascript" src="~/js/planificacion.js"></script>
 
 <script>
@@ -223,15 +221,15 @@
 
 <script>
     //var fecha = "28/04/2020";
-    
+
     $(document).ready(function () {
-        
+
         planificacionDisponible()
         var fecha = fechaActual();
         seleccionarBuscarPlanificacion(fecha);
-        
+
     });
-    
+
 
 </script>
 

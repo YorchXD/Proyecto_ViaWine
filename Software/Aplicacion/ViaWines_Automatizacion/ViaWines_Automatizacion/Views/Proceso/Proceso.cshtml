@@ -99,23 +99,23 @@
     <!-- /.row -->
 
     <div class="row">
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
-            <p>
-                <button type="button" id="btnInicio" class="btn btn-block bg-purple" >Inicio</button>
-            </p>
-            <p>
-                <button type="button" id="btnPausar" class="btn btn-block bg-orange" >Pausar</button>
-            </p>
-            <p>
-                <button type="button" id="btnPosponer" class="btn btn-block bg-maroon" >Posponer</button>
-            </p>
-            <p>
-                <button type="button" id="btnFinalizar" class="btn btn-block bg-olive" >Terminar</button>
-            </p>
+        <div class="col-lg-3 col-md-4 col-sm-12 col-xs-12" style="padding-left:11px; padding-right:11px; padding-bottom:15px;">
+            <div class="col-lg-12 col-md-12 col-sm-6 col-xs-6" style="padding:1%;">
+                <button type="button" id="btnInicio" class="btn btn-block bg-purple" style="height:45px">Inicio</button>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-6 col-xs-6" style="padding:1%;">
+                <button type="button" id="btnPausar" class="btn btn-block bg-orange" style="height:45px">Pausar</button>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-6 col-xs-6" style="padding:1%;">
+                <button type="button" id="btnPosponer" class="btn btn-block bg-maroon" style="height:45px">Posponer</button>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-6 col-xs-6" style="padding:1%;">
+                <button type="button" id="btnFinalizar" class="btn btn-block bg-olive" style="height:45px">Terminar</button>
+            </div>
         </div>
         <!-- ./col -->
 
-        <div class="col-lg-9 col-md-8 col-sm-8 col-xs-6">
+        <div class="col-lg-9 col-md-8 col-sm-12 col-xs-12">
             <div class="box box-solid">
                 <div class="box-header with-border">
                     <i class="fa fa-text-width"></i>
@@ -161,7 +161,7 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <table id="tablaBotellas" class="table table-bordered table-striped table-hover">
+                    <table id="tablaBotellas" class="table table-bordered display dt-responsive" cellpadding="0" width="100%">
                         <thead>
                             <tr>
                                 <th style="width: 10px">#</th>
@@ -182,7 +182,7 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <table id="tablaCajas" class="table table-bordered table-striped table-hover">
+                    <table id="tablaCajas" class="table table-bordered display dt-responsive" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th style="width: 10px">#</th>
@@ -321,6 +321,10 @@
 
 <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script-->
 <script src="https://unpkg.com/moment"></script>
+<!--   Datatables-->
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
+<!-- extension responsive -->
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 <script type="text/javascript" src="~/js/proceso.js"></script>
 
 <script>
@@ -355,33 +359,19 @@
 <script>
     function actualizarTablasMonitoreo()
     {
+
+
         var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, Newtonsoft.Json.Formatting.Indented));
         var ordenSelect = document.getElementById("numeroOrden");
-        var cajasPlan = document.getElementById("cantCajasPlan");
-        var botellasPlan = document.getElementById("cantBotellasPlan");
         var numeroOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
-        var estado = esOrdenIniciada(ordenSelect);
-        if (estado == true) {
-            monitoreo(OrdenFabricacion, botellasPlan, cajasPlan);
+        for (var i = 0; modelo!=null && i < modelo.length; i++) {
+            if (modelo[i]["Estado"] == 1 && numeroOrden == modelo[i]["OrdenFabricacion"]) {
+                monitoreo(numeroOrden, modelo[i]["BotellasPlanificadas"], modelo[i]["CajasPlanificadas"])
+                break;
+            }
         }
 
-
-
-
-        //for (var i = 0; modelo!=null && i < modelo.length; i++) {
-            //if (modelo[i]["Estado"] == 1 && numeroOrden == modelo[i]["OrdenFabricacion"])
-            //{
-                //monitoreoBotellas(numeroOrden);
-                //monitoreoCajas(numeroOrden);
-                //indicadorCantCajas(numeroOrden, modelo[i]["CajasPlanificadas"]);
-                //indicadorCantBotellas(numeroOrden, modelo[i]["BotellasPlanificadas"]);
-                //indicadorVelocidadBotellas(numeroOrden);
-                //indicadorVelocidadCajas(numeroOrden);
-                //indicadoresVelocidad(numeroOrden); no se usa de momento
-                //break;
-            //}
-        //}
     }
-    setInterval(actualizarTablasMonitoreo, 60000);
+    setInterval(actualizarTablasMonitoreo, 30000);
 </script>
 

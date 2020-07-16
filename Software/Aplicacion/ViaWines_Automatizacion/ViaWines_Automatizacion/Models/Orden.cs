@@ -24,10 +24,8 @@ namespace ViaWines_Automatizacion.Models
         public String HoraInicioPlanificada { get; set; }
         //[DisplayFormat(DataFormatString = "{0:HH:mm:ss}", ApplyFormatInEditMode = true)]
         public String HoraTerminoPlanificada { get; set; }
-        //[DisplayFormat(DataFormatString = "{0:HH:mm:ss}", ApplyFormatInEditMode = true)]
-        public String HoraInicio { get; set; }
-        //[DisplayFormat(DataFormatString = "{0:HH:mm:ss}", ApplyFormatInEditMode = true)]
-        public String HoraTermino { get; set; }
+        public DateTime FechaHoraInicio { get; set; }
+        public DateTime FechaHoraTermino { get; set; }
         public String FormatoCaja { get; set; }
         public int Estado { get; set; }
         public int Secuencia { get; set; }

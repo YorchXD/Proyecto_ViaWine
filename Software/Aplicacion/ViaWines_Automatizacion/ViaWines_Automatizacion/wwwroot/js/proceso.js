@@ -365,10 +365,6 @@ function monitoreo(OrdenFabricacion, botellasPlan, cajasPlan)
             var cajas = data.filter(element => element.tipo == "Caja");
             var cantBotellas = botellas.length;
             var cantCajas = cajas.length;
-            console.log(botellas);
-            console.log(cajas);
-            console.log(cantBotellas);
-            console.log(cantCajas);
             indicadorCantBotellas1(cantBotellas, botellasPlan);
             indicadorCantCajas1(cantCajas, cajasPlan);
             indicadorVelocidadPorMin(OrdenFabricacion, 'botella');
@@ -432,24 +428,11 @@ function indicadorVelocidadPorMin(OrdenFabricacion, tipoMaterial) {
                 document.getElementById("cantCajasMin").innerHTML = data;
             }
             
-            //console.log(data)
         }
     })
 }
 
-/**
- * Consulta si la orden esta iniciada
- * @param {int} OrdenFabricacion
- */
-function esOrdenIniciada(OrdenFabricacion) {
-    $.ajax({
-        url: "/Proceso/EsOrdenIniciada",
-        method: "POST",
-        success: function (data) {
-            return data;
-        }
-    })
-}
+
 
 
 function monitoreoBotellas1(botellas) {

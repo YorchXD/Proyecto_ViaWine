@@ -1,6 +1,11 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Last-Modified" content="0">
+    <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>ViaWines</title>
@@ -39,12 +44,13 @@
     <link rel="stylesheet" href="~/AdminLTE/dist/css/skins/_all-skins.min.css">
 
     <!-- DataTables -->
+
     <link rel="stylesheet" href="~/AdminLTE/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-    <script src="~/AdminLTE/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="~/AdminLTE/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 
 
 
+    <!--script src="~/AdminLTE/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/AdminLTE/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script-->
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
@@ -69,7 +75,13 @@
     <![endif]-->
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <!--link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.21/r-2.2.5/datatables.min.css" /-->
 
+    <!--  Datatables  -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.css" />
+
+    <!--  extension responsive  -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
 
 </head>
 
@@ -81,10 +93,12 @@
             <!-- Logo -->
             <a href="#" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini"><b>V</b>W</span>
+                <span class="logo-mini"><img src="https://viawines.com/wp-content/uploads/2018/11/logo_blanco.png" class="brandlogo-image"></span>
                 <!-- logo for regular state and mobile devices -->
-                <span class="logo-lg"><b>Via</b>Wines</span>
+                <span class="logo-lg"><img src="https://viawines.com/wp-content/uploads/2018/11/logo_blanco.png" class="brandlogo-image"><strong>AdminLTE</strong></span>
             </a>
+
+            
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top">
                 <!-- Sidebar toggle button-->
@@ -416,12 +430,10 @@
         <div class="control-sidebar-bg"></div>
     </div>
     <!-- ./wrapper -->
-    
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <!--script>
         $.widget.bridge('uibutton', $.ui.button);
     </script-->
-
     <!-- Bootstrap 3.3.7 -->
     <script src="~/AdminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- Morris.js charts -->
@@ -458,7 +470,8 @@
     <!-- AdminLTE for demo purposes -->
     <script src="~/AdminLTE/dist/js/demo.js"></script>
 
-    
+    <!--script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.21/r-2.2.5/datatables.min.js"></script-->
+
 
     <!-- Page script -->
     <script>

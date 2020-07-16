@@ -203,7 +203,7 @@ a:focus {
   margin-bottom: 0;
   margin-left: 230px;
   border: none;
-  min-height: 50px;
+  min-height: 70px;
   border-radius: 0;
 }
 .layout-top-nav .main-header .navbar {
@@ -231,6 +231,7 @@ a:focus {
 .main-header .navbar-custom-menu,
 .main-header .navbar-right {
   float: right;
+  padding-top:12px;
 }
 @media (max-width: 991px) {
   .main-header .navbar-custom-menu a,
@@ -255,7 +256,7 @@ a:focus {
   float: left;
   background-color: transparent;
   background-image: none;
-  padding: 15px 15px;
+  padding: 27px 27px;
   font-family: fontAwesome;
 }
 .main-header .sidebar-toggle:before {
@@ -298,13 +299,13 @@ a:focus {
   transition: width 0.3s ease-in-out;
   display: block;
   float: left;
-  height: 50px;
+  height: 73px;
   font-size: 20px;
-  line-height: 50px;
+  line-height: 70px;
   text-align: center;
   width: 230px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  padding: 0 15px;
+  padding: 0 28px;
   font-weight: 300;
   overflow: hidden;
 }
@@ -318,10 +319,10 @@ a:focus {
 }
 .main-header .logo .logo-lg img {
   max-width: 200px;
-  max-height: 50px;
+  max-height: 70px;
 }
 .main-header .logo .logo-lg .brandlogo-image {
-  margin-top: 8px;
+  margin-top: 1px;
   margin-right: 10px;
   margin-left: -5px;
 }
@@ -339,7 +340,7 @@ a:focus {
 }
 .main-header .logo .brandlogo-image {
   float: left;
-  height: 34px;
+  height: 70px;
   width: auto;
 }
 .main-header .navbar-brand {
@@ -5603,13 +5604,16 @@ hr {
 
 
 
-span.logo-lg {
+/*span.logo-lg {
     background-image: url(https://viawines.com/wp-content/uploads/2018/11/logo_blanco.png);
     background-size: 95%;
     background-repeat: no-repeat;
     background-position: left center;
     height: 100px;
-}
+}*/
+
+
+/*background: url(img/logo-campusmvp-fondo-blanco.png)*/
 
 .skin-blue .main-header .logo {
     background-color: rgba(65, 65, 66, 0) !important;

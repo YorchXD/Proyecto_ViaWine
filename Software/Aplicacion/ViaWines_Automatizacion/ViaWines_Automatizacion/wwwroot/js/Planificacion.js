@@ -4,13 +4,15 @@
         'opcion': opcion
     };
     $('#tabla').DataTable({
+        'responsive': true,
+        'dom': "Bfrtip",
         'searching': true,
         'ordering': true,
         'info': false,
         'autoWidth': true,
         'paging': true,
-        'scrollX': true,
-         'destroy': true,
+        'scrollX': false,
+        'destroy': true,
         'lengthChange': false,
         //"processing": true,
         'language': {
@@ -39,7 +41,7 @@
             "method": "POST",
             "data": datos,
             "dataSrc": "",
-        },
+        },        
         'columns': [
             { "data": "secuencia" },
             { "data": "ordenFabricacion" },
@@ -52,10 +54,22 @@
             { "data": "cajasPlanificadas" },
             { "data": "cajasFabricadas" },
             { "data": "fechaFabricacion" },
-            { "data": "horaInicio" },
-            { "data": "horaTermino" },
             {
-                "data": "estado", "render": function (estado) {
+                "data": "fechaHoraInicio", render: function (d, type, full, meta) {
+                    var fecha = moment(new Date(d)).format('YYYY-MM-DD HH:mm:ss');
+                    if (fecha == "2020-01-01 00:00:00")
+                        return "";
+                    return fecha;
+            } },
+            {
+                "data": "fechaHoraTermino", render: function (d, type, full, meta) {
+                    var fecha = moment(new Date(d)).format('YYYY-MM-DD HH:mm:ss');
+                    if (fecha == "2020-01-01 00:00:00")
+                        return "";
+                    return fecha;
+            } },
+            {
+                "data": "estado", "render": function (estado, type, full, meta) {
                     var estadoAux = "";
                     switch (estado) {
                         case 1:
@@ -77,7 +91,7 @@
                 }
             },
             {
-                "render": function (data, type, full) {
+                "render": function (data, type, full, meta) {
                     var porcentaje = "";
                     switch (full.estado) {
                         case 1:
@@ -140,7 +154,6 @@ function planificacionDisponible() {
 function seleccionarBuscarPlanificacion(fecha)
 {
     var hoy = fechaActual();
-    console.log(hoy);
 
     if (fecha == hoy) {
         mostrarTablaOrdenes(fecha, 1)

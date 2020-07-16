@@ -191,10 +191,11 @@ function indicadoresDia()
 function mostrarTablaOrdenes() {
 
     $('#tabla').DataTable({
+        'responsive': true,
         'searching': true,
         'ordering': true,
         'info': false,
-        'autoWidth': true,
+        //'autoWidth': true,
         'paging': true,
         'scrollX': true,
         'destroy': true,
@@ -363,7 +364,7 @@ function monitoreo(OrdenFabricacion, botellasPlan, cajasPlan) {
         'OrdenFabricacion': OrdenFabricacion
     };
     $.ajax({
-        url: "/Proceso/GetMonitoreoMateriales",
+        url: "/Resumen/GetMonitoreoMateriales",
         method: "POST",
         data: datos,
         success: function (data) {
