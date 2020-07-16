@@ -100,6 +100,7 @@
             },
         ]
     });
+    
 }
 
 function planificacionDisponible() {
@@ -114,7 +115,7 @@ function planificacionDisponible() {
             var eventDates = {};
 
             $.each(data, function (indice, elemento) {
-                console.log('El elemento con el índice ' + indice + ' contiene ' + elemento);
+                //console.log('El elemento con el índice ' + indice + ' contiene ' + elemento);
                 eventDates[new Date(elemento)] = new Date(elemento);
                 //alert(elemento);
             });
@@ -136,11 +137,22 @@ function planificacionDisponible() {
     });
 }
 
-
-
 function seleccionarBuscarPlanificacion(fecha)
 {
-    
+    var hoy = fechaActual();
+    console.log(hoy);
+
+    if (fecha == hoy) {
+        mostrarTablaOrdenes(fecha, 1)
+    }
+    else {
+        mostrarTablaOrdenes(fecha, 2)
+    }
+}
+
+
+
+function fechaActual() {
     var hoy = new Date();
     var dd = hoy.getDate();
     var MM = hoy.getMonth() + 1;
@@ -154,12 +166,35 @@ function seleccionarBuscarPlanificacion(fecha)
     }
 
     hoy = yyyy + '-' + MM + '-' + dd;
-    console.log(hoy);
+    return hoy;
+}
 
-    if (fecha == hoy) {
-        mostrarTablaOrdenes(fecha, 1)
-    }
-    else {
-        mostrarTablaOrdenes(fecha, 2)
-    }
+function agregarOrdenesNuevas() {
+    var modal = document.getElementById('myModal');
+    modal.style.display = "block";
+    $.ajax({
+        url: "/Planificacion/AgregarOrdenesNuevas",
+        method: "POST",
+        data: {},
+        success: function (data)
+        {
+            if (data == true)
+            {
+                //location.reload(true);
+                var fecha = fechaActual();
+                mostrarTablaOrdenes(fecha, 1);
+                modal.style.display = "none";
+                $('#title-confirm').text("Nuevas ordenes");
+                $('#body-confirm').text("Se han agregado nuevas ordenes");
+                $("#modal-confirm").modal("show");
+            }
+            else
+            {
+                modal.style.display = "none";
+                $('#title-alert').text("Alerta");
+                $('#body-alert').text("No existen nuevas ordenes");
+                $("#modal-alerta").modal("show");
+            }
+        }
+    })
 }

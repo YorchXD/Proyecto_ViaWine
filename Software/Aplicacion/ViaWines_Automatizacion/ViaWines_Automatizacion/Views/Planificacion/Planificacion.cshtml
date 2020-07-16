@@ -43,151 +43,27 @@
             </h1>
         </div>
 
-        <div class="col-xs-12 col-md-4" style="margin-top:19px">
-            <div class="datepicker">
+        <div class="col-xs-12 col-md-4">
+            <div class="datepicker col-xs-12 col-md-6" style="margin-top:19px">
                 <div class="input-group date input-group-sm">
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                    <input type="text" class="form-control pull-right" id="datepicker" name="fecha" autocomplete="off">
-                    <div class="input-group-btn">
+                    <input type="text" class="form-control pull-right" id="datepicker" name="fecha" autocomplete="off" onchange="buscarPlanificacion()">
+                    <!--div class="input-group-btn">
                         <button type="button" class="btn btn-default" id="obtenerOrdenes" onclick="buscarPlanificacion()"><i class="fa fa-search"></i></button>
-                    </div>
+                    </div-->
                 </div>
+            </div>
+            <div class="col-xs-12 col-md-6" style="margin-top:19px">
+                <p>
+                    <button type="button" id="btnAgregarOrdenes" class="btn btn-block btn-sm bg-purple">Agregar nuevas ordenes</button>
+                </p>
             </div>
         </div>
     </div>
 </section>
 
-
-<!-- Main content -->
-<!--section class="content">
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="box">
-                <div class="box-body">
-                    <table id="tabla" class="table table-bordered table-striped table-hover">
-                        <thead>
-                            <tr>
-                                <th>Secuencia</th>
-                                <th>Orden</th>
-                                <th>Version</th>
-                                <th>Cliente</th>
-                                <th>SKU</th>
-                                <th>Descripción</th>
-                                <th>Cant. Botellas</th>
-                                <th>Cant. Botellas Fabricadas</th>
-                                <th>Cant. Cajas</th>
-                                <th>Cant. Cajas Fabricadas</th>
-                                <th>Fecha Fabricación</th>
-                                <th>Hora de inicio</th>
-                                <th>Hora de término</th>
-                                <th>Estado</th>
-                                <th>% de avance</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @if (Model != null)
-                            {
-                                @foreach (var item in Model)
-                                {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Secuencia)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.OrdenFabricacion)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Version)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Cliente)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.SKU)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Descripcion)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.BotellasPlanificadas)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.BotellasFabricadas)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CajasPlanificadas)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CajasFabricadas)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.FechaFabricacion)
-                                </td>
-
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.HoraInicioPlanificada)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.HoraTerminoPlanificada)
-                                </td>
-
-                                <td>
-                                    @{
-                                        switch (item.Estado)
-                                        {
-                                            case 0:
-                                                <span class="label label-default">No iniciado</span>
-                                                break;
-                                            case 1:
-                                                <span class="label label-primary">En proceso</span>
-                                                break;
-                                            case 2:
-                                                <span class="label label-warning">Pausa</span>
-                                                break;
-                                            case 3:
-                                                <span class="label label-danger">Pendiente</span>
-                                                break;
-                                            default:
-                                                <span class="label label-success">Finalizado</span>
-                                                break;
-                                        }
-                                    }
-                                </td>
-                                <td>
-                                    @{
-                                        switch (item.Estado)
-                                        {
-                                            case 0:
-                                                <span class="label label-default">@Html.DisplayFor(modelItem => item.PorcentajeAvance)</span>
-                                                break;
-                                            case 1:
-                                                <span class="label label-primary">@Html.DisplayFor(modelItem => item.PorcentajeAvance)</span>
-                                                break;
-                                            case 2:
-                                                <span class="label label-warning">@Html.DisplayFor(modelItem => item.PorcentajeAvance)</span>
-                                                break;
-                                            case 3:
-                                                <span class="label label-danger">@Html.DisplayFor(modelItem => item.PorcentajeAvance)</span>
-                                                break;
-                                            default:
-                                                <span class="label label-success">@Html.DisplayFor(modelItem => item.PorcentajeAvance)</span>
-                                                break;
-                                        }
-                                    }
-                                </td>
-                            </tr>
-                                }
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</section-->
 
 <section class="content">
     <div class="row">
@@ -224,8 +100,69 @@
         <!-- /.col -->
     </div>
     <!-- /.row -->
+
+
+
+    <div class="modal fade" id="modal-confirm">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-purple">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-confirm"></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="body-confirm"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-black" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
+
+
+    <div class="modal fade" id="modal-alerta">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-red">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-alert"></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="body-alert"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-black" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
+
+
+    <div id="myModal" class="modalFP" style="display: none;">
+        <!-- Modal content -->
+        <div class="modal-contentFP">
+            <img src="~/img/cargando1.gif" style="opacity:0.8; width:40%; height:30%; margin-top: 30%;" />
+        </div>
+    </div>
+
 </section>
 <!-- /.content -->
+
 <!-- datepicker -->
 <!--script src="~/AdminLTE/bower_components/jquery/dist/jquery.min.js"></script>
 <script src="~/AdminLTE/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
@@ -233,11 +170,43 @@
 <!--link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></!-script>
 <script! src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script-->
-
 <!--script src="~/AdminLTE/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.es.min.js"></script-->
 
 
+<style>
+    .modalFP {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 100000; /* Sit on top */
+        padding-top: 150px; /* Location of the box */
+        padding-bottom: 150px;
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0,0,0, 0.4); /* Fallback color */
+        background-color: rgba(0,0,0,0.8); /* Black w/ opacity */
+    }
 
+    /* Modal Content */
+    .modal-contentFP {
+        background: url("~/../../img/tenor.gif") no-repeat;
+        background-color: rgba(254,254,254,0.4);
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 340px;
+        height: 340px;
+        text-align: center;
+        border-radius: 30px;
+
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+</style>
 
 <style>
     .event a {
@@ -247,11 +216,24 @@
 </style>
 
 <script type="text/javascript" src="~/js/planificacion.js"></script>
+
 <script>
-    $(document).ready(
-        planificacionDisponible());
+    $('#btnAgregarOrdenes').click(function () { agregarOrdenesNuevas(); });
 </script>
 
+<script>
+    //var fecha = "28/04/2020";
+    
+    $(document).ready(function () {
+        
+        planificacionDisponible()
+        var fecha = fechaActual();
+        seleccionarBuscarPlanificacion(fecha);
+        
+    });
+    
+
+</script>
 
 
 <script>
@@ -261,84 +243,8 @@
     }
 </script>
 
-<script>
-    //var fecha = "28/04/2020";
-    
-    $(document).ready(function () {
-        var fecha = new Date();
-        var dd = fecha.getDate();
-        var MM = fecha.getMonth() + 1;
-        var yyyy = fecha.getFullYear();
-        if (dd < 10) {
-            dd = '0' + dd;
-        }
-        if (MM < 10) {
-            MM = '0' + MM;
-        }
-        fecha = yyyy + '-' + MM + '-' + dd;
-        seleccionarBuscarPlanificacion(fecha);
-
-    });
-</script>
 
 
 
-<!--script>
-    $(document).ready(function () {
-        $('#tabla').DataTable({
-            'searching': true,
-            'ordering': true,
-            'info': false,
-            'autoWidth': true,
-            'paging': false,
-            'scrollX': true,
-            //retrieve: true,
-            'lengthChange': false,
-            //"processing": true,
-            'language': {
-                "decimal": "",
-                "emptyTable": "No hay información",
-                "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-                "infoPostFix": "",
-                "thousands": ",",
-                "lengthMenu": "Mostrar _MENU_ Entradas",
-                "loadingRecords": "Cargando...",
-                "processing": "Procesando...",
-                "search": "Buscar:",
-                "zeroRecords": "Sin resultados encontrados",
-                "paginate": {
-                    "first": "Primero",
-                    "last": "Ultimo",
-                    "next": "Siguiente",
-                    "previous": "Anterior"
-                }
-            },
 
-            'ajax': {
-                "url": "/Planificacion/GetPlanificacion",
-                "method": "POST",
-                "data": { fecha: "2020/04/28" },
-                "dataSrc": ""
-            },
-            'columns': [
-                { "data": "secuencia" },
-                { "data": "ordenFabricacion" },
-                { "data": "version" },
-                { "data": "cliente" },
-                { "data": "sku" },
-                { "data": "descripcion" },
-                { "data": "botellasPlanificadas" },
-                { "data": "botellasFabricadas" },
-                { "data": "cajasPlanificadas" },
-                { "data": "cajasFabricadas" },
-                { "data": "fechaFabricacion" },
-                { "data": "horaInicioPlanificada" },
-                { "data": "horaTerminoPlanificada" },
-                { "data": "estado" },
-                { "data": "porcentajeAvance" },
-            ]
-        });
-    });
-</script-->
+

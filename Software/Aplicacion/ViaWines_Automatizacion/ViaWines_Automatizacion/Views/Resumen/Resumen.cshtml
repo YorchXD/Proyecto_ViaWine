@@ -134,9 +134,17 @@
                 <ul class="nav nav-tabs pull-right">
                     <li class="pull-left header"><i class="fa fa-inbox"></i> Cantidad de botellas y cajas por hora</li>
                 </ul>
+
+                
+
                 <div class="tab-content no-padding">
                     <!-- Morris chart - Sales -->
-                    <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 200px;"></div>
+                    <!--div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 200px;"></div-->
+                    <!--div class="container"-->
+                    <div id="loadingMessage"></div>
+                    <canvas id="myChart" height="100"></canvas>
+                    <!--/div-->
+
                 </div>
             </div>
             <!-- /.nav-tabs-custom -->
@@ -282,14 +290,6 @@
     </div>
 </section>
 
-<!-- Styles -->
-<style>
-    #chartdiv {
-        width: 100%;
-        height: 350px;
-    }
-</style>
-
 
 <!--Acciones para las ordenes e indicadores-->
 <script type="text/javascript" src="~/js/resumen.js"></script>
@@ -320,12 +320,13 @@
         var numeroOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
         for (var i = 0; modelo!=null && i < modelo.length; i++) {
             if (modelo[i]["Estado"] == 1 && numeroOrden == modelo[i]["OrdenFabricacion"]) {
+                monitoreo(OrdenFabricacion, modelo[i]["BotellasPlanificadas"], modelo[i]["CajasPlanificadas"])
                 //monitoreoBotellas(numeroOrden);
                 //monitoreoCajas(numeroOrden);
-                indicadorCantCajas(numeroOrden, modelo[i]["CajasPlanificadas"]);
-                indicadorCantBotellas(numeroOrden, modelo[i]["BotellasPlanificadas"]);
-                indicadorVelocidadBotellas(numeroOrden);
-                indicadorVelocidadCajas(numeroOrden);
+                //indicadorCantCajas(numeroOrden, modelo[i]["CajasPlanificadas"]);
+                //indicadorCantBotellas(numeroOrden, modelo[i]["BotellasPlanificadas"]);
+                //indicadorVelocidadBotellas(numeroOrden);
+                //indicadorVelocidadCajas(numeroOrden);
                 //indicadoresVelocidad(numeroOrden)
                 break;
             }
@@ -340,12 +341,6 @@
     }
     setInterval(actualizarIndicadorHora, 60*60*1000);
 </script>
-
-
-
-
-
-
 
 <!-- Resources -->
 <script src="https://www.amcharts.com/lib/4/core.js"></script>
@@ -401,8 +396,6 @@
         dateAxis.start = 0.8;
         dateAxis.keepSelection = true;
 
-
-
         function generateChartData() {
             var chartData = [];
             // obtiene la fecha actual
@@ -429,3 +422,42 @@
 
     }); // end am4core.ready()
 </script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+<!--script src="https://code.jquery.com/jquery-3.3.1.min.js"></script-->
+<script type="text/javascript" src="~/js/myChart.js"></script>
+
+<script>
+    $(document).ready(
+        function () {
+            getChartData();
+        });
+</script>
+
+<style>
+    #chartdiv {
+        width: 100%;
+        height: 350px;
+    }
+
+    #area-chart {
+        min-height: 250px;
+    }
+</style>
+
+<style>
+    .container {
+        width: 100%;
+        height: 35%;
+        position: relative;
+    }
+
+    #loadingMessage {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+</style>

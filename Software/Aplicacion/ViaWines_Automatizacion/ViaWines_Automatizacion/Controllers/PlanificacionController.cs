@@ -39,6 +39,34 @@ namespace ViaWines_Automatizacion.Controllers
             
         }
 
+        [HttpPost]
+        public Boolean AgregarOrdenesNuevas()
+        {
+            String fecha = DateTime.Today.ToString("yyyy-MM-dd");
+            int cantOrdenesActuales = 0;
+            int cantOrdenesNuevas = 0;
+
+            List<Orden> ordenesActuales = ConsultaPlanificacion.LeerOrdenes(fecha, 1);
+            ConsultaPlanificacion.AgregarNuevasOrdenes();
+            List<Orden> ordenesNuevas = ConsultaPlanificacion.LeerOrdenes(fecha, 1);
+
+            if (ordenesActuales != null)
+            {
+                cantOrdenesActuales = ordenesActuales.Count();
+            }
+
+            if (ordenesNuevas != null)
+            {
+                cantOrdenesNuevas = ordenesNuevas.Count();
+            }
+
+            if (cantOrdenesNuevas>cantOrdenesActuales)
+            {
+                return true;
+            }
+            return false;
+        }
+
         [HttpGet]
         public JsonResult GetFechasPlanificacion()
         {
@@ -48,29 +76,6 @@ namespace ViaWines_Automatizacion.Controllers
                 return Json(fechas);
             }
             return Json(new object());
-        }
-
-
-        [HttpPost]
-        public JsonResult Exit_proces_ini()//ActualizarOrden orden)
-        {
-            var resultado = new VistaModalIniciarProceso();
-
-            List<Orden> ordenes = ConsultaProceso.LeerOrdenesIniciadas();
-            //int actualizacion = -1;
-            if (ordenes.Count > 0)
-            {
-                resultado.Titulo = "Falló iniciar proceso";
-                resultado.Contenido = "No se puede iniciar proceso dado que existe otro ejecutandose";
-                resultado.ExisteProceso = true;
-            }
-            else
-            {
-                resultado.Titulo = "Falló iniciar proceso";
-                resultado.Contenido = "No se puede iniciar proceso dado que existe otro ejecutandose";
-                resultado.ExisteProceso = false;
-            }
-            return Json(resultado);
         }
     }
 }

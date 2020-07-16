@@ -21,7 +21,7 @@ namespace ViaWines_Automatizacion.Controllers
 
 
         [HttpPost]
-        public JsonResult GetCantCajas(int OrdenFabricacion, int CajasPlanificadas)
+        /*public JsonResult GetCantCajas(int OrdenFabricacion, int CajasPlanificadas)
         {
             //String fecha = "2020-06-04";
             String fecha = DateTime.Now.ToString("yyyy-MM-dd");
@@ -66,7 +66,7 @@ namespace ViaWines_Automatizacion.Controllers
             return Json(datosBotella);
         }
 
-        /*[HttpPost]
+        [HttpPost]
         public JsonResult GetVelocidad(int OrdenFabricacion)
         {
             //String fecha = "2020-06-04";
@@ -206,6 +206,34 @@ namespace ViaWines_Automatizacion.Controllers
             return Json(new Object());
         }
 
+        [HttpPost]
+        public JsonResult GetMonitoreoMateriales(int OrdenFabricacion)
+        {
+            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
+            List<Material> materiales = ConsultaResumen.LeerMaterial(fecha, OrdenFabricacion);
+            if (materiales != null)
+            {
+                return Json(materiales);
+            }
+            /*Manda un objeto vacio para que se active zero records y muestre que no hay información en la tabla*/
+            return Json(new Object());
+        }
+
+        [HttpPost]
+        public JsonResult GetVelocidadPorMin(int OrdenFabricacion, string TipoMaterial)
+        {
+            //String fecha = "2020-05-13";
+            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
+            String hora = DateTime.Now.AddMinutes(-1).ToString("HH:mm");
+            int cantTpoMaterial = ConsultaResumen.LeerVelocidadMaterial(fecha, hora, OrdenFabricacion, TipoMaterial);
+            if (cantTpoMaterial == -1)
+            {
+                cantTpoMaterial = 0;
+            }
+            return Json(cantTpoMaterial);
+        }
+
+
         /*public JsonResult getIndicadorAvanceDia()
         {
             String fecha = DateTime.Now.ToString("yyyy-MM-dd");
@@ -221,7 +249,7 @@ namespace ViaWines_Automatizacion.Controllers
         }*/
 
 
-        [HttpPost]
+        /*[HttpPost]
         public JsonResult GetVelocidadBotellas(int OrdenFabricacion)
         {
             //String fecha = "2020-05-13";
@@ -247,6 +275,6 @@ namespace ViaWines_Automatizacion.Controllers
                 cantCajas = 0;
             }
             return Json(cantCajas);
-        }
+        }*/
     }
 }

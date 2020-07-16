@@ -365,7 +365,7 @@ def procesoOrden(ordenAux):
             listaThreads.append(Thread(target=func))
             listaThreads[-1].start()
         
-        #Esto ayuda a que no se sigan creando hilos de ejecución hasta que se termine la orden
+        #Esto ayuda a que no se sigan creando hilos de ejecucion hasta que se termine la orden
         validador = True
         while(validador):
             if(ordenIniciada==False and ordenPausada == False):

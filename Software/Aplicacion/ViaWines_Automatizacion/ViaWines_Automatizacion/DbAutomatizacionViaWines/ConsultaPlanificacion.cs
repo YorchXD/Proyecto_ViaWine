@@ -83,10 +83,6 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             {
                 Console.WriteLine(ex.ToString());
             }
-            finally
-            {
-
-            }
             return null;
         }
 
@@ -117,10 +113,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             {
                 Console.WriteLine(ex.ToString());
             }
-            finally
-            {
 
-            }
             return null;
         }
 
@@ -150,10 +143,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             {
                 Console.WriteLine(ex.ToString());
             }
-            finally
-            {
 
-            }
             return -1;
         }
 
@@ -183,11 +173,22 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             {
                 Console.WriteLine(ex.ToString());
             }
-            finally
-            {
 
-            }
             return -1;
+        }
+
+        public static void AgregarNuevasOrdenes()
+        {
+            try
+            {
+                var command = new SqlCommand() { CommandText = "ActualizarNuevasOrdenes", CommandType = System.Data.CommandType.StoredProcedure };
+                var datos = ContexDb.GetDataSet(command);
+                Console.WriteLine(datos);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
     }
 }
