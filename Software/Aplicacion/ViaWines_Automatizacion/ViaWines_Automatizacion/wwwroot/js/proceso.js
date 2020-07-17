@@ -101,7 +101,7 @@ function exist_proces_ini(tipoAccion)
         },
         error: function ()
         {
-            alert("Error inesperado, vuelva a intentarlo mas tarde o contactese con Tibox para informar en detalle cuando ocurrió el error.");
+            alert("Error inesperado, vuelva a intentarlo más tarde o contáctese con Tibox para informar en detalle cuando ocurrió el error.");
         },
     });
 }

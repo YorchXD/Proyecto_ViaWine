@@ -193,7 +193,7 @@ a:focus {
  */
 .main-header {
   position: relative;
-  max-height: 100px;
+  max-height: 130px;
   z-index: 1030;
 }
 .main-header .navbar {
@@ -576,7 +576,7 @@ a:focus {
   padding: 0;
 }
 .sidebar-menu > li > a {
-  padding: 12px 5px 12px 15px;
+  padding: 25px 5px 25px 15px;
   display: block;
 }
 .sidebar-menu > li > a > .fa,
@@ -5842,7 +5842,7 @@ ul.sidebar-menu.tree {
 }
 
 aside.main-sidebar {
-    padding-top: 100px;
+    padding-top: 150px;
 }
 
 .skin-blue .main-header li.user-header {

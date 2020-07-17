@@ -15,6 +15,7 @@
         'destroy': true,
         'lengthChange': false,
         //"processing": true,
+        'iDisplayLength': 5,
         'language': {
             "decimal": "",
             "emptyTable": "No hay información",
