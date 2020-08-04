@@ -40,30 +40,17 @@
                 </dl>
             </p>
         </div>
-        <!-- ./col -->
-        <!--div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <div class="small-box bg-gray">
-                <div class="inner">
-                    <h3>70<sup style="font-size: 20px">%</sup></h3>
-                    <p>Avance del proceso</p>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-stats-bars"></i>
-                </div>
-                <a href="#" class="small-box-footer">
-                    More info <i class="fa fa-arrow-circle-right"></i>
-                </a>
-            </div>
-        </div-->
-        <!-- ./col -->
     </div>
     <div class="row">
+        <div class="col-lg-12 text-right">
+            <p style="color:white;">Última actualización: <span id="horaActualizacionIndicadoresOrden">--:--</span>hrs</p>
+        </div>
         <div class="col-md-3 col-sm-6 col-xs-12">
             <div class="info-box bg-gray">
                 <span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
 
                 <div class="info-box-content">
-                    <span class="info-box-text">Botellas finalizadas</span>
+                    <span class="info-box-text">Botellas contabilizadas</span>
                     <span class="info-box-number" id="cantBotellas">-</span>
 
                     <div class="progress" id="progresoBotellas">
@@ -168,12 +155,15 @@
 <!-- Main content -->
 <section class="content">
     <div class="row">
+        <div class="col-lg-12 text-right">
+            <p style="color:black;">Última actualización: <span id="horaActualizacionIndicadoresDia">--:--</span>hrs</p>
+        </div>
         <div class="col-md-3 col-sm-6 col-xs-12">
             <div class="info-box bg-gray">
                 <span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
 
                 <div class="info-box-content">
-                    <span class="info-box-text">Botellas finalizadas</span>
+                    <span class="info-box-text">Botellas contabilizadas</span>
                     <span class="info-box-number" id="cantBotellasDia">-</span>
 
                     <div class="progress" id="progresoBotellasDia">
@@ -309,6 +299,8 @@
     $(document).ready(function ()
     {
         var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model,Newtonsoft.Json.Formatting.Indented));
+        document.getElementById("horaActualizacionIndicadoresOrden").innerHTML = obtenerHora();
+        document.getElementById("horaActualizacionIndicadoresDia").innerHTML = obtenerHora();
         iniciarOrdenesSelect(modelo);
         indicadoresDia();
         indicadorCantBotellasHora();
@@ -330,6 +322,10 @@
             }
         }
         indicadoresDia();
+        document.getElementById("horaActualizacionIndicadoresOrden").innerHTML = obtenerHora();
+        document.getElementById("horaActualizacionIndicadoresDia").innerHTML = obtenerHora();
+
+        
     }
     setInterval(actualizarIndicadores, 60*1000);
 
@@ -425,14 +421,14 @@
 <!--Grafico principal version 1-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
 <!--script src="https://code.jquery.com/jquery-3.3.1.min.js"></script-->
-<script type="text/javascript" src="~/js/myChart.js"></script>
+<!--script type="text/javascript" src="~/js/myChart.js"></script-->
 
-<script>
+<!--script>
     $(document).ready(
         function () {
             getChartData();
         });
-</script>
+</script-->
 
 <style>
     #chartdiv {
@@ -482,109 +478,90 @@
         var chart = am4core.create("chartdiv1", am4charts.XYChart);
 
         chart.data = [{
-            "year": "1994",
-            "cars": 1587,
-            "motorcycles": 650,
-            "bicycles": 121
+            "hour": "08:30",
+            "Botellas": 1587,
+            "Cajas": 650
         }, {
-            "year": "1995",
-            "cars": 1567,
-            "motorcycles": 683,
-            "bicycles": 146
+            "hour": "08:35",
+            "Botellas": 1567,
+            "Cajas": 683
         }, {
-            "year": "1996",
-            "cars": 1617,
-            "motorcycles": 691,
-            "bicycles": 138
+            "hour": "08:40",
+            "Botellas": 1617,
+            "Cajas": 691
         }, {
-            "year": "1997",
-            "cars": 1630,
-            "motorcycles": 642,
-            "bicycles": 127
+            "hour": "08:45",
+            "Botellas": 1630,
+            "Cajas": 642
         }, {
-            "year": "1998",
-            "cars": 1660,
-            "motorcycles": 699,
-            "bicycles": 105
+            "hour": "08:50",
+            "Botellas": 1660,
+            "Cajas": 699
         }, {
-            "year": "1999",
-            "cars": 1683,
-            "motorcycles": 721,
-            "bicycles": 109
+            "hour": "08:55",
+            "Botellas": 1683,
+            "Cajas": 721
         }, {
-            "year": "2000",
-            "cars": 1691,
-            "motorcycles": 737,
-            "bicycles": 112
+            "hour": "09:00",
+            "Botellas": 1691,
+            "Cajas": 737
         }, {
-            "year": "2001",
-            "cars": 1298,
-            "motorcycles": 680,
-            "bicycles": 101
+            "hour": "09:05",
+            "Botellas": 1298,
+            "Cajas": 680
         }, {
-            "year": "2002",
-            "cars": 1275,
-            "motorcycles": 664,
-            "bicycles": 97
+            "hour": "09:10",
+            "Botellas": 1275,
+            "Cajas": 664
         }, {
-            "year": "2003",
-            "cars": 1246,
-            "motorcycles": 648,
-            "bicycles": 93
+            "hour": "09:15",
+            "Botellas": 1246,
+            "Cajas": 648
         }, {
-            "year": "2004",
-            "cars": 1318,
-            "motorcycles": 697,
-            "bicycles": 111
+            "hour": "09:20",
+            "Botellas": 1318,
+            "Cajas": 697
         }, {
-            "year": "2005",
-            "cars": 1213,
-            "motorcycles": 633,
-            "bicycles": 87
+            "hour": "09:25",
+            "Botellas": 1213,
+            "Cajas": 633
         }, {
-            "year": "2006",
-            "cars": 1199,
-            "motorcycles": 621,
-            "bicycles": 79
+            "hour": "09:30",
+            "Botellas": 1199,
+            "Cajas": 621
         }, {
-            "year": "2007",
-            "cars": 1110,
-            "motorcycles": 210,
-            "bicycles": 81
+            "hour": "09:35",
+            "Botellas": 1110,
+            "Cajas": 210
         }, {
-            "year": "2008",
-            "cars": 1165,
-            "motorcycles": 232,
-            "bicycles": 75
+            "hour": "09:40",
+            "Botellas": 1165,
+            "Cajas": 232
         }, {
-            "year": "2009",
-            "cars": 1145,
-            "motorcycles": 219,
-            "bicycles": 88
+            "hour": "09:45",
+            "Botellas": 1145,
+            "Cajas": 219
         }, {
-            "year": "2010",
-            "cars": 1163,
-            "motorcycles": 201,
-            "bicycles": 82
+            "hour": "09:50",
+            "Botellas": 1163,
+            "Cajas": 201
         }, {
-            "year": "2011",
-            "cars": 1180,
-            "motorcycles": 285,
-            "bicycles": 87
+            "hour": "09:55",
+            "Botellas": 1180,
+            "Cajas": 285
         }, {
-            "year": "2012",
-            "cars": 1159,
-            "motorcycles": 277,
-            "bicycles": 71
+            "hour": "10:00",
+            "Botellas": 1159,
+            "Cajas": 277
         }];
 
-        chart.dateFormatter.inputDateFormat = "yyyy";
+        chart.dateFormatter.inputDateFormat = "HH:mm";
         var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
         dateAxis.renderer.minGridDistance = 60;
         dateAxis.startLocation = 0.5;
         dateAxis.endLocation = 0.5;
         dateAxis.baseInterval = {
-            timeUnit: "year",
+            timeUnit: "minute",
             count: 1
         }
 
@@ -592,10 +569,10 @@
         valueAxis.tooltip.disabled = true;
 
         var series = chart.series.push(new am4charts.LineSeries());
-        series.dataFields.dateX = "year";
-        series.name = "cars";
-        series.dataFields.valueY = "cars";
-        series.tooltipHTML = "<img src='https://www.amcharts.com/lib/3/images/car.png' style='vertical-align:bottom; margin-right: 10px; width:28px; height:21px;'><span style='font-size:14px; color:#000000;'><b>{valueY.value}</b></span>";
+        series.dataFields.dateX = "hour";
+        series.name = "Botellas";
+        series.dataFields.valueY = "Botellas";
+        series.tooltipHTML = "<img src='img/vino.png' style='vertical-align:bottom; margin-right: 10px; width:24px; height:24px;'><span style='font-size:14px; color:#000000;'><b>{valueY.value}</b></span>";
         series.tooltipText = "[#000]{valueY.value}[/]";
         series.tooltip.background.fill = am4core.color("#FFF");
         series.tooltip.getStrokeFromObject = true;
@@ -610,11 +587,12 @@
         bullet.circle.fill = am4core.color("#fff");
         bullet.circle.strokeWidth = 3;
 
+
         var series2 = chart.series.push(new am4charts.LineSeries());
-        series2.name = "motorcycles";
-        series2.dataFields.dateX = "year";
-        series2.dataFields.valueY = "motorcycles";
-        series2.tooltipHTML = "<img src='https://www.amcharts.com/lib/3/images/motorcycle.png' style='vertical-align:bottom; margin-right: 10px; width:28px; height:21px;'><span style='font-size:14px; color:#000000;'><b>{valueY.value}</b></span>";
+        series2.name = "Cajas";
+        series2.dataFields.dateX = "hour";
+        series2.dataFields.valueY = "Cajas";
+        series2.tooltipHTML = "<img src='img/botellas-de-vino.png' style='vertical-align:bottom; margin-right: 10px; width:24px; height:24px;'><span style='font-size:14px; color:#000000;'><b>{valueY.value}</b></span>";
         series2.tooltipText = "[#000]{valueY.value}[/]";
         series2.tooltip.background.fill = am4core.color("#FFF");
         series2.tooltip.getFillFromObject = false;
@@ -625,7 +603,12 @@
         series2.stacked = true;
         series2.strokeWidth = 2;
 
-        var series3 = chart.series.push(new am4charts.LineSeries());
+        var bullet2 = series2.bullets.push(new am4charts.CircleBullet());
+        bullet2.circle.radius = 6;
+        bullet2.circle.fill = am4core.color("#fff");
+        bullet2.circle.strokeWidth = 3;
+
+        /*var series3 = chart.series.push(new am4charts.LineSeries());
         series3.name = "bicycles";
         series3.dataFields.dateX = "year";
         series3.dataFields.valueY = "bicycles";
@@ -639,7 +622,7 @@
         series3.fillOpacity = 0.6;
         series3.defaultState.transitionDuration = 1000;
         series3.stacked = true;
-        series3.strokeWidth = 2;
+        series3.strokeWidth = 2;*/
 
         chart.cursor = new am4charts.XYCursor();
         chart.cursor.xAxis = dateAxis;
@@ -650,7 +633,7 @@
         chart.legend.position = "top";
 
         // axis ranges
-        var range = dateAxis.axisRanges.create();
+        /*var range = dateAxis.axisRanges.create();
         range.date = new Date(2001, 0, 1);
         range.endDate = new Date(2003, 0, 1);
         range.axisFill.fill = chart.colors.getIndex(7);
@@ -660,9 +643,9 @@
         range.label.inside = true;
         range.label.rotation = 90;
         range.label.horizontalCenter = "right";
-        range.label.verticalCenter = "bottom";
+        range.label.verticalCenter = "bottom";*/
 
-        var range2 = dateAxis.axisRanges.create();
+        /*var range2 = dateAxis.axisRanges.create();
         range2.date = new Date(2007, 0, 1);
         range2.grid.stroke = chart.colors.getIndex(7);
         range2.grid.strokeOpacity = 0.6;
@@ -673,7 +656,7 @@
         range2.label.inside = true;
         range2.label.rotation = 90;
         range2.label.horizontalCenter = "right";
-        range2.label.verticalCenter = "bottom";
+        range2.label.verticalCenter = "bottom";*/
 
     }); // end am4core.ready()
 </script>

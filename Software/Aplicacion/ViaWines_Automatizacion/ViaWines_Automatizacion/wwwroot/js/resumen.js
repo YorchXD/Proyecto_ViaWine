@@ -368,11 +368,19 @@ function monitoreo(OrdenFabricacion, botellasPlan, cajasPlan) {
         method: "POST",
         data: datos,
         success: function (data) {
-
-            var botellas = data.filter(element => element.tipo == "Botella");
-            var cajas = data.filter(element => element.tipo == "Caja");
-            var cantBotellas = botellas.length;
-            var cantCajas = cajas.length;
+            console.log(data);
+            var botellas = {};
+            var cajas = {};
+            var cantBotellas = 0;
+            var cantCajas = 0;
+            if (Object.entries(data).length!=0)
+            {
+                botellas = data.filter(element => element.tipo == "Botella");
+                cajas = data.filter(element => element.tipo == "Caja");
+                cantBotellas = botellas.length;
+                cantCajas = cajas.length;
+            }
+            
             console.log(botellas);
             console.log(cajas);
             console.log(cantBotellas);
@@ -383,6 +391,21 @@ function monitoreo(OrdenFabricacion, botellasPlan, cajasPlan) {
             indicadorVelocidadPorMin(OrdenFabricacion, 'caja');
         }
     })
+}
+
+function obtenerHora() {
+    var today = new Date();
+    var h = today.getHours();
+    var m = today.getMinutes();
+
+    if (h < 10) {
+        h = '0' + h;
+    }
+
+    if (m < 10) {
+        m = '0' + m;
+    }
+    return h + ":" + m;
 }
 
 /**

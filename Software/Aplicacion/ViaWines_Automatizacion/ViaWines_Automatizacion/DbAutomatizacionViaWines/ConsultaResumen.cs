@@ -42,6 +42,8 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                             FormatoCaja = prodData["formatoCaja"].ToString(),
                             Estado = Convert.ToInt32(prodData["estado"]),
                             Secuencia = Convert.ToInt32(prodData["secuencia"]),
+                            FechaHoraInicio = Convert.ToDateTime(prodData["fechaHoraInicio"]),
+                            FechaHoraTermino = Convert.ToDateTime(prodData["fechaHoraTermino"]),
                             PorcentajeAvance = 0,
                             CajasFabricadas = 0,
                             BotellasFabricadas = 0

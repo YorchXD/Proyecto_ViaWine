@@ -4,15 +4,18 @@
         'opcion': opcion
     };
     $('#tabla').DataTable({
+        'responsive': true,
+        'dom': "Bfrtip",
         'searching': true,
         'ordering': true,
         'info': false,
         'autoWidth': true,
         'paging': true,
-        'scrollX': true,
-         'destroy': true,
+        'scrollX': false,
+        'destroy': true,
         'lengthChange': false,
         //"processing": true,
+        'iDisplayLength': 5,
         'language': {
             "decimal": "",
             "emptyTable": "No hay información",
@@ -39,7 +42,7 @@
             "method": "POST",
             "data": datos,
             "dataSrc": "",
-        },
+        },        
         'columns': [
             { "data": "secuencia" },
             { "data": "ordenFabricacion" },
@@ -52,10 +55,22 @@
             { "data": "cajasPlanificadas" },
             { "data": "cajasFabricadas" },
             { "data": "fechaFabricacion" },
-            { "data": "horaInicio" },
-            { "data": "horaTermino" },
             {
-                "data": "estado", "render": function (estado) {
+                "data": "fechaHoraInicio", render: function (d, type, full, meta) {
+                    var fecha = moment(new Date(d)).format('YYYY-MM-DD HH:mm:ss');
+                    if (fecha == "2020-01-01 00:00:00")
+                        return "";
+                    return fecha;
+            } },
+            {
+                "data": "fechaHoraTermino", render: function (d, type, full, meta) {
+                    var fecha = moment(new Date(d)).format('YYYY-MM-DD HH:mm:ss');
+                    if (fecha == "2020-01-01 00:00:00")
+                        return "";
+                    return fecha;
+            } },
+            {
+                "data": "estado", "render": function (estado, type, full, meta) {
                     var estadoAux = "";
                     switch (estado) {
                         case 1:
@@ -77,7 +92,7 @@
                 }
             },
             {
-                "render": function (data, type, full) {
+                "render": function (data, type, full, meta) {
                     var porcentaje = "";
                     switch (full.estado) {
                         case 1:
@@ -100,6 +115,7 @@
             },
         ]
     });
+    
 }
 
 function planificacionDisponible() {
@@ -114,7 +130,7 @@ function planificacionDisponible() {
             var eventDates = {};
 
             $.each(data, function (indice, elemento) {
-                console.log('El elemento con el índice ' + indice + ' contiene ' + elemento);
+                //console.log('El elemento con el índice ' + indice + ' contiene ' + elemento);
                 eventDates[new Date(elemento)] = new Date(elemento);
                 //alert(elemento);
             });
@@ -136,11 +152,21 @@ function planificacionDisponible() {
     });
 }
 
-
-
 function seleccionarBuscarPlanificacion(fecha)
 {
-    
+    var hoy = fechaActual();
+
+    if (fecha == hoy) {
+        mostrarTablaOrdenes(fecha, 1)
+    }
+    else {
+        mostrarTablaOrdenes(fecha, 2)
+    }
+}
+
+
+
+function fechaActual() {
     var hoy = new Date();
     var dd = hoy.getDate();
     var MM = hoy.getMonth() + 1;
@@ -154,12 +180,35 @@ function seleccionarBuscarPlanificacion(fecha)
     }
 
     hoy = yyyy + '-' + MM + '-' + dd;
-    console.log(hoy);
+    return hoy;
+}
 
-    if (fecha == hoy) {
-        mostrarTablaOrdenes(fecha, 1)
-    }
-    else {
-        mostrarTablaOrdenes(fecha, 2)
-    }
+function agregarOrdenesNuevas() {
+    var modal = document.getElementById('myModal');
+    modal.style.display = "block";
+    $.ajax({
+        url: "/Planificacion/AgregarOrdenesNuevas",
+        method: "POST",
+        data: {},
+        success: function (data)
+        {
+            if (data == true)
+            {
+                //location.reload(true);
+                var fecha = fechaActual();
+                mostrarTablaOrdenes(fecha, 1);
+                modal.style.display = "none";
+                $('#title-confirm').text("Nuevas ordenes");
+                $('#body-confirm').text("Se han agregado nuevas ordenes");
+                $("#modal-confirm").modal("show");
+            }
+            else
+            {
+                modal.style.display = "none";
+                $('#title-alert').text("Alerta");
+                $('#body-alert').text("No existen nuevas ordenes");
+                $("#modal-alerta").modal("show");
+            }
+        }
+    })
 }

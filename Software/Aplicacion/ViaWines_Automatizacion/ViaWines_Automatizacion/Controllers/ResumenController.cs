@@ -233,6 +233,40 @@ namespace ViaWines_Automatizacion.Controllers
             return Json(cantTpoMaterial);
         }
 
+        [HttpPost]
+        public void GetDatosGraficoPorOrden(int OrdenFabriacion)
+        {
+            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
+            List<Orden> ordenes = ConsultaResumen.LeerOrdenes(fecha);
+            foreach(Orden orden in ordenes)
+            {
+                if(orden.Estado==1)
+                {
+                    DateTime fechaTermino = DateTime.Now;
+                    if(orden.FechaHoraTermino!=Convert.ToDateTime("2020-01-01 00:00:00"))
+                    {
+                        fechaTermino = orden.FechaHoraTermino;
+                    }
+
+                    DateTime fechaHoraAux = orden.FechaHoraInicio;
+                    DateTime fechaHoraAux2 = fechaHoraAux;
+                    fechaHoraAux2.AddMinutes(1);
+                    while (fechaHoraAux.ToString("yyyy-MM-dd hh:mm") != fechaTermino.ToString("yyyy-MM-dd hh:mm"))
+                    {
+                        int hora = fechaHoraAux.Hour;
+                        int minIni = fechaHoraAux.Minute;
+                        int minTer = fechaHoraAux2.Minute;
+
+                        if(minIni==59)
+                        {
+                            minTer = 60;
+                        }
+
+                    }
+                }
+            }
+        }
+
 
         /*public JsonResult getIndicadorAvanceDia()
         {
