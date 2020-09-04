@@ -14,16 +14,34 @@
             <small>del pedido</small>
         </h1>
     </div>
+</section>
+
+<section class="content">
     <div class="row">
-        <div class="col-xs-12 col-md-6">
-            <select class="form-control select2" id="numeroOrden" onchange="seleccionarOrden()">
+        <!--div class="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <select class="form-control select2" style="width: 100%;" id="tipoOrden" onchange="cambiarTipo()">
+                <option selected value="1">Ordenes abiertas</option>
+                <option value="2">Ordenes futuras</option>
+            </select>
+        </div-->
+
+        <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="datepicker">
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" class="form-control pull-right" id="datepicker" name="fecha" autocomplete="off" onchange="obtenerOrdenes()">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <select class="form-control select2" style="width: 100%;" id="numeroOrden" onchange="mostrarOrden()">
                 <option disabled selected value="-1">Seleccione una orden</option>
             </select>
         </div>
     </div>
-</section>
-
-<section class="content">
     <div class="row">
         <div class="col-lg-12 text-right">
             <p style="color:black;">Última actualización: <span id="horaActualizacionIndicadoresOrden">--:--</span>hrs</p>
@@ -319,6 +337,35 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
+
+    <div class="modal fade" id="modal-confirm">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-purple">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-confirm"></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="body-confirm"></p>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnConfirm" type="button" class="btn bg-black" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div id="myModal" class="modalFP" style="display: none;">
+        <!-- Modal content -->
+        <div class="modal-contentFP">
+            <img src="~/img/cargando1.gif" style="opacity:0.8; width:40%; height:30%; margin-top: 30%;" />
+        </div>
+    </div>
 </section>
 
 
@@ -331,13 +378,6 @@
 <script type="text/javascript" src="~/js/proceso.js"></script>
 
 <script>
-    function seleccionarOrden() {
-        var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, Newtonsoft.Json.Formatting.Indented));
-        mostrarOrden(modelo);
-    }
-</script>
-
-<script>
     $('#btnInicio').click(function () { exist_proces_ini(1); });
     $('#btnInicioProceso').click(function () { Actualizar_Estado(1); });
     $('#btnPausar').click(function () { exist_proces_ini(2); });
@@ -346,34 +386,101 @@
     $('#btnPosponerProceso').click(function () { Actualizar_Estado(3); });
     $('#btnFinalizar').click(function () { exist_proces_ini(4); });
     $('#btnFinalizarProceso').click(function () { Actualizar_Estado(4); });
+    $('#btnConfirm').click(function () { location.reload(); });
 </script>
 
+<style>
+    .ordenesDia a {
+        background-color: #560f3d !important;
+        color: #ffffff !important;
+    }
+</style>
+
+<style>
+    .ordenesFuturas a {
+        background-color: #ea9409 !important;
+        color: #ffffff !important;
+    }
+</style>
+
+<style>
+    .modalFP {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 100000; /* Sit on top */
+        padding-top: 150px; /* Location of the box */
+        padding-bottom: 150px;
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0,0,0, 0.4); /* Fallback color */
+        background-color: rgba(0,0,0,0.8); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-contentFP {
+        background: url("~/../../img/tenor.gif") no-repeat;
+        background-color: rgba(254,254,254,0.4);
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 340px;
+        height: 340px;
+        text-align: center;
+        border-radius: 30px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+</style>
 
 
 <script>
-    $(document).ready(function ()
-    {
-        var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model,Newtonsoft.Json.Formatting.Indented));
-        iniciarOrdenesSelect(modelo);
-        document.getElementById("horaActualizacionIndicadoresOrden").innerHTML = obtenerHora();
-        $.fn.DataTable.ext.pager.numbers_length = 4;
-    });
-</script>
-
-<script>
-    function actualizarTablasMonitoreo()
-    {
-        var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, Newtonsoft.Json.Formatting.Indented));
-        var ordenSelect = document.getElementById("numeroOrden");
-        var numeroOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
-        for (var i = 0; modelo!=null && i < modelo.length; i++) {
-            if (modelo[i]["Estado"] == 1 && numeroOrden == modelo[i]["OrdenFabricacion"]) {
-                monitoreo(numeroOrden, modelo[i]["BotellasPlanificadas"], modelo[i]["CajasPlanificadas"])
-                break;
+    $.extend($.fn.dataTable.defaults, {
+        'destroy': true,
+        'responsive': true,
+        'dom': "Bfrtip",
+        'searching': false,
+        'ordering': true,
+        'info': false,
+        'autoWidth': true,
+        'paging': true,
+        'scrollX': false,
+        'lengthChange': false,
+        'processing': true,
+        'iDisplayLength': 5,
+        'language': {
+            "decimal": "",
+            "emptyTable": "No hay información",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Entradas",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
             }
         }
+    });
+    $(document).ready(function ()
+    {
+        /*var modelo = Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model,Newtonsoft.Json.Formatting.Indented));
+        iniciarOrdenesSelect(modelo);*/
         document.getElementById("horaActualizacionIndicadoresOrden").innerHTML = obtenerHora();
-    }
-    setInterval(actualizarTablasMonitoreo, 30000);
+        $.fn.DataTable.ext.pager.numbers_length = 4;
+        //cambiarTipo();
+        obtenerOrdenesAbiertas();
+    });
 </script>
 

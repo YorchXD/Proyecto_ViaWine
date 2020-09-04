@@ -13,17 +13,83 @@ namespace ViaWines_Automatizacion.Controllers
     {
         public IActionResult Proceso()
         {
-            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
-            //String fecha = "2020-05-08";
-            List<Orden> ordenes = ConsultaProceso.LeerOrdenes(fecha);
-            return View(ordenes);
+            return View();
         }
 
         [HttpPost]
-        public JsonResult ActualizarEstadoProceso(int OrdenFabricacion, int Estado)//ActualizarOrden orden)
+        public JsonResult GetOrdenes(String Fecha, int Tipo)
+        {
+            Boolean validacion;
+            List<Orden> ordenes = ConsultaProceso.LeerOrdenes(Fecha, Tipo);
+            if (ordenes != null)
+            {
+                validacion = true;
+            }
+            else
+            {
+                validacion = false;
+                ordenes = new List<Orden>();
+            }
+
+            var datos = new { 
+                validacion = validacion,
+                ordenes = ordenes
+            };
+
+
+            /*Manda un objeto vacio para que se active "zero records" y muestre que no hay información en la tabla*/
+            return Json(datos);
+
+        }
+
+
+        [HttpPost]
+        public JsonResult ObtenerFecha(int Opcion)
+        {
+            List<String> fechasOrden;
+            switch (Opcion)
+            {
+                case 1:
+                    fechasOrden = ConsultaProceso.LeerFechasOrdenesAbiertas();
+                    break;
+                default:
+                    fechasOrden = ConsultaProceso.GetFechasOrdenesPlanificadas();
+                    break;
+            }
+            if (fechasOrden != null)
+            {
+                return Json(fechasOrden);
+            }
+            return Json(new object());
+        }
+
+        /*[HttpGet]
+        public JsonResult GetFechasOrdenesPlanificadas()
+        {
+            List<String> fechasOrden = ConsultaProceso.GetFechasOrdenesPlanificadas();
+            if (fechasOrden != null)
+            {
+                return Json(fechasOrden);
+            }
+            return Json(new object());
+        }
+
+        [HttpGet]
+        public JsonResult GetFechaOrdenesAbiertas()
+        {
+            List<String> fechasOrden = ConsultaProceso.LeerFechasOrdenesAbiertas();
+            if (fechasOrden != null)
+            {
+                return Json(fechasOrden);
+            }
+            return Json(new object());
+        }*/
+
+        [HttpPost]
+        public JsonResult ActualizarEstadoProceso(int OrdenFabricacion, int Estado, String Fecha)//ActualizarOrden orden)
         {
             ConsultaProceso.InsertarLogEstadoOrden(OrdenFabricacion, Estado);
-            int actualizacion = ConsultaProceso.ActualizarEstadoOrden(OrdenFabricacion, Estado);
+            int actualizacion = ConsultaProceso.ActualizarEstadoOrden(OrdenFabricacion, Estado, Fecha);
             if(actualizacion==1)
             {
                 return Json(true);
@@ -35,57 +101,62 @@ namespace ViaWines_Automatizacion.Controllers
          */
         public Boolean OrdenesIniciadasPausadas(List<Orden> Ordenes)
         {
-            for (int i = 0; i < Ordenes.Count; i++)
+            if (Ordenes.Where(orden => orden.Estado == 1 || orden.Estado == 2).Count() > 0)
             {
-                if (Ordenes[i].Estado==1 || Ordenes[i].Estado == 2)
-                {
-                    return true;
-                }
+                return true;
+            }
+
+            return false;
+        }
+
+        /**
+         * Verifica si la orden iniciada o pausada es diferente a la que se quiere reanudar
+         */
+        public Boolean OrdenesIniciadasPausadasDiferente(List<Orden> Ordenes, int OrdenFabricacion)
+        {
+
+            if (Ordenes.Where(orden => (orden.Estado == 1 || orden.Estado == 2) && orden.OrdenFabricacion != OrdenFabricacion).Count() > 0)
+            {
+                return true;
             }
             return false;
+
         }
 
         /*
          * Consulta si una orden en particular se encuentra iniciada
          */
-        public Boolean OrdenIniciada(List<Orden> Ordenes, int Orden)
+        public Boolean OrdenIniciada(List<Orden> Ordenes, int OrdenFabricacion)
         {
-            for(int i=0; i<Ordenes.Count;i++)
+            if (Ordenes.Where(orden => orden.OrdenFabricacion == OrdenFabricacion && orden.Estado == 1).Count() > 0)
             {
-                if(Ordenes[i].OrdenFabricacion==Orden && Ordenes[i].Estado==1)
-                {
-                    return true;
-                }
+                return true;
             }
             return false;
+
         }
 
         /*
          * Consulta si una orden en particular se encuentra pausada
          */
-        public Boolean OrdenPausada(List<Orden> Ordenes, int Orden)
+        public Boolean OrdenPausada(List<Orden> Ordenes, int OrdenFabricacion)
         {
-            for (int i = 0; i < Ordenes.Count; i++)
+            if (Ordenes.Where(orden => orden.OrdenFabricacion == OrdenFabricacion && orden.Estado == 2).Count() > 0)
             {
-                if (Ordenes[i].OrdenFabricacion == Orden && Ordenes[i].Estado == 2)
-                {
-                    return true;
-                }
+                return true;
             }
             return false;
+
         }
 
         /*
          * Consulta si una orden en particular se encuentra pospuesta
          */
-        public Boolean OrdenPospuesta(List<Orden> Ordenes, int Orden)
+        public Boolean OrdenPospuesta(List<Orden> Ordenes, int OrdenFabricacion)
         {
-            for (int i = 0; i < Ordenes.Count; i++)
+            if (Ordenes.Where(orden => orden.OrdenFabricacion == OrdenFabricacion && orden.Estado == 3).Count() > 0)
             {
-                if (Ordenes[i].OrdenFabricacion == Orden && Ordenes[i].Estado == 3)
-                {
-                    return true;
-                }
+                return true;
             }
             return false;
         }
@@ -93,14 +164,11 @@ namespace ViaWines_Automatizacion.Controllers
         /*
          * Consulta si una orden en particular se encuentra finalizada
          */
-        public Boolean OrdenFinalizada(List<Orden> Ordenes, int Orden)
+        public Boolean OrdenFinalizada(List<Orden> Ordenes, int OrdenFabricacion)
         {
-            for (int i = 0; i < Ordenes.Count; i++)
+            if (Ordenes.Where(orden => orden.OrdenFabricacion == OrdenFabricacion && orden.Estado == 4).Count() > 0)
             {
-                if (Ordenes[i].OrdenFabricacion == Orden && Ordenes[i].Estado == 4)
-                {
-                    return true;
-                }
+                return true;
             }
             return false;
         }
@@ -139,9 +207,10 @@ namespace ViaWines_Automatizacion.Controllers
             else
             {
                 //String fecha = "2020-05-08";
-                String fecha = DateTime.Now.ToString("yyyy-MM-dd");
-                List<Orden> Ordenes = ConsultaProceso.LeerOrdenes(fecha);
+                //String fecha = DateTime.Now.ToString("yyyy-MM-dd");
+                List<Orden> Ordenes = ConsultaProceso.LeerOrdenesAbiertas();
                 Boolean ordenesIniciadasPausadas = OrdenesIniciadasPausadas(Ordenes);
+                Boolean ordenIniciadasPausadasDiferente = OrdenesIniciadasPausadasDiferente(Ordenes, OrdenFabricacion);
                 Boolean iniciada = OrdenIniciada(Ordenes, OrdenFabricacion);
                 Boolean pausada = OrdenPausada(Ordenes, OrdenFabricacion);
                 Boolean pospuesta = OrdenPospuesta(Ordenes, OrdenFabricacion);
@@ -160,7 +229,7 @@ namespace ViaWines_Automatizacion.Controllers
                             resultado.ExisteProceso = true;
                         }
                         /*Se puede reanudar una orden en particular si se encuentra pospuesta o pausada*/
-                        else if(pausada || pospuesta)
+                        else if((pausada || pospuesta) && !ordenIniciadasPausadasDiferente )
                         {
                             resultado.Titulo = "Reanudar proceso";
                             resultado.Contenido = "¿Está seguro que desea reaundar el proceso de la orden N°" + OrdenFabricacion + " ?";
@@ -225,6 +294,48 @@ namespace ViaWines_Automatizacion.Controllers
                 }
             }
             return Json(resultado);
+        }
+
+        [HttpPost]
+        public JsonResult GetMonitoreoMateriales(int OrdenFabricacion, String Fecha)
+        {
+            List<Material> materiales = ConsultaProceso.LeerMaterial(OrdenFabricacion, Fecha);
+            if (materiales != null)
+            {
+                return Json(materiales);
+            }
+            /*Manda un objeto vacio para que se active zero records y muestre que no hay información en la tabla*/
+            return Json(new Object());
+        }
+
+        [HttpPost]
+        public JsonResult GetVelocidadPorMin(int OrdenFabricacion, string TipoMaterial)
+        {
+            //String fecha = "2020-05-13";
+            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
+            String hora = DateTime.Now.AddMinutes(-1).ToString("HH:mm");
+            int cantTpoMaterial = ConsultaProceso.LeerVelocidadMaterial(fecha, hora, OrdenFabricacion, TipoMaterial);
+            if (cantTpoMaterial == -1)
+            {
+                cantTpoMaterial = 0;
+            }
+            return Json(cantTpoMaterial);
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public JsonResult LeerOrdenesAbiertas()
+        {
+            List<Orden> ordenes = ConsultaProceso.LeerOrdenesAbiertas();
+            if (ordenes != null)
+            {
+                return Json(ordenes);
+            }
+            return Json(new object());
         }
 
         /*[HttpPost]
@@ -339,38 +450,5 @@ namespace ViaWines_Automatizacion.Controllers
             }
             return Json(cantCajas);
         }*/
-
-        [HttpPost]
-        public JsonResult GetMonitoreoMateriales(int OrdenFabricacion)
-        {
-            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
-            List<Material> materiales = ConsultaProceso.LeerMaterial(fecha, OrdenFabricacion);
-            if (materiales != null)
-            {
-                return Json(materiales);
-            }
-            /*Manda un objeto vacio para que se active zero records y muestre que no hay información en la tabla*/
-            return Json(new Object());
-        }
-
-        [HttpPost]
-        public JsonResult GetVelocidadPorMin(int OrdenFabricacion, string TipoMaterial)
-        {
-            //String fecha = "2020-05-13";
-            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
-            String hora = DateTime.Now.AddMinutes(-1).ToString("HH:mm");
-            int cantTpoMaterial = ConsultaProceso.LeerVelocidadMaterial(fecha, hora, OrdenFabricacion, TipoMaterial);
-            if (cantTpoMaterial == -1)
-            {
-                cantTpoMaterial = 0;
-            }
-            return Json(cantTpoMaterial);
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }

@@ -16,13 +16,26 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             try
             {
                 String PA = null;
-                if(opcion==1)
+                switch(opcion)
                 {
-                    PA = "Leer_Ordenes_Del_Día";
-                }
-                else
-                {
-                    PA = "Leer_Ordenes_Planificadas";
+                    case 1:
+                        PA = "Leer_Ordenes_Del_Día_Abierta";
+                        break;
+                    case 2:
+                        PA = "Leer_Ordenes_Planificadas";
+                        break;
+                    default:
+                        DateTime fechaConsulta = Convert.ToDateTime(fecha).Date;
+                        DateTime fechaActual = DateTime.Now.Date;
+                        if (fechaConsulta<=fechaActual)
+                        {
+                            PA = "Leer_Ordenes_Del_Día";
+                        }
+                        else
+                        {
+                            PA = "Leer_Ordenes_Planificadas";
+                        }
+                        break;
                 }
 
                 var command = new SqlCommand() { CommandText = PA, CommandType = System.Data.CommandType.StoredProcedure };
@@ -46,7 +59,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                             BotellasFabricadas = 0,
                             CajasPlanificadas = Convert.ToInt32(prodData["cajasPlanificadas"]),
                             CajasFabricadas = 0,
-                            FechaFabricacion = prodData["fechaFabricacion"].ToString().Split(" ")[0],
+                            FechaFabricacion = Convert.ToDateTime(prodData["fechaFabricacion"]),
                             HoraInicioPlanificada = prodData["horaInicioPlanificada"].ToString(),
                             HoraTerminoPlanificada = prodData["horaTerminoPlanificada"].ToString(),
                             FechaHoraInicio = Convert.ToDateTime(prodData["fechaHoraInicio"]),
@@ -62,15 +75,15 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                         int CantBotellas = LeerCantBotellas(fecha, orden.OrdenFabricacion);
                         int CantCajas = LeerCantCajas(fecha, orden.OrdenFabricacion);
 
-                        if (CantBotellas != -1)
+                        if (CantCajas != -1)
                         {
                             orden.BotellasFabricadas = CantBotellas;
-                            orden.PorcentajeAvance = Math.Round((double)((CantBotellas * 100.0) / orden.BotellasPlanificadas), 2);
                         }
 
                         if (CantCajas!=-1)
                         {
                             orden.CajasFabricadas = CantCajas;
+                            orden.PorcentajeAvance = Math.Round((double)((CantCajas * 100.0) / orden.CajasPlanificadas), 2);
                         }
                         ordenes.Add(orden);
 
@@ -87,6 +100,8 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
         }
 
 
+
+
         public static List<String> LeerFechas()
         {
             try
@@ -101,8 +116,36 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                     {
                         var prodData = row;
                         DateTime fecha = Convert.ToDateTime(prodData["fechaFabricacion"]);
-                        //String date = DateTime.ParseExact(prodData["fechaFabricacion"].ToString(), "MM/dd/yyyy", CultureInfo.InstalledUICulture).ToString("MM/dd/yyyy"); 
                         String FechaFabricacion = fecha.Month+"/"+fecha.Day+"/"+fecha.Year;
+                        fechas.Add(FechaFabricacion);
+                    }
+                    return fechas;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+            return null;
+        }
+
+        public static List<String> LeerFechasPasadas()
+        {
+            try
+            {
+                var command = new SqlCommand() { CommandText = "Leer_Fechas_Planificadas_Realizadas", CommandType = System.Data.CommandType.StoredProcedure };
+                var datos = ContexDb.GetDataSet(command);
+                List<String> fechas = new List<String>();
+
+                if (datos.Tables[0].Rows.Count > 0)
+                {
+                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
+                    {
+                        var prodData = row;
+                        DateTime fecha = Convert.ToDateTime(prodData["fechaFabricacion"]);
+                        String FechaFabricacion = fecha.Month + "/" + fecha.Day + "/" + fecha.Year;
                         fechas.Add(FechaFabricacion);
                     }
                     return fechas;
@@ -177,18 +220,89 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             return -1;
         }
 
-        public static void AgregarNuevasOrdenes()
+        public static Boolean AgregarNuevasOrdenes(int OrdenFabricacion, String Fecha)
+        {
+            Boolean validar = false;
+            try
+            {
+                var command = new SqlCommand() { CommandText = "AgregarUnaOrdenFutura", CommandType = System.Data.CommandType.StoredProcedure };
+                command.Parameters.Add(new SqlParameter() { ParameterName = "OrdenFabricacion", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
+                var datos = ContexDb.GetDataSet(command);
+                if (datos.Tables[0].Rows.Count == 1)
+                {
+                    var prodData = datos.Tables[0].Rows[0];
+                    int refOrden = Convert.ToInt32(prodData["refOrden"]);
+                    if(refOrden==OrdenFabricacion)
+                    {
+                        validar = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+
+            }
+            return validar;
+        }
+
+        public static List<String> LeerFechasOrdenesPlanificadas()
         {
             try
             {
-                var command = new SqlCommand() { CommandText = "ActualizarNuevasOrdenes", CommandType = System.Data.CommandType.StoredProcedure };
+                var command = new SqlCommand() { CommandText = "Leer_Fechas_Planificadas1", CommandType = System.Data.CommandType.StoredProcedure };
                 var datos = ContexDb.GetDataSet(command);
-                Console.WriteLine(datos);
+                List<String> fechas = new List<String>();
+
+                if (datos.Tables[0].Rows.Count > 0)
+                {
+                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
+                    {
+                        var prodData = row;
+                        DateTime fecha = Convert.ToDateTime(prodData["fechaFabricacion"]);
+                        String FechaFabricacion = fecha.Month + "/" + fecha.Day + "/" + fecha.Year;
+                        fechas.Add(FechaFabricacion);
+                    }
+                    return fechas;
+                }
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
+
+            return null;
+        }
+
+        public static List<String> LeerFechasOrdenesAbiertas()
+        {
+            try
+            {
+                var command = new SqlCommand() { CommandText = "Leer_Fechas_Ordenes_Abiertas", CommandType = System.Data.CommandType.StoredProcedure };
+                var datos = ContexDb.GetDataSet(command);
+                List<String> fechas = new List<String>();
+
+                if (datos.Tables[0].Rows.Count > 0)
+                {
+                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
+                    {
+                        var prodData = row;
+                        DateTime fecha = Convert.ToDateTime(prodData["fechaFabricacion"]);
+                        String FechaFabricacion = fecha.Month + "/" + fecha.Day + "/" + fecha.Year;
+                        fechas.Add(FechaFabricacion);
+                    }
+                    return fechas;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+            return null;
         }
     }
 }

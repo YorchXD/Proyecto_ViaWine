@@ -18,8 +18,8 @@ namespace ViaWines_Automatizacion.Models
         public int BotellasFabricadas { get; set; }
         public int CajasPlanificadas { get; set; }
         public int CajasFabricadas { get; set; }
-        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public String FechaFabricacion { get; set; }
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime FechaFabricacion { get; set; }
         //[DisplayFormat(DataFormatString = "{0:HH:mm:ss}", ApplyFormatInEditMode = true)]
         public String HoraInicioPlanificada { get; set; }
         //[DisplayFormat(DataFormatString = "{0:HH:mm:ss}", ApplyFormatInEditMode = true)]

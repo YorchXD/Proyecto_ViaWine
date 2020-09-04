@@ -19,7 +19,6 @@ namespace ViaWines_Automatizacion.Controllers
             return View();
         }
 
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
@@ -27,30 +26,17 @@ namespace ViaWines_Automatizacion.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetPlanificacion(String fecha, int opcion)
+        public JsonResult AgregarOrdenesNuevas(int OrdenFabricacion, String Fecha)
         {
-            List<Orden> ordenes = ConsultaPlanificacion.LeerOrdenes(fecha, opcion); 
-            if (ordenes!=null)
-            {
-                return Json(ordenes);
-            }
-            /*Manda un objeto vacio para que se active zero records y muestre que no hay información en la tabla*/
-            return Json(new object());
-            
-        }
+            //String fecha = DateTime.Today.ToString("yyyy-MM-dd");
+            //int cantOrdenesActuales = 0;
+            //int cantOrdenesNuevas = 0;
 
-        [HttpPost]
-        public Boolean AgregarOrdenesNuevas()
-        {
-            String fecha = DateTime.Today.ToString("yyyy-MM-dd");
-            int cantOrdenesActuales = 0;
-            int cantOrdenesNuevas = 0;
+            //List<Orden> ordenesActuales = ConsultaPlanificacion.LeerOrdenes(fecha, 1);
+            return Json(ConsultaPlanificacion.AgregarNuevasOrdenes(OrdenFabricacion, Fecha));
+            //List<Orden> ordenesNuevas = ConsultaPlanificacion.LeerOrdenes(fecha, 1);
 
-            List<Orden> ordenesActuales = ConsultaPlanificacion.LeerOrdenes(fecha, 1);
-            ConsultaPlanificacion.AgregarNuevasOrdenes();
-            List<Orden> ordenesNuevas = ConsultaPlanificacion.LeerOrdenes(fecha, 1);
-
-            if (ordenesActuales != null)
+            /*if (ordenesActuales != null)
             {
                 cantOrdenesActuales = ordenesActuales.Count();
             }
@@ -60,22 +46,109 @@ namespace ViaWines_Automatizacion.Controllers
                 cantOrdenesNuevas = ordenesNuevas.Count();
             }
 
-            if (cantOrdenesNuevas>cantOrdenesActuales)
+            if (cantOrdenesNuevas > cantOrdenesActuales)
             {
                 return true;
             }
-            return false;
+            return false;*/
         }
 
-        [HttpGet]
-        public JsonResult GetFechasPlanificacion()
+        [HttpPost]
+        public JsonResult LeerPlanificaciones(String fecha, int opcion)
         {
-            List<String> fechas = ConsultaPlanificacion.LeerFechas();
-            if(fechas!=null)
+            bool validacion = true;
+            List<Orden> ordenes = ConsultaPlanificacion.LeerOrdenes(fecha, opcion);
+            /*Manda un objeto vacio para que se active zero records y muestre que no hay información en la tabla*/
+            if (ordenes==null)
             {
-                return Json(fechas);
+                ordenes = new List<Orden>();
+                validacion = false;
+            }
+
+            var planificacion = new
+            {
+                validacion = validacion,
+                ordenes = ordenes
+            };
+
+            
+            return Json(planificacion);
+            
+        }
+
+
+        [HttpPost]
+        public JsonResult GetFechasTipo(int opcion)
+        {
+            List<String> fechasAux = null;
+            switch (opcion)
+            {
+                case 1:
+                    /*Fecha de ordenes abiertas*/
+                    fechasAux = ConsultaPlanificacion.LeerFechasOrdenesAbiertas();
+                    break;
+                case 2:
+                    /*Fechas de ordenes Planificadas (futuras)*/
+                    fechasAux = ConsultaPlanificacion.LeerFechasOrdenesPlanificadas();
+                    break;
+                default:
+                    /*Todas las fechas en donde existen ordenes*/
+                    List<String> fechasPasadas = ConsultaPlanificacion.LeerFechasPasadas();
+                    List<String> fechas = ConsultaPlanificacion.LeerFechas();
+                    fechasAux = fechasPasadas.Union(fechas).ToList();
+                    break;
+            }
+
+            if (fechasAux != null)
+            {
+                return Json(fechasAux);
             }
             return Json(new object());
         }
+
+
+
+
+
+
+
+
+
+
+        /*[HttpGet]
+        public JsonResult GetTodasFechasPlanificacion()
+        {
+            List<String> fechasPasadas = ConsultaPlanificacion.LeerFechasPasadas();
+            List<String> fechas = ConsultaPlanificacion.LeerFechas();
+
+            List<String> fechasAux = fechasPasadas.Union(fechas).ToList();
+            if (fechasAux != null)
+            {
+                return Json(fechasAux);
+            }
+            return Json(new object());
+        }
+
+        [HttpGet]
+        public JsonResult GetFechasOrdenesPlanificadas()
+        {
+            List<String> fechasOrden = ConsultaPlanificacion.LeerFechasOrdenesPlanificadas();
+            if (fechasOrden != null)
+            {
+                return Json(fechasOrden);
+            }
+            return Json(new object());
+        }
+
+        [HttpGet]
+        public JsonResult GetFechaOrdenesAbiertas()
+        {
+            List<String> fechasOrden = ConsultaPlanificacion.LeerFechasOrdenesAbiertas();
+            if (fechasOrden != null)
+            {
+                return Json(fechasOrden);
+            }
+            return Json(new object());
+        }*/
     }
 }

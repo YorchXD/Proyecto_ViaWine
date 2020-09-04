@@ -10,13 +10,14 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
 {
     public class ConsultaProceso
     {
-        public static int ActualizarEstadoOrden(int OrdenFabricacion, int Estado)
+        public static int ActualizarEstadoOrden(int OrdenFabricacion, int Estado, String Fecha)
         {
             try
             {
-                var command = new SqlCommand() { CommandText = "Actualizar_Estado_Orden", CommandType = System.Data.CommandType.StoredProcedure };
+                var command = new SqlCommand() { CommandText = "Actualizar_Estado_Orden_1", CommandType = System.Data.CommandType.StoredProcedure };
                 command.Parameters.Add(new SqlParameter() { ParameterName = "OrdenFabricacion", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
                 command.Parameters.Add(new SqlParameter() { ParameterName = "Estado", Direction = System.Data.ParameterDirection.Input, Value = Estado });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
                 ContexDb.ExecuteProcedure(command);
                 return 1;
             }
@@ -25,6 +26,65 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                 Console.WriteLine(ex.ToString());
             }
             return -1;
+        }
+
+        public static List<String> GetFechasOrdenesPlanificadas()
+        {
+            try
+            {
+                var command = new SqlCommand() { CommandText = "Leer_Fechas_Planificadas1", CommandType = System.Data.CommandType.StoredProcedure };
+                var datos = ContexDb.GetDataSet(command);
+                List<String> fechas = new List<String>();
+
+                if (datos.Tables[0].Rows.Count > 0)
+                {
+                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
+                    {
+                        var prodData = row;
+                        DateTime fecha = Convert.ToDateTime(prodData["fechaFabricacion"]);
+                        //String date = DateTime.ParseExact(prodData["fechaFabricacion"].ToString(), "MM/dd/yyyy", CultureInfo.InstalledUICulture).ToString("MM/dd/yyyy"); 
+                        String FechaFabricacion = fecha.Month + "/" + fecha.Day + "/" + fecha.Year;
+                        fechas.Add(FechaFabricacion);
+                    }
+                    return fechas;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+            return null;
+        }
+
+        public static List<String> LeerFechasOrdenesAbiertas()
+        {
+            try
+            {
+                var command = new SqlCommand() { CommandText = "Leer_Fechas_Ordenes_Abiertas", CommandType = System.Data.CommandType.StoredProcedure };
+                var datos = ContexDb.GetDataSet(command);
+                List<String> fechas = new List<String>();
+
+                if (datos.Tables[0].Rows.Count > 0)
+                {
+                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
+                    {
+                        var prodData = row;
+                        DateTime fecha = Convert.ToDateTime(prodData["fechaFabricacion"]);
+                        String FechaFabricacion = fecha.Month + "/" + fecha.Day + "/" + fecha.Year;
+                        fechas.Add(FechaFabricacion);
+                    }
+                    return fechas;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+            return null;
         }
 
         public static void InsertarLogEstadoOrden(int OrdenFabricacion, int Estado)
@@ -59,7 +119,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
         /// <summary>
         /// Obtiene las ordenes que se encuentren iniciadas.
         /// </summary>
-        public static List<Orden> LeerOrdenesIniciadas()
+        /*public static List<Orden> LeerOrdenesIniciadas()
         {
             try
             {
@@ -86,7 +146,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                 Console.WriteLine(ex.ToString());
             }
             return null;
-        }
+        }*/
 
 
         /// <summary>
@@ -163,11 +223,23 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
         /**
          * Obtiene las ordenes del día
          **/
-        public static List<Orden> LeerOrdenes(String fecha)
+        public static List<Orden> LeerOrdenes(String fecha, int opcion)
         {
             try
             {
-                var command = new SqlCommand() { CommandText = "Leer_Ordenes_Del_Día", CommandType = System.Data.CommandType.StoredProcedure };
+                String consulta = "";
+                switch(opcion)
+                {
+                    case 1:
+                        consulta = "Leer_Ordenes_Del_Día_Abierta";
+                        break;
+                    default:
+                        consulta = "Leer_Ordenes_Planificadas";
+                        break;
+                }
+
+
+                var command = new SqlCommand() { CommandText = consulta, CommandType = System.Data.CommandType.StoredProcedure };
                 command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = fecha });
                 var datos = ContexDb.GetDataSet(command);
                 List<Orden> ordenes = new List<Orden>();
@@ -185,7 +257,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                             Descripcion = prodData["descripcionSKU"].ToString(),
                             BotellasPlanificadas = Convert.ToInt32(prodData["botellasPlanificadas"]),
                             CajasPlanificadas = Convert.ToInt32(prodData["cajasPlanificadas"]),
-                            FechaFabricacion = prodData["fechaFabricacion"].ToString().Split(" ")[0],
+                            FechaFabricacion = Convert.ToDateTime(prodData["fechaFabricacion"]),
                             HoraInicioPlanificada = prodData["horaInicioPlanificada"].ToString(),
                             HoraTerminoPlanificada = prodData["horaTerminoPlanificada"].ToString(),
                             FormatoCaja = prodData["formatoCaja"].ToString(),
@@ -206,12 +278,58 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             return null;
         }
 
-        public static List<Material> LeerMaterial(String Fecha, int OrdenFabricacion)
+        /**
+        * Obtiene las ordenes abiertas sin importar la fecha
+        **/
+        public static List<Orden> LeerOrdenesAbiertas()
+        {
+            try
+            {
+                var command = new SqlCommand() { CommandText = "Leer_Ordenes_Abiertas", CommandType = System.Data.CommandType.StoredProcedure };
+                var datos = ContexDb.GetDataSet(command);
+                List<Orden> ordenes = new List<Orden>();
+                if (datos.Tables[0].Rows.Count > 0)
+                {
+                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
+                    {
+                        var prodData = row;
+                        var orden = new Orden()
+                        {
+                            OrdenFabricacion = Convert.ToInt32(prodData["ordenFabricacion"]),
+                            Version = prodData["version"].ToString(),
+                            Cliente = prodData["cliente"].ToString(),
+                            SKU = prodData["sku"].ToString(),
+                            Descripcion = prodData["descripcionSKU"].ToString(),
+                            BotellasPlanificadas = Convert.ToInt32(prodData["botellasPlanificadas"]),
+                            CajasPlanificadas = Convert.ToInt32(prodData["cajasPlanificadas"]),
+                            FechaFabricacion = Convert.ToDateTime(prodData["fechaFabricacion"]),
+                            HoraInicioPlanificada = prodData["horaInicioPlanificada"].ToString(),
+                            HoraTerminoPlanificada = prodData["horaTerminoPlanificada"].ToString(),
+                            FormatoCaja = prodData["formatoCaja"].ToString(),
+                            Estado = Convert.ToInt32(prodData["estado"]),
+                            Secuencia = Convert.ToInt32(prodData["secuencia"])
+                        };
+
+                        ordenes.Add(orden);
+                    }
+                    return ordenes;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            return null;
+        }
+
+        public static List<Material> LeerMaterial(int OrdenFabricacion, String Fecha)
         {
             try
             {
                 var command = new SqlCommand() { CommandText = "Leer_Material", CommandType = System.Data.CommandType.StoredProcedure };
                 command.Parameters.Add(new SqlParameter() { ParameterName = "OrdenFabricacion", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
+                /*El parametro fecha se debe eliminar ya que ahora extraerá todos los materiales tanto de dias anteriores como del dia actual y así saber el avance que tiene una orden*/
                 command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
                 var datos = ContexDb.GetDataSet(command);
                 List<Material> materiales = new List<Material>();

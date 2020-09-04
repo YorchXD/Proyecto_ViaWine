@@ -305,7 +305,7 @@ a:focus {
   text-align: center;
   width: 230px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  padding: 0 28px;
+  padding: 0 24px;
   font-weight: 300;
   overflow: hidden;
 }
@@ -650,6 +650,8 @@ a:focus {
   }
   .sidebar-mini.sidebar-collapse .sidebar-menu > li:not(.treeview) > a > span {
     border-bottom-right-radius: 4px;
+    height:70px;
+    line-height: 45px;
   }
   .sidebar-mini.sidebar-collapse .sidebar-menu > li > .treeview-menu {
     padding-top: 5px;
@@ -5735,7 +5737,8 @@ i.fa.fa-comments-o {
 }
 
 .sidebar-menu > li > a > .fa, .sidebar-menu > li > a > .glyphicon, .sidebar-menu > li > a > .ion {
-    color: #bf076e;
+    /*color: #bf076e;*/ 
+    color: white;
 }
 
 .small-box h3 {

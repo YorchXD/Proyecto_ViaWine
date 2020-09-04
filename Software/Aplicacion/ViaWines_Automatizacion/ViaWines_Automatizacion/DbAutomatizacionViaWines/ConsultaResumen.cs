@@ -11,6 +11,36 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
 {
     public class ConsultaResumen
     {
+
+        public static List<String> LeerFechasOrdenes()
+        {
+            try
+            {
+                var command = new SqlCommand() { CommandText = "Leer_Fechas_Planificadas_Realizadas", CommandType = System.Data.CommandType.StoredProcedure };
+                var datos = ContexDb.GetDataSet(command);
+                List<String> fechas = new List<String>();
+
+                if (datos.Tables[0].Rows.Count > 0)
+                {
+                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
+                    {
+                        var prodData = row;
+                        DateTime fecha = Convert.ToDateTime(prodData["fechaFabricacion"]);
+                        //String date = DateTime.ParseExact(prodData["fechaFabricacion"].ToString(), "MM/dd/yyyy", CultureInfo.InstalledUICulture).ToString("MM/dd/yyyy"); 
+                        String FechaFabricacion = fecha.Month + "/" + fecha.Day + "/" + fecha.Year;
+                        fechas.Add(FechaFabricacion);
+                    }
+                    return fechas;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+            return null;
+        }
+
         /**
          * Obtiene las ordenes del día
          **/
@@ -20,6 +50,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             {
                 var command = new SqlCommand() { CommandText = "Leer_Ordenes_Del_Día", CommandType = System.Data.CommandType.StoredProcedure };
                 command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = fecha });
+                
                 var datos = ContexDb.GetDataSet(command);
                 List<Orden> ordenes = new List<Orden>();
                 if (datos.Tables[0].Rows.Count > 0)
@@ -36,7 +67,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                             Descripcion = prodData["descripcionSKU"].ToString(),
                             BotellasPlanificadas = Convert.ToInt32(prodData["botellasPlanificadas"]),
                             CajasPlanificadas = Convert.ToInt32(prodData["cajasPlanificadas"]),
-                            FechaFabricacion = prodData["fechaFabricacion"].ToString().Split(" ")[0],
+                            FechaFabricacion = Convert.ToDateTime(prodData["fechaFabricacion"]),
                             HoraInicioPlanificada = prodData["horaInicioPlanificada"].ToString(),
                             HoraTerminoPlanificada = prodData["horaTerminoPlanificada"].ToString(),
                             FormatoCaja = prodData["formatoCaja"].ToString(),
@@ -56,19 +87,19 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                         if (CantBotellas != -1)
                         {
                             orden.BotellasFabricadas = CantBotellas;
-                            orden.PorcentajeAvance = Math.Round((double)((CantBotellas * 100.0) / orden.BotellasPlanificadas), 2);
+                            
                         }
 
                         if (CantCajas != -1)
                         {
                             orden.CajasFabricadas = CantCajas;
+                            orden.PorcentajeAvance = Math.Round((double)((CantCajas * 100.0) / orden.CajasPlanificadas), 2);
                         }
 
                         ordenes.Add(orden);
                     }
                     return ordenes;
                 }
-
             }
             catch (Exception ex)
             {
@@ -103,10 +134,6 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             {
                 Console.WriteLine(ex.ToString());
             }
-            finally
-            {
-
-            }
             return -1;
         }
 
@@ -135,10 +162,6 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-            }
-            finally
-            {
-
             }
             return -1;
         }
@@ -210,10 +233,6 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             {
                 Console.WriteLine(ex.ToString());
             }
-            finally
-            {
-
-            }
             return null;
         }
 
@@ -248,10 +267,6 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             {
                 Console.WriteLine(ex.ToString());
             }
-            finally
-            {
-
-            }
             return null;
         }
 
@@ -281,15 +296,10 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
 
                 }
                 return indicadorOrdenesFinalizadas;
-
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-            }
-            finally
-            {
-
             }
             return null;
         }
@@ -416,7 +426,6 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                     }
                 }
                 return cantTipoMaterial;
-
             }
             catch (Exception ex)
             {
@@ -431,6 +440,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             {
                 var command = new SqlCommand() { CommandText = "Leer_Material", CommandType = System.Data.CommandType.StoredProcedure };
                 command.Parameters.Add(new SqlParameter() { ParameterName = "OrdenFabricacion", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
+                /*El parametro fecha se debe eliminar ya que ahora extraerá todos los materiales tanto de dias anteriores como del dia actual y así saber el avance que tiene una orden*/
                 command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
                 var datos = ContexDb.GetDataSet(command);
                 List<Material> materiales = new List<Material>();
@@ -458,6 +468,70 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             }
             return null;
         }
+
+        public static List<Monitoreo> LeerMonitoreoMin(int OrdenFabricación, String fecha)
+        {
+            try
+            {
+                var command = new SqlCommand() { CommandText = "Cant_Bot_Caj_Min_Orden", CommandType = System.Data.CommandType.StoredProcedure };
+                command.Parameters.Add(new SqlParameter() { ParameterName = "fecha", Direction = System.Data.ParameterDirection.Input, Value = fecha });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "refOrden", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricación });
+                var datos = ContexDb.GetDataSet(command);
+                List<Monitoreo> monitoreos= new List<Monitoreo>();
+                if (datos.Tables[0].Rows.Count > 0)
+                {
+                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
+                    {
+                        var prodData = row;
+                        var monitoreo = new Monitoreo()
+                        {
+                            Hora = prodData["hora"].ToString(),
+                            Botellas = Convert.ToInt32(prodData["botellas"]),
+                            Cajas = Convert.ToInt32(prodData["cajas"])
+                        };
+
+                        monitoreos.Add(monitoreo);
+                    }
+                    return monitoreos;
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            return null;
+        }
+
+        public static List<Monitoreo> LeerMonitoreoHora( String fecha)
+        {
+            try
+            {
+                var command = new SqlCommand() { CommandText = "Cant_Bot_Caj_Hora_Orden", CommandType = System.Data.CommandType.StoredProcedure };
+                command.Parameters.Add(new SqlParameter() { ParameterName = "fecha", Direction = System.Data.ParameterDirection.Input, Value = fecha });
+                var datos = ContexDb.GetDataSet(command);
+                List<Monitoreo> monitoreos = new List<Monitoreo>();
+                if (datos.Tables[0].Rows.Count > 0)
+                {
+                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
+                    {
+                        var prodData = row;
+                        var monitoreo = new Monitoreo()
+                        {
+                            Hora = prodData["hora"].ToString(),
+                            Botellas = Convert.ToInt32(prodData["botellas"]),
+                            Cajas = Convert.ToInt32(prodData["cajas"])
+                        };
+
+                        monitoreos.Add(monitoreo);
+                    }
+                    return monitoreos;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            return null;
+        }
     }
 }
-

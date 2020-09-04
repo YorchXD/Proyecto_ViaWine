@@ -5,35 +5,6 @@
 }
 
 
-<!--section class="content-header">
-    <div class="row">
-        <div class="col-xs-12 col-md-8">
-            <h1>
-                Planificación
-                <small>Del día</small>
-            </h1>
-        </div>
-
-        <div class="col-xs-12 col-md-4" style="margin-top:19px">
-            @using (Html.BeginForm("Planificacion", "Planificacion", FormMethod.Post))
-            {
-                <div class="datepicker">
-                    <div class="input-group date input-group-sm">
-                        <div class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </div>
-                        <input type="text" class="form-control pull-right" id="datepicker" name="fecha">
-                        <div class="input-group-btn">
-                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
-</section-->
-
-
 <section class="content-header">
     <div class="row">
         <div class="col-xs-12 col-md-6">
@@ -42,30 +13,36 @@
                 <small>Del día</small>
             </h1>
         </div>
-
-        <div class="col-xs-12 col-md-6">
-            <div class="datepicker col-xs-12 col-md-6" style="margin-top:19px">
-                <div class="input-group date">
-                    <div class="input-group-addon">
-                        <i class="fa fa-calendar"></i>
-                    </div>
-                    <input type="text" class="form-control pull-right" id="datepicker" name="fecha" autocomplete="off" onchange="buscarPlanificacion()">
-                    <!--div class="input-group-btn">
-                        <button type="button" class="btn btn-default" id="obtenerOrdenes" onclick="buscarPlanificacion()"><i class="fa fa-search"></i></button>
-                    </div-->
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-6" style="margin-top:19px">
-                <p>
-                    <button type="button" id="btnAgregarOrdenes" class="btn btn-block bg-purple">Agregar nuevas ordenes desde SAP</button>
-                </p>
-            </div>
-        </div>
     </div>
 </section>
 
 
 <section class="content">
+    <div class="row">
+        <div class="col-md-4 col-xs-12">
+            <select class="form-control select2" style="width: 100%;" id="tipoOrden" onchange="cambiarTipo()">
+                <option value="1">Ordenes abiertas</option>
+                <option value="2">Ordenes futuras</option>
+                <option selected value="3">Todas las ordenes</option>
+            </select>
+        </div>
+
+        <div class="col-xs-12 col-md-4">
+            <div class="datepicker">
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" class="form-control pull-right" id="datepicker" name="fecha" autocomplete="off" onchange="buscarPlanificacion()">
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-4">
+            <p>
+                <button type="button" id="btnAgregarOrdenes" class="btn btn-block bg-purple">Agregar nuevas ordenes desde SAP</button>
+            </p>
+        </div>
+    </div>
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
@@ -80,14 +57,14 @@
                                 <th>Version</th>
                                 <th>Cliente</th>
                                 <th>SKU</th>
-                                <th>Descripción</th>
+                                <th class="none">Descripción</th>
                                 <th>Cant. Botellas</th>
-                                <th>Cant. Botellas Fabricadas</th>
+                                <th class="none">Cant. Botellas Fabricadas</th>
                                 <th>Cant. Cajas</th>
-                                <th>Cant. Cajas Fabricadas</th>
+                                <th class="none">Cant. Cajas Fabricadas</th>
                                 <th>Fecha Fabricación</th>
-                                <th>Fecha y hora de inicio</th>
-                                <th>Fecha y hora de término</th>
+                                <th class="none">Fecha y hora de inicio</th>
+                                <th class="none">Fecha y hora de término</th>
                                 <th>Estado</th>
                                 <th>% de avance</th>
                             </tr>
@@ -101,6 +78,84 @@
         <!-- /.col -->
     </div>
     <!-- /.row -->
+
+
+    <div class="modal fade" id="modal-agregar-ordenes">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-purple">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-ini-process">Agregrar nueva orden</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+
+                        <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="datepicker">
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right clsDatePicker" id="datepickerAgregar" autocomplete="off" onchange="obtenerOrdenes()">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <select class="form-control select2" style="width: 100%;" id="numeroOrden" onchange="mostrarOrden()">
+                                <option disabled selected value="null">Seleccione una orden</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="box box-solid">
+                                <div class="box-header with-border">
+                                    <i class="fa fa-text-width"></i>
+                                    <h3 class="box-title">Descripción de la orden</h3>
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <dl class="dl-horizontal">
+                                        <dt>SKU</dt>
+                                        <dd id="SKU"></dd>
+                                        <dt>Descripción del producto</dt>
+                                        <dd id="descripcionProducto"></dd>
+                                        <dt>Cantidad de cajas planificadas</dt>
+                                        <dd id="cantCajasPlan"></dd>
+                                        <dt>Cantidad de botellas planificadas</dt>
+                                        <dd id="cantBotellasPlan"></dd>
+                                        <dt>Fecha planificada</dt>
+                                        <dd id="fechaPlan"></dd>
+
+                                    </dl>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <!-- /.box -->
+                        </div>
+                        <!-- ./col -->
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnAgregarOrden" class="btn bg-black">Agregar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
+
+
 
 
 
@@ -126,8 +181,28 @@
     </div>
     <!-- /.modal -->
 
-
-
+    <div class="modal fade" id="modal-confirmar-Agregar-orden">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-purple">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-confirm-agregar-orden"></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="body-confirm-agregar-orden"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnConfirmarAgregarOrden" class="btn bg-black">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 
     <div class="modal fade" id="modal-alerta">
         <div class="modal-dialog">
@@ -150,9 +225,6 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
-
-
-
 
     <div id="myModal" class="modalFP" style="display: none;">
         <!-- Modal content -->
@@ -202,9 +274,19 @@
 </style>
 
 <style>
-    .event a {
+    .ordenesDia a {
         background-color: #560f3d !important;
         color: #ffffff !important;
+    }
+</style>
+
+<style>
+    .ordenesFuturas a {
+        background-color: #78981a !important;
+        color: #ffffff !important;
+    }
+    .clsDatePicker {
+        z-index: 1600 !important;
     }
 </style>
 
@@ -215,31 +297,31 @@
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 <script type="text/javascript" src="~/js/planificacion.js"></script>
 
-<script>
-    $('#btnAgregarOrdenes').click(function () { agregarOrdenesNuevas(); });
-</script>
+
 
 <script>
-    //var fecha = "28/04/2020";
-
-    $(document).ready(function () {
-
-        planificacionDisponible()
-        var fecha = fechaActual();
-        seleccionarBuscarPlanificacion(fecha);
-
+    $('#btnAgregarOrdenes').click(function () {
+        resetear();
+        $('#modal-agregar-ordenes').modal('show');
+        fechasOrdenesAgregar();
+        obtenerOrdenes()
     });
 
+    $('#btnAgregarOrden').click(function () {
+        $('#title-confirm-agregar-orden').text("Agregrar nueva orden");
+        $('#body-confirm-agregar-orden').text("¿Está seguro que desea agregar la orden N°" + $('#numeroOrden').val() + " del día " + $("#datepickerAgregar").datepicker({ dateFormat: 'yy-mm-dd' }).val() + "?");
+        $("#modal-confirmar-Agregar-orden").modal("show");
+    });
 
+    $('#btnConfirmarAgregarOrden').click(function () {
+        $("#modal-confirmar-Agregar-orden").modal("hide");
+        agregarOrdenesNuevas();
+    });
+    $(document).ready(function () {
+        cambiarTipo();
+    });
 </script>
 
-
-<script>
-    function buscarPlanificacion() {
-        var fecha = $("#datepicker").datepicker({ dateFormat: 'yy-mm-dd' }).val();
-        seleccionarBuscarPlanificacion(fecha);
-    }
-</script>
 
 
 

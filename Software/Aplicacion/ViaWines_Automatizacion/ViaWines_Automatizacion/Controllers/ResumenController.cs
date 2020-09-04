@@ -14,9 +14,21 @@ namespace ViaWines_Automatizacion.Controllers
         public IActionResult Resumen()
         {
             //String fecha = "2020-06-04";
-            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
+            /*String fecha = DateTime.Now.ToString("yyyy-MM-dd");
             List<Orden> ordenes = ConsultaResumen.LeerOrdenes(fecha);
-            return View(ordenes);
+            return View(ordenes);*/
+            return View();
+        }
+
+        [HttpGet]
+        public JsonResult GetFechasOrdenes()
+        {
+            List<String> fechasOrden = ConsultaResumen.LeerFechasOrdenes();
+            if (fechasOrden != null)
+            {
+                return Json(fechasOrden);
+            }
+            return Json(new object());
         }
 
 
@@ -83,10 +95,10 @@ namespace ViaWines_Automatizacion.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetCantBotellasDia()
+        public JsonResult GetCantBotellasDia(String fecha)
         {
             //String fecha = "2020-06-04";
-            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
+            //String fecha = DateTime.Now.ToString("yyyy-MM-dd");
             List<int> indicador = ConsultaResumen.LeerCantBotellasDia(fecha);
             double porcentaje;
             int cantBotellas;
@@ -120,10 +132,10 @@ namespace ViaWines_Automatizacion.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetCantCajasDia()
+        public JsonResult GetCantCajasDia(String fecha)
         {
             //String fecha = "2020-06-04";
-            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
+            //String fecha = DateTime.Now.ToString("yyyy-MM-dd");
             List<int> indicador = ConsultaResumen.LeerCantCajasDia(fecha);
             double porcentaje;
             int cantCajas;
@@ -156,11 +168,14 @@ namespace ViaWines_Automatizacion.Controllers
             return Json(datosCajas);
         }
 
+        /**
+         * Obtiene la cantidad de ordenes finalizadas en un día en especifico
+         */
         [HttpPost]
-        public JsonResult GetCantOrdenesDia()
+        public JsonResult GetCantOrdenesDia(String fecha)
         {
             //String fecha = "2020-06-04";
-            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
+            //String fecha = DateTime.Now.ToString("yyyy-MM-dd");
             List<int> indicador = ConsultaResumen.LeerOrdenesTerminadasDia(fecha);
             double porcentaje;
             int cantOrdenes;
@@ -194,10 +209,10 @@ namespace ViaWines_Automatizacion.Controllers
         }
 
         [HttpPost]
-        public JsonResult getOrdenes()
+        public JsonResult getOrdenes(String fecha)
         {
             //String fecha = "2020-06-04";
-            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
+            //String fecha = DateTime.Now.ToString("yyyy-MM-dd");
             List<Orden> ordenes = ConsultaResumen.LeerOrdenes(fecha);
             if(ordenes!=null)
             {
@@ -207,10 +222,10 @@ namespace ViaWines_Automatizacion.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetMonitoreoMateriales(int OrdenFabricacion)
+        public JsonResult GetMonitoreoMateriales(int OrdenFabricacion, String Fecha)
         {
-            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
-            List<Material> materiales = ConsultaResumen.LeerMaterial(fecha, OrdenFabricacion);
+            //String fecha = DateTime.Now.ToString("yyyy-MM-dd");
+            List<Material> materiales = ConsultaResumen.LeerMaterial(Fecha, OrdenFabricacion);
             if (materiales != null)
             {
                 return Json(materiales);
@@ -265,6 +280,48 @@ namespace ViaWines_Automatizacion.Controllers
                     }
                 }
             }
+        }
+
+        [HttpGet]
+        public JsonResult GetMonitoreoMin(int OrdenFabricacion, String fecha)
+        {
+            //String fecha = DateTime.Now.ToString("yyyy-MM-dd");
+            //String fecha = "2020-08-17";
+            List<Monitoreo> monitoreo = ConsultaResumen.LeerMonitoreoMin(OrdenFabricacion, fecha);
+            if(monitoreo!=null)
+            {
+                return Json(monitoreo);
+            }
+            return Json(new object());
+        }
+
+        [HttpGet]
+        public JsonResult GetMonitoreoHora(string fecha)
+        {
+            //String fecha = DateTime.Now.ToString("yyyy-MM-dd");
+            //String fecha = "2020-08-17";
+
+            List<Monitoreo> monitoreo = ConsultaResumen.LeerMonitoreoHora(fecha);
+            if (monitoreo != null)
+            {
+                return Json(monitoreo);
+            }
+
+           
+            return Json(new object());
+        }
+
+        [HttpPost]
+        public JsonResult LeerPlanificaciones(String fecha)
+        {
+            List<Orden> ordenes = ConsultaResumen.LeerOrdenes(fecha);
+            if (ordenes != null)
+            {
+                return Json(ordenes);
+            }
+            /*Manda un objeto vacio para que se active zero records y muestre que no hay información en la tabla*/
+            return Json(new object());
+
         }
 
 
