@@ -14,7 +14,7 @@ function mostrarTablaOrdenes(fecha, opcion) {
     $('#tabla').DataTable({
         'responsive': true,
         'dom': "Bfrtip",
-        'searching': true,
+        'searching': false,
         'ordering': true,
         'info': false,
         'autoWidth': true,
