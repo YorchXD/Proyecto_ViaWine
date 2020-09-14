@@ -794,9 +794,9 @@ function actualizarIndicadores() {
     if (modelo.length > 0 && (modelo != null || modelo != "" || typeof modelo != 'undefined') && numeroOrden!='-1') {
         var orden = modelo.filter(orden => orden.estado == 1 && orden.ordenFabricacion == numeroOrden);
         buscarPlanificacionActualizada();
-        var ordenAux = modelo.filter(orden => orden.estado == 1 && orden.ordenFabricacion == numeroOrden);
+        var ordenAux = modelo.filter(orden => orden.ordenFabricacion == numeroOrden);
         if (orden.length != 0 && ordenAux.length != 0) {
-            if (ordenAux.estado != orden.estado) {
+            if (ordenAux[0].estado != orden[0].estado) {
                 location.reload();
             }
             else {
@@ -834,6 +834,7 @@ function buscarPlanificacionActualizada() {
         url: "/Resumen/LeerPlanificaciones",
         data: datos,
         dataType: 'json',
+        async: false,
         success: function (data) {
             if (!$.isEmptyObject(data)) {
                 modelo = data;

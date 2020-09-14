@@ -428,7 +428,11 @@ function resetear() {
 
     document.getElementById("cantCajas").innerHTML = "-";
     document.getElementById("progresoCajas").innerHTML = "<div class='progress-bar' style='width:" + 0 + "%'></div>";
-    document.getElementById("porcentCajas").innerHTML = "-%";
+    document.getElementById("porcentCajas").innerHTML = "-% de avance";
+
+    document.getElementById("cantBotellasEquiv").innerHTML = "-";
+    document.getElementById("progresoBotellasEquiv").innerHTML = "<div class='progress-bar' style='width:" + 0 + "%'></div>";
+    document.getElementById("porcentBotellasEquiv").innerHTML = "-% de avance";
 
     document.getElementById("cantBotellasMin").innerHTML = "-";
     document.getElementById("cantCajasMin").innerHTML = "-";
@@ -478,7 +482,6 @@ function obtenerOrdenes() {
                 iniciarOrdenesSelect(data.ordenes);
             }
             else {
-                modal.style.display = "none";
                 $('#title-alert').text("Alerta");
                 $('#body-alert').text("Aun no existen ordenes para la fecha " + fecha);
                 $("#modal-alerta").modal("show");
@@ -506,18 +509,20 @@ function obtenerOrdenesAbiertas() {
         data: {},
         dataType: 'json',
         async: false,
-        success: function (data) {
-            if (data.length != 0) {
-                modal.style.display = "none";
+        success: function (data)
+        {
+            modal.style.display = "none";
+            if (data.length != 0)
+            {
                 mostrarOrdenDefault(data);
             }
             else
             {
-                modal.style.display = "none";
                 $('#title-alert').text("Alerta");
                 $('#body-alert').text("Aun no existen ordenes abiertas para la fecha " + fecha);
                 $("#modal-alerta").modal("show");
             }
+            
         },
         error: function () {
             modal.style.display = "none";
@@ -543,9 +548,6 @@ function mostrarOrdenDefault(datos) {
     ordenes = datos.filter(orden => (orden.fechaFabricacion).split('T')[0] == fecha);
     fechasOrdenes(fecha);
     if (ordenes.length == 0) {
-        if (modal != "") {
-            modal.style.display = "none";
-        }
         $('#title-alert').text("Alerta");
         $('#body-alert').text("Aun no existen ordenes abiertas para la fecha " + fecha);
         $("#modal-alerta").modal("show");
@@ -577,12 +579,12 @@ function actualizarTablasMonitoreo()
     var ordenSelect = document.getElementById("numeroOrden");
     var numeroOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
 
-    if ((ordenes != null || ordenes != "" || typeof ordenes!='undefined') && ordenes.length > 0) {
+    if ((ordenes != null || ordenes != "" || typeof ordenes != 'undefined') && ordenes.length > 0 && numeroOrden!='-1' ) {
         var orden = ordenes.filter(orden => orden.estado == 1 && orden.ordenFabricacion == numeroOrden);
         obtenerOrdenesAbiertasActualizadas();
-        var ordenAux = ordenes.filter(orden => orden.estado == 1 && orden.ordenFabricacion == numeroOrden);
+        var ordenAux = ordenes.filter(orden => orden.ordenFabricacion == numeroOrden);
         if (orden.length != 0 && ordenAux.length != 0) {
-            if (ordenAux.estado != orden.estado) {
+            if (ordenAux[0].estado != orden[0].estado) {
                 location.reload();
             }
             else {
@@ -615,4 +617,4 @@ function actualizarPagina() {
         moviendo = false;
     }
 }
-setInterval(actualizarPagina, 50000);
+setInterval(actualizarPagina, 60000*2);
