@@ -303,8 +303,8 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                             BotellasPlanificadas = Convert.ToInt32(prodData["botellasPlanificadas"]),
                             CajasPlanificadas = Convert.ToInt32(prodData["cajasPlanificadas"]),
                             FechaFabricacion = Convert.ToDateTime(prodData["fechaFabricacion"]),
-                            HoraInicioPlanificada = prodData["horaInicioPlanificada"].ToString(),
-                            HoraTerminoPlanificada = prodData["horaTerminoPlanificada"].ToString(),
+                            FechaHoraInicio = Convert.ToDateTime(prodData["fechaHoraInicio"]),
+                            FechaHoraTermino = Convert.ToDateTime(prodData["fechaHoraTermino"]),
                             FormatoCaja = prodData["formatoCaja"].ToString(),
                             Estado = Convert.ToInt32(prodData["estado"]),
                             Secuencia = Convert.ToInt32(prodData["secuencia"])

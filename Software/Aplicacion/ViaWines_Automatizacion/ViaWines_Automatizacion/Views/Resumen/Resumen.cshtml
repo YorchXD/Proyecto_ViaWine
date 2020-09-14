@@ -30,7 +30,7 @@
 
         <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <select class="form-control select2" style="width: 100%;" id="numeroOrden" onchange="mostrarOrden()">
-                <option disabled selected value="null">Seleccione una orden</option>
+                <option disabled selected value="-1">Seleccione una orden</option>
             </select>
         </div>
     </div>
@@ -375,6 +375,37 @@
     .event a {
         background-color: #560f3d !important;
         color: #ffffff !important;
+    }
+    .modalFP {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 100000; /* Sit on top */
+        padding-top: 150px; /* Location of the box */
+        padding-bottom: 150px;
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0,0,0, 0.4); /* Fallback color */
+        background-color: rgba(0,0,0,0.8); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-contentFP {
+        background: url("~/../../img/tenor.gif") no-repeat;
+        background-color: rgba(254,254,254,0.4);
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 340px;
+        height: 340px;
+        text-align: center;
+        border-radius: 30px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
 </style>
 
