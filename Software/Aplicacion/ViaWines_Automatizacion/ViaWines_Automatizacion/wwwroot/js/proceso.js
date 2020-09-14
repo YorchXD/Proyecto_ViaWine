@@ -152,6 +152,7 @@ function Orden(modelo)
     document.getElementById("horaInicioPlan").innerHTML = modelo["horaInicioPlanificada"];
     document.getElementById("horaTerminoPlan").innerHTML = modelo["horaTerminoPlanificada"];
     document.getElementById("fechaPlan").innerHTML = (modelo["fechaFabricacion"]).split('T')[0];
+    document.getElementById("formatoCaja").innerHTML = modelo["formatoCaja"];
     switch (modelo["estado"]) {
         case 0:
             document.getElementById("estado").innerHTML = 'No iniciada';
@@ -168,7 +169,7 @@ function Orden(modelo)
         default:
             document.getElementById("estado").innerHTML = 'Finalizada';
     }
-    monitoreo(modelo["ordenFabricacion"], modelo["botellasPlanificadas"], modelo["cajasPlanificadas"])
+    monitoreo(modelo["ordenFabricacion"], modelo["botellasPlanificadas"], modelo["cajasPlanificadas"], modelo["formatoCaja"]);
 }
 
 
@@ -352,7 +353,7 @@ function Orden(modelo)
  * @param {int} botellasPlan
  * @param {int} cajasPlan
  */
-function monitoreo(OrdenFabricacion, botellasPlan, cajasPlan)
+function monitoreo(OrdenFabricacion, botellasPlan, cajasPlan, formato)
 {
     fecha = $("#datepicker").datepicker({ dateFormat: 'yy-mm-dd' }).val();
     var datos = {
@@ -369,15 +370,19 @@ function monitoreo(OrdenFabricacion, botellasPlan, cajasPlan)
             var cajas = {};
             var cantBotellas = 0;
             var cantCajas = 0;
+            var botellasEquiv = 0;
+            var cantBotellasCajas = parseInt(formato.split("x")[0]);
             if (Object.entries(data).length != 0) {
                 botellas = data.filter(element => element.tipo == "Botella");
                 cajas = data.filter(element => element.tipo == "Caja");
                 cantBotellas = botellas.length;
                 cantCajas = cajas.length;
+                botellasEquiv = cantCajas * cantBotellasCajas
             }
 
             indicadorCantBotellas1(cantBotellas, botellasPlan);
             indicadorCantCajas1(cantCajas, cajasPlan);
+            indicadorCantBotellasEquiv1(botellasEquiv, botellasPlan);
             indicadorVelocidadPorMin(OrdenFabricacion, 'botella');
             indicadorVelocidadPorMin(OrdenFabricacion, 'caja');
             monitoreoBotellas1(botellas);
@@ -417,6 +422,18 @@ function indicadorCantCajas1(cantCajas, cajasPlan) {
     document.getElementById("cantCajas").innerHTML = cantCajas;
     document.getElementById("progresoCajas").innerHTML = "<div class='progress-bar' style='width:" + porcentaje + "%'></div>";
     document.getElementById("porcentCajas").innerHTML = "" + porcentaje + "% de avance";
+}
+
+/**
+ * Inserta la cantidad de botellas equivalentes respecto a la cantidad de cajas contabilizadas segun lo planificado
+ * @param {any} cantBotellasEquiv
+ * @param {any} botellasPlan
+ */
+function indicadorCantBotellasEquiv1(cantBotellasEquiv, botellasPlan) {
+    porcentaje = roundToTwo((cantBotellasEquiv * 100.0) / botellasPlan);
+    document.getElementById("cantBotellasEquiv").innerHTML = cantBotellasEquiv;
+    document.getElementById("progresoBotellasEquiv").innerHTML = "<div class='progress-bar' style='width:" + porcentaje + "%'></div>";
+    document.getElementById("porcentBotellasEquiv").innerHTML = "" + porcentaje + "% de avance";
 }
 
 function indicadorVelocidadPorMin(OrdenFabricacion, tipoMaterial) {
@@ -578,6 +595,7 @@ function resetear() {
     document.getElementById("horaInicioPlan").innerHTML = "-";
     document.getElementById("horaTerminoPlan").innerHTML = "-";
     document.getElementById("fechaPlan").innerHTML = "-";
+    document.getElementById("formatoCaja").innerHTML = "-";
     document.getElementById("estado").innerHTML = "-";
     var cantTablaBotella = $('#tablaBotellas').DataTable().page.info().recordsTotal;
     var cantTablaCajas = $('#tablaCajas').DataTable().page.info().recordsTotal;
@@ -717,7 +735,7 @@ function actualizarTablasMonitoreo()
 
     if (ordenes != null && ordenes.length > 0) {
         var orden = ordenes.filter(orden => orden.estado == 1 && orden.ordenFabricacion == numeroOrden);
-        monitoreo(numeroOrden, orden[0]["botellasPlanificadas"], orden[0]["cajasPlanificadas"])
+        monitoreo(numeroOrden, orden[0]["botellasPlanificadas"], orden[0]["cajasPlanificadas"], orden[0]["formatoCaja"])
     }
     
     /*for (var i = 0; ordenes != null && i < ordenes.length; i++) {

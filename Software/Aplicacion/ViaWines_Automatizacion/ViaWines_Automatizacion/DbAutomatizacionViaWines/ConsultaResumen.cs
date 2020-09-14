@@ -11,12 +11,12 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
 {
     public class ConsultaResumen
     {
-
+        /*SE DEBE MODIFICAR*/
         public static List<String> LeerFechasOrdenes()
         {
             try
             {
-                var command = new SqlCommand() { CommandText = "Leer_Fechas_Planificadas_Realizadas", CommandType = System.Data.CommandType.StoredProcedure };
+                var command = new SqlCommand() { CommandText = "Leer_Fechas_Resumen", CommandType = System.Data.CommandType.StoredProcedure };
                 var datos = ContexDb.GetDataSet(command);
                 List<String> fechas = new List<String>();
 
@@ -26,7 +26,6 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                     {
                         var prodData = row;
                         DateTime fecha = Convert.ToDateTime(prodData["fechaFabricacion"]);
-                        //String date = DateTime.ParseExact(prodData["fechaFabricacion"].ToString(), "MM/dd/yyyy", CultureInfo.InstalledUICulture).ToString("MM/dd/yyyy"); 
                         String FechaFabricacion = fecha.Month + "/" + fecha.Day + "/" + fecha.Year;
                         fechas.Add(FechaFabricacion);
                     }
@@ -42,13 +41,15 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
         }
 
         /**
-         * Obtiene las ordenes del día
+         * Obtiene las ordenes del día (MODIFICADA)
          **/
         public static List<Orden> LeerOrdenes(String fecha)
         {
             try
             {
-                var command = new SqlCommand() { CommandText = "Leer_Ordenes_Del_Día", CommandType = System.Data.CommandType.StoredProcedure };
+                //var command = new SqlCommand() { CommandText = "Leer_Ordenes_Del_Día", CommandType = System.Data.CommandType.StoredProcedure };
+                var command = new SqlCommand() { CommandText = "Leer_Ordenes_Resumen", CommandType = System.Data.CommandType.StoredProcedure };
+                
                 command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = fecha });
                 
                 var datos = ContexDb.GetDataSet(command);
@@ -75,14 +76,15 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                             Secuencia = Convert.ToInt32(prodData["secuencia"]),
                             FechaHoraInicio = Convert.ToDateTime(prodData["fechaHoraInicio"]),
                             FechaHoraTermino = Convert.ToDateTime(prodData["fechaHoraTermino"]),
+                            Formato = prodData["formatoCaja"].ToString(),
                             PorcentajeAvance = 0,
                             CajasFabricadas = 0,
                             BotellasFabricadas = 0
 
                         };
 
-                        int CantBotellas = LeerCantBotellas(fecha, orden.OrdenFabricacion);
-                        int CantCajas = LeerCantCajas(fecha, orden.OrdenFabricacion);
+                        int CantBotellas = LeerCantMaterial(fecha, orden.OrdenFabricacion, "Botella");
+                        int CantCajas = LeerCantMaterial(fecha, orden.OrdenFabricacion, "Caja");
 
                         if (CantBotellas != -1)
                         {
@@ -108,26 +110,33 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             return null;
         }
 
-        public static int LeerCantCajas(String Fecha, int OrdenFabricacion)
+
+        /**
+         * IMPLEMENTADA
+         * Obtiene la cantidad de botellas o cajas contabilizadas segun el día, la orden de fabricación y el tipo.
+         * El tipo indica si es botella o cajas el material a contabilizar
+         */
+        public static int LeerCantMaterial(String Fecha, int OrdenFabricacion, String Tipo)
         {
             try
             {
-                var command = new SqlCommand() { CommandText = "Leer_Cantidad_Cajas", CommandType = System.Data.CommandType.StoredProcedure };
+                var command = new SqlCommand() { CommandText = "Leer_Cantidad_Material", CommandType = System.Data.CommandType.StoredProcedure };
                 command.Parameters.Add(new SqlParameter() { ParameterName = "OrdenFabricacion", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
                 command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "Tipo", Direction = System.Data.ParameterDirection.Input, Value = Tipo });
                 var datos = ContexDb.GetDataSet(command);
-                int cantCajas = 0;
+                int cantMaterial = 0;
 
                 if (datos.Tables[0].Rows.Count > 0)
                 {
                     foreach (System.Data.DataRow row in datos.Tables[0].Rows)
                     {
                         var prodData = row;
-                        cantCajas = Convert.ToInt32(prodData["cantCajas"]);
+                        cantMaterial = Convert.ToInt32(prodData["cantMaterial"]);
                     }
 
                 }
-                return cantCajas;
+                return cantMaterial;
 
             }
             catch (Exception ex)
@@ -137,96 +146,35 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             return -1;
         }
 
-        public static int LeerCantBotellas(String Fecha, int OrdenFabricacion)
-        {
-            try
-            {
-                var command = new SqlCommand() { CommandText = "Leer_Cantidad_Botellas", CommandType = System.Data.CommandType.StoredProcedure };
-                command.Parameters.Add(new SqlParameter() { ParameterName = "OrdenFabricacion", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
-                command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
-                var datos = ContexDb.GetDataSet(command);
-                int cantCajas = 0;
-
-                if (datos.Tables[0].Rows.Count > 0)
-                {
-                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
-                    {
-                        var prodData = row;
-                        cantCajas = Convert.ToInt32(prodData["cantBotellas"]);
-                    }
-
-                }
-                return cantCajas;
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-            return -1;
-        }
-
-        /*public static VelocidadProceso LeerVelocidad(String Fecha, String Hora, int OrdenFabricacion)
-        {
-            try
-            {
-                var command = new SqlCommand() { CommandText = "Leer_Velocidad", CommandType = System.Data.CommandType.StoredProcedure };
-                command.Parameters.Add(new SqlParameter() { ParameterName = "RefOrden", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
-                command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
-                command.Parameters.Add(new SqlParameter() { ParameterName = "Hora", Direction = System.Data.ParameterDirection.Input, Value = Hora });
-                var datos = ContexDb.GetDataSet(command);
-                VelocidadProceso velocidad = new VelocidadProceso() { Fecha = Fecha, Hora = Hora, cantBotellas = 0, cantCajas = 0 };
-                if (datos.Tables[0].Rows.Count > 0)
-                {
-                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
-                    {
-                        var prodData = row;
-                        if (prodData["cantBotellas"] != null)
-                        {
-                            velocidad.cantBotellas = Convert.ToInt32(prodData["cantBotellas"]);
-                        }
-
-                        if (prodData["cantCajas"] != null)
-                        {
-                            velocidad.cantCajas = Convert.ToInt32(prodData["cantCajas"]);
-                        }
-                    }
-                }
-                return velocidad;
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-            return null;
-        }*/
-
         /**
-         * Obtiene los el total de botellas fabricadas hasta el momento de la consulta y el total de botellas a fabricar.
-         * Devuelve un listado de los datos en donde la posicion 0 es la cantidad de botellas fabricadas hasta el momento
-         * y la posicion 1 es la cantidad de botellas planificadas a producir. En caso que se produzca un error se envía null
-         **/
-        public static List<int> LeerCantBotellasDia(String Fecha)
+         * IMPLEMENTADA
+         * Obtiene el total de cajas o botellas fabricadas hasta el momento de la consulta y el total de cajas o botellas a fabricar.
+         * Devuelve un listado de los datos en donde la posicion 0 es la cantidad de cajas o cajsa fabricadas hasta el momento
+         * y la posicion 1 es la cantidad de cajas o botellas planificadas a producir. En caso que se produzca un error se envía null
+         * 
+         * tipo puede ser 1 cuando es botellas o 2 cuando es cajas
+         */
+        public static List<int> LeerCantMaterialDia(String Fecha, String Tipo)
         {
             try
             {
-                var command = new SqlCommand() { CommandText = "Leer_Cant_Botellas_Dia", CommandType = System.Data.CommandType.StoredProcedure };
+                var command = new SqlCommand() { CommandText = "Leer_Cant_Material_Dia", CommandType = System.Data.CommandType.StoredProcedure };
                 command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "Tipo", Direction = System.Data.ParameterDirection.Input, Value = Tipo });
                 var datos = ContexDb.GetDataSet(command);
-                List<int> indicadorBotella = new List<int>{ 0,0};
+                List<int> indicadorMaterial = new List<int> { 0, 0 };
 
                 if (datos.Tables[0].Rows.Count > 0)
                 {
                     foreach (System.Data.DataRow row in datos.Tables[0].Rows)
                     {
                         var prodData = row;
-                        indicadorBotella[0] = Convert.ToInt32(prodData["cantBotellas"]);
-                        indicadorBotella[1] = Convert.ToInt32(prodData["totalBotellasPlanificadas"]);
+                        indicadorMaterial[0] = Convert.ToInt32(prodData["cantMaterial"]);
+                        indicadorMaterial[1] = Convert.ToInt32(prodData["totalMaterialPlanificado"]);
                     }
 
                 }
-                return indicadorBotella;
+                return indicadorMaterial;
 
             }
             catch (Exception ex)
@@ -236,39 +184,6 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             return null;
         }
 
-        /**
-         * Obtiene el total de cajas fabricadas hasta el momento de la consulta y el total de cajas a fabricar.
-         * Devuelve un listado de los datos en donde la posicion 0 es la cantidad de cajas fabricadas hasta el momento
-         * y la posicion 1 es la cantidad de cajas planificadas a producir. En caso que se produzca un error se envía null
-         **/
-        public static List<int> LeerCantCajasDia(String Fecha)
-        {
-            try
-            {
-                var command = new SqlCommand() { CommandText = "Leer_Cant_Cajas_Dia", CommandType = System.Data.CommandType.StoredProcedure };
-                command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
-                var datos = ContexDb.GetDataSet(command);
-                List<int> indicadorCaja = new List<int> { 0, 0 };
-
-                if (datos.Tables[0].Rows.Count > 0)
-                {
-                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
-                    {
-                        var prodData = row;
-                        indicadorCaja[0] = Convert.ToInt32(prodData["cantCajas"]);
-                        indicadorCaja[1] = Convert.ToInt32(prodData["totalCajasPlanificadas"]);
-                    }
-
-                }
-                return indicadorCaja;
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-            return null;
-        }
 
 
         /**
@@ -304,112 +219,14 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             return null;
         }
 
-        /*public static List<Objeto> LeerCantBotellasHora(String Fecha)
+        public static int LeerVelocidadMaterial(string FechaActual, string FechaFabricacion, string Hora, int OrdenFabricacion, string TipoMaterial)
         {
             try
             {
-                var command = new SqlCommand() { CommandText = "Leer_Cant_Botellas_Por_Hora", CommandType = System.Data.CommandType.StoredProcedure };
-                command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
-                var datos = ContexDb.GetDataSet(command);
-                List<Objeto> ListaBotellasHora = null;
-
-                if (datos.Tables[0].Rows.Count > 0)
-                {
-                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
-                    {
-                        var prodData = row;
-                        var cantBotellasHora = new Objeto()
-                        {
-                            Hora = prodData["hora"].ToString(),
-                            Cantidad = Convert.ToInt32(prodData["cantBotellas"])
-                        };
-                        ListaBotellasHora.Add(cantBotellasHora);
-                    }
-
-                }
-                return ListaBotellasHora;
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-            finally
-            {
-
-            }
-            return null;
-        }*/
-
-        /*public static int LeerVelocidadBotellas(String Fecha, String Hora, int OrdenFabricacion)
-        {
-            try
-            {
-                var command = new SqlCommand() { CommandText = "Leer_Velocidad_Botellas", CommandType = System.Data.CommandType.StoredProcedure };
+                var command = new SqlCommand() { CommandText = "Leer_Velocidad_Material1", CommandType = System.Data.CommandType.StoredProcedure };
                 command.Parameters.Add(new SqlParameter() { ParameterName = "RefOrden", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
-                command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
-                command.Parameters.Add(new SqlParameter() { ParameterName = "Hora", Direction = System.Data.ParameterDirection.Input, Value = Hora });
-                var datos = ContexDb.GetDataSet(command);
-                int cantBotellasMin = 0;
-                if (datos.Tables[0].Rows.Count > 0)
-                {
-                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
-                    {
-                        var prodData = row;
-                        if (prodData["cantBotellas"] != null)
-                        {
-                            cantBotellasMin = Convert.ToInt32(prodData["cantBotellas"]);
-                        }
-                    }
-                }
-                return cantBotellasMin;
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-            return -1;
-        }*/
-
-        /*public static int LeerVelocidadCajas(String Fecha, String Hora, int OrdenFabricacion)
-        {
-            try
-            {
-                var command = new SqlCommand() { CommandText = "Leer_Velocidad_Cajas", CommandType = System.Data.CommandType.StoredProcedure };
-                command.Parameters.Add(new SqlParameter() { ParameterName = "RefOrden", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
-                command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
-                command.Parameters.Add(new SqlParameter() { ParameterName = "Hora", Direction = System.Data.ParameterDirection.Input, Value = Hora });
-                var datos = ContexDb.GetDataSet(command);
-                int cantCajasMin = 0;
-                if (datos.Tables[0].Rows.Count > 0)
-                {
-                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
-                    {
-                        var prodData = row;
-                        if (prodData["cantCajas"] != null)
-                        {
-                            cantCajasMin = Convert.ToInt32(prodData["cantCajas"]);
-                        }
-                    }
-                }
-                return cantCajasMin;
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-            return -1;
-        }*/
-
-        public static int LeerVelocidadMaterial(string Fecha, string Hora, int OrdenFabricacion, string TipoMaterial)
-        {
-            try
-            {
-                var command = new SqlCommand() { CommandText = "Leer_Velocidad_Material", CommandType = System.Data.CommandType.StoredProcedure };
-                command.Parameters.Add(new SqlParameter() { ParameterName = "RefOrden", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
-                command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "FechaFabricacion", Direction = System.Data.ParameterDirection.Input, Value = FechaFabricacion });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "FechaActual", Direction = System.Data.ParameterDirection.Input, Value = FechaActual });
                 command.Parameters.Add(new SqlParameter() { ParameterName = "Hora", Direction = System.Data.ParameterDirection.Input, Value = Hora });
                 command.Parameters.Add(new SqlParameter() { ParameterName = "TipoMaterial", Direction = System.Data.ParameterDirection.Input, Value = TipoMaterial });
                 var datos = ContexDb.GetDataSet(command);
@@ -438,7 +255,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
         {
             try
             {
-                var command = new SqlCommand() { CommandText = "Leer_Material", CommandType = System.Data.CommandType.StoredProcedure };
+                var command = new SqlCommand() { CommandText = "Leer_Material_Resumen", CommandType = System.Data.CommandType.StoredProcedure };
                 command.Parameters.Add(new SqlParameter() { ParameterName = "OrdenFabricacion", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
                 /*El parametro fecha se debe eliminar ya que ahora extraerá todos los materiales tanto de dias anteriores como del dia actual y así saber el avance que tiene una orden*/
                 command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
@@ -469,45 +286,32 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             return null;
         }
 
-        public static List<Monitoreo> LeerMonitoreoMin(int OrdenFabricación, String fecha)
+        /**
+         * IMPLEMENTADA
+         * Obtiene la cantidad de botellas y cajas contabilizada por minuto o por hora segun sea el caso
+         * Para determinar si se obtiene la cantidad de material por minuto o por hora se considera la orden de fabricacion
+         * Si la orden de fabricacion es -1 significa que se pide la cantidad de material por hora
+         * Si la orden de fabricacion es distinta de -1 significa que se pide la cantidad de material por minuto
+         */
+        public static List<Monitoreo> LeerMonitoreo (String Fecha, int OrdenFabricacion)
         {
+            
             try
             {
-                var command = new SqlCommand() { CommandText = "Cant_Bot_Caj_Min_Orden", CommandType = System.Data.CommandType.StoredProcedure };
-                command.Parameters.Add(new SqlParameter() { ParameterName = "fecha", Direction = System.Data.ParameterDirection.Input, Value = fecha });
-                command.Parameters.Add(new SqlParameter() { ParameterName = "refOrden", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricación });
-                var datos = ContexDb.GetDataSet(command);
-                List<Monitoreo> monitoreos= new List<Monitoreo>();
-                if (datos.Tables[0].Rows.Count > 0)
+                SqlCommand command;
+
+                if (OrdenFabricacion != -1)
                 {
-                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
-                    {
-                        var prodData = row;
-                        var monitoreo = new Monitoreo()
-                        {
-                            Hora = prodData["hora"].ToString(),
-                            Botellas = Convert.ToInt32(prodData["botellas"]),
-                            Cajas = Convert.ToInt32(prodData["cajas"])
-                        };
-
-                        monitoreos.Add(monitoreo);
-                    }
-                    return monitoreos;
+                    command = new SqlCommand() { CommandText = "Cant_Bot_Caj_Min_Orden", CommandType = System.Data.CommandType.StoredProcedure };
+                    command.Parameters.Add(new SqlParameter() { ParameterName = "fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
+                    command.Parameters.Add(new SqlParameter() { ParameterName = "refOrden", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
                 }
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-            return null;
-        }
+                else
+                {
+                    command = new SqlCommand() { CommandText = "Cant_Bot_Caj_Hora_Orden", CommandType = System.Data.CommandType.StoredProcedure };
+                    command.Parameters.Add(new SqlParameter() { ParameterName = "fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
+                }
 
-        public static List<Monitoreo> LeerMonitoreoHora( String fecha)
-        {
-            try
-            {
-                var command = new SqlCommand() { CommandText = "Cant_Bot_Caj_Hora_Orden", CommandType = System.Data.CommandType.StoredProcedure };
-                command.Parameters.Add(new SqlParameter() { ParameterName = "fecha", Direction = System.Data.ParameterDirection.Input, Value = fecha });
                 var datos = ContexDb.GetDataSet(command);
                 List<Monitoreo> monitoreos = new List<Monitoreo>();
                 if (datos.Tables[0].Rows.Count > 0)
@@ -526,6 +330,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                     }
                     return monitoreos;
                 }
+
             }
             catch (Exception ex)
             {

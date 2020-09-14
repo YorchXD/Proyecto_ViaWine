@@ -30,5 +30,6 @@ namespace ViaWines_Automatizacion.Models
         public int Estado { get; set; }
         public int Secuencia { get; set; }
         public double PorcentajeAvance { get; set; }
+        public String Formato { get; set; }
     }
 }

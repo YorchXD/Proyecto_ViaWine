@@ -1,5 +1,6 @@
-﻿var modelo = "";
+﻿var modelo = null;
 var fecha = "";
+var mensajeOrdenGraficoMin = 0;
 
 function fechasOrdenes() {
     $.ajax({
@@ -37,6 +38,8 @@ function fechasOrdenes() {
 
 function buscarPlanificacion()
 {
+    modal = document.getElementById('myModal');
+    modal.style.display = "block";
     fecha = $("#datepicker").datepicker({ dateFormat: 'yy-mm-dd' }).val();
     var datos = {
         'fecha': fecha
@@ -47,22 +50,25 @@ function buscarPlanificacion()
         data: datos,
         dataType: 'json',
         success: function (data) {
+            modal.style.display = "none";
             resetearDatosOrden();
 
             if (!$.isEmptyObject(data)) {
-                var hoy = fechaActual();
+                //var hoy = fechaActual();
                 modelo = data;
-                if (fecha == hoy) {
+                iniciarOrdenesSelect(data);
+                /*if (fecha == hoy) {
                     iniciarOrdenesSelect(data);
                 }
                 else {
                     ordenesFechasAnteriores(data);
-                }
+                }*/
                 indicadoresDia();
-                indicadorCantCajasHora();
+                indicadorPorcCajasHora();
                 mostrarTablaOrdenes();
             }
             else {
+                modal.style.display = "none";
                 $('#title-alert').text("Alerta");
                 $('#body-alert').text("Aun no existen ordenes para la fecha " + fecha);
                 $("#modal-alerta").modal("show");
@@ -97,6 +103,7 @@ function resetearDatosOrden() {
     document.getElementById("cantBotellasPlan").innerHTML = "-";
     document.getElementById("estado").innerHTML = "-";
     document.getElementById("fechaPlan").innerHTML = "-";
+    document.getElementById("formatoCaja").innerHTML = "-";
 
     document.getElementById("cantBotellas").innerHTML = "-";
     document.getElementById("progresoBotellas").innerHTML = "<div class='progress-bar' style='width:" + 0 + "%'></div>";
@@ -104,7 +111,11 @@ function resetearDatosOrden() {
 
     document.getElementById("cantCajas").innerHTML = "-";
     document.getElementById("progresoCajas").innerHTML = "<div class='progress-bar' style='width:" + 0 + "%'></div>";
-    document.getElementById("porcentCajas").innerHTML = "-%";
+    document.getElementById("porcentCajas").innerHTML = "-% de avance";
+
+    document.getElementById("cantBotellasEquiv").innerHTML = "-";
+    document.getElementById("progresoBotellasEquiv").innerHTML = "<div class='progress-bar' style='width:" + 0 + "%'></div>";
+    document.getElementById("porcentBotellasEquiv").innerHTML = "-% de avance";
 
     document.getElementById("cantBotellasMin").innerHTML = "-";
     document.getElementById("cantCajasMin").innerHTML = "-";
@@ -114,23 +125,27 @@ function resetearDatosOrden() {
 
 function iniciarOrdenesSelect(modelo)
 {
+    modal = document.getElementById('myModal');
+    modal.style.display = "block";
     var opciones = '<option disabled selected value="null">Seleccione una orden</option>'
-    for (var i = 0; modelo!=null && i < modelo.length; i++)
-    {
-        
-        if (modelo[i]["estado"] == 1 || modelo[i]["estado"] == 2) {
+    if (modelo != null || modelo != "" || typeof modelo != 'undefined') {
+        for (var i = 0; i < modelo.length; i++) {
 
-            opciones += "<option value='" + modelo[i]["ordenFabricacion"] + "'selected>" + modelo[i]["ordenFabricacion"] + "</option>";
-            //$('#numeroOrden').append("<option value='" + modelo[i]["ordenFabricacion"] + "'selected>" + modelo[i]["ordenFabricacion"] + "</option>");
-            Orden(modelo[i]);
+            if (modelo[i]["estado"] == 1 || modelo[i]["estado"] == 2) {
+
+                opciones += "<option value='" + modelo[i]["ordenFabricacion"] + "'selected>" + modelo[i]["ordenFabricacion"] + "</option>";
+                //$('#numeroOrden').append("<option value='" + modelo[i]["ordenFabricacion"] + "'selected>" + modelo[i]["ordenFabricacion"] + "</option>");
+                Orden(modelo[i]);
+            }
+            else {
+                opciones += "<option value='" + modelo[i]["ordenFabricacion"] + "'>" + modelo[i]["ordenFabricacion"] + "</option>";
+                //$('#numeroOrden').append("<option value='" + modelo[i]["ordenFabricacion"] + "'>" + modelo[i]["ordenFabricacion"] + "</option>");
+            }
         }
-        else
-        {
-            opciones += "<option value='" + modelo[i]["ordenFabricacion"] + "'>" + modelo[i]["ordenFabricacion"] + "</option>";
-            //$('#numeroOrden').append("<option value='" + modelo[i]["ordenFabricacion"] + "'>" + modelo[i]["ordenFabricacion"] + "</option>");
-        }
+        $('#numeroOrden').empty().append(opciones);
     }
-    $('#numeroOrden').empty().append(opciones);
+    
+    modal.style.display = "none";
 }
 
 function ordenesFechasAnteriores(modelo)
@@ -146,6 +161,7 @@ function mostrarOrden()
 {
     var ordenSelect = document.getElementById("numeroOrden");
     var numeroOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
+    mensajeOrdenGraficoMin = 0;
 
     for (var i = 0; i < modelo.length; i++)
     {
@@ -168,6 +184,8 @@ function Orden(modelo) {
     //document.getElementById("horaInicioPlan").innerHTML = modelo["HoraInicioPlanificada"];
     //document.getElementById("horaTerminoPlan").innerHTML = modelo["HoraTerminoPlanificada"];
     document.getElementById("fechaPlan").innerHTML = (modelo["fechaFabricacion"]).split('T')[0];
+    document.getElementById("formatoCaja").innerHTML = modelo["formato"];
+    
     switch (modelo["estado"]) {
         case 0:
             document.getElementById("estado").innerHTML = 'No iniciada';
@@ -184,123 +202,48 @@ function Orden(modelo) {
         default:
             document.getElementById("estado").innerHTML = 'Finalizada';
     }
-    monitoreo(modelo["ordenFabricacion"], (modelo["fechaFabricacion"]).split('T')[0], modelo["botellasPlanificadas"], modelo["cajasPlanificadas"]);
+    monitoreo(modelo["ordenFabricacion"], fecha, modelo["fechaFabricacion"].split("T")[0], modelo["botellasPlanificadas"], modelo["cajasPlanificadas"], modelo["formato"]);
 
-
-    //BotCajMinHelper.CargarGrafico(modelo["OrdenFabricacion"]);
-    
-    //monitoreoPorMin(modelo["OrdenFabricacion"]);
-
-    //monitoreoBotellas(modelo["OrdenFabricacion"]);
-    //monitoreoCajas(modelo["OrdenFabricacion"]);
-    //indicadorCantCajas(modelo["OrdenFabricacion"], modelo["CajasPlanificadas"]);
-    //indicadorCantBotellas(modelo["OrdenFabricacion"], modelo["BotellasPlanificadas"]);
-    //indicadorVelocidadBotellas(modelo["OrdenFabricacion"]);
-    //indicadorVelocidadCajas(modelo["OrdenFabricacion"]);
-    //indicadoresVelocidad(modelo["OrdenFabricacion"]);
 }
-
-
-
-/*function monitoreoPorMin(OrdenFabricacion)
-{
-    $.ajax({
-        url: "/Resumen/GetMonitoreoOrden",
-        method: "POST",
-        data: { 'OrdenFabricacion': OrdenFabricacion},
-        success: function (data) {
-            console.log(data)
-        }
-    })
-
-}*/
-/*function indicadorCantCajas(OrdenFabricacion, CajasPlanificadas)
-{
-    var datos = {
-        'OrdenFabricacion': OrdenFabricacion,
-        'CajasPlanificadas': CajasPlanificadas
-    };
-    $.ajax({
-        url: "/Resumen/GetCantCajas",
-        method: "POST",
-        data: datos,
-        success: function (data) {
-            document.getElementById("cantCajas").innerHTML = data.cantCajas;
-            document.getElementById("progresoCajas").innerHTML = "<div class='progress-bar' style='width:" + data.porcentaje + "%'></div>";
-            document.getElementById("porcentCajas").innerHTML = "" + data.porcentaje + "% de avance";
-            console.log(data)
-        }
-    })
-}
-
-function indicadorCantBotellas(OrdenFabricacion, BotellasPlanificadas)
-{
-    var datos = {
-        'OrdenFabricacion': OrdenFabricacion,
-        'BotellasPlanificadas': BotellasPlanificadas
-    };
-    $.ajax({
-        url: "/Resumen/GetCantBotellas",
-        method: "POST",
-        data: datos,
-        success: function (data) {
-            document.getElementById("cantBotellas").innerHTML = data.cantBotellas;
-            document.getElementById("progresoBotellas").innerHTML = "<div class='progress-bar' style='width:" + data.porcentaje + "%'></div>";
-            document.getElementById("porcentBotellas").innerHTML = "" + data.porcentaje + "% de avance";
-            console.log(data)
-        }
-    })
-}*/
-
-/*function indicadoresVelocidad(OrdenFabricacion)
-{
-    var datos = {
-        'OrdenFabricacion': OrdenFabricacion
-    };
-    $.ajax({
-        url: "/Resumen/GetVelocidad",
-        method: "POST",
-        data: datos,
-        success: function (data) {
-            document.getElementById("cantBotellasMin").innerHTML = data.cantBotellas;
-            document.getElementById("cantCajasMin").innerHTML = data.cantCajas;
-            console.log(data)
-        }
-    })
-}*/
 
 
 function indicadorCantBotellasDia() {
+    modal = document.getElementById('myModal');
+    modal.style.display = "block";
     $.ajax({
-        url: "/Resumen/GetCantBotellasDia",
+        url: "/Resumen/GetCantMaterialDia",
         method: "POST",
-        data: { 'fecha': fecha },
+        data: { 'Fecha': fecha, 'Tipo' : 'Botella' },
         success: function (data) {
-            document.getElementById("cantBotellasDia").innerHTML = data.cantBotellas;
+            document.getElementById("cantBotellasDia").innerHTML = data.cantMaterial;
             document.getElementById("progresoBotellasDia").innerHTML = "<div class='progress-bar' style='width:" + data.porcentaje + "%'></div>";
             document.getElementById("porcentBotellasDia").innerHTML = "" + data.porcentaje + "% de avance";
-            console.log(data)
+            modal.style.display = "none";
+            //console.log(data)
         }
     })
 }
 
 function indicadorCantCajasDia() {
-
+    modal = document.getElementById('myModal');
+    modal.style.display = "block";
     $.ajax({
-        url: "/Resumen/GetCantCajasDia",
+        url: "/Resumen/GetCantMaterialDia",
         method: "POST",
-        data: { 'fecha': fecha },
+        data: { 'Fecha': fecha, 'Tipo': 'Caja' },
         success: function (data) {
-            document.getElementById("cantCajasDia").innerHTML = data.cantCajas;
+            document.getElementById("cantCajasDia").innerHTML = data.cantMaterial;
             document.getElementById("progresoCajasDia").innerHTML = "<div class='progress-bar' style='width:" + data.porcentaje + "%'></div>";
             document.getElementById("porcentCajasDia").innerHTML = "" + data.porcentaje + "% de avance";
-            console.log(data)
+            modal.style.display = "block";
+            //console.log(data)
         }
     })
 }
 
 function indicadorCantOrdenesDia() {
-
+    modal = document.getElementById('myModal');
+    modal.style.display = "block";
     $.ajax({
         url: "/Resumen/GetCantOrdenesDia",
         method: "POST",
@@ -309,22 +252,25 @@ function indicadorCantOrdenesDia() {
             document.getElementById("cantOrdenesDia").innerHTML = data.cantOrdenes;
             document.getElementById("progresoOrdenesDia").innerHTML = "<div class='progress-bar' style='width:" + data.porcentaje + "%'></div>";
             document.getElementById("porcentOrdenesDia").innerHTML = "" + data.porcentaje + "% de avance";
-            console.log(data)
+            modal.style.display = "none";
+            //console.log(data)
         }
     })
 }
 
-function indicadorCantCajasHora() {
-
+function indicadorPorcCajasHora() {
+    modal = document.getElementById('myModal');
+    modal.style.display = "block";
     $.ajax({
-        url: "/Resumen/GetCantCajasDia",
+        url: "/Resumen/GetCantMaterialDia",
         method: "POST",
-        data: {'fecha': fecha},
+        data: { 'Fecha': fecha, 'Tipo': 'Caja' },
         success: function (data) {
             var hoy = new Date();
             document.getElementById("porcentajePorHora").innerHTML = "" + data.porcentaje + "%";
             document.getElementById("progresoPorHora").innerHTML = "<div class='progress-bar' style='width:" + data.porcentaje + "%'></div>";
             document.getElementById("horaPorcentaje").innerHTML = "Hora del avance: " + hoy.getHours() + ":00";
+            modal.style.display = "none";
         }
     })
 }
@@ -381,6 +327,12 @@ function mostrarTablaOrdenes() {
             { "data": "secuencia" },
             { "data": "ordenFabricacion" },
             { "data": "cliente" },
+            {
+                "data": "fechaFabricacion", render: function (d, type, full, meta) {
+                    var fecha = moment(new Date(d)).format('YYYY-MM-DD');
+                    return fecha;
+                }
+            },
             {
                 "data": "estado", "render": function (estado) {
                     var estadoAux = "";
@@ -462,43 +414,6 @@ function mostrarTablaOrdenes() {
     });
 }
 
-/*function indicadorVelocidadBotellas(OrdenFabricacion) {
-    var datos = {
-        'OrdenFabricacion': OrdenFabricacion
-    };
-    $.ajax({
-        url: "/Resumen/GetVelocidadBotellas",
-        method: "POST",
-        data: datos,
-        success: function (data) {
-            document.getElementById("cantBotellasMin").innerHTML = data;
-            console.log(data)
-        }
-    })
-}
-
-function indicadorVelocidadCajas(OrdenFabricacion) {
-    var datos = {
-        'OrdenFabricacion': OrdenFabricacion
-    };
-    $.ajax({
-        url: "/Resumen/GetVelocidadCajas",
-        method: "POST",
-        data: datos,
-        success: function (data) {
-            document.getElementById("cantCajasMin").innerHTML = data;
-            console.log(data)
-        }
-    })
-}*/
-
-
-
-
-
-
-
-
 
 /**
  * Ayuda a obtener la cantidad de cajas y botellas para insertarla en los indicadores correspondiente. Ademas ayuda a la creacion de las tablas que 
@@ -508,38 +423,40 @@ function indicadorVelocidadCajas(OrdenFabricacion) {
  * @param {int} botellasPlan
  * @param {int} cajasPlan
  */
-function monitoreo(OrdenFabricacion, Fecha, botellasPlan, cajasPlan) {
+function monitoreo(ordenFabricacion, fechaActual, fechaFabricacion, botellasPlan, cajasPlan, formato) {
+    modal = document.getElementById('myModal');
+    modal.style.display = "block";
     var datos = {
-        'OrdenFabricacion': OrdenFabricacion,
-        'Fecha': Fecha
+        'OrdenFabricacion': ordenFabricacion,
+        'Fecha': fechaActual
     };
     $.ajax({
         url: "/Resumen/GetMonitoreoMateriales",
         method: "POST",
         data: datos,
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             var botellas = {};
             var cajas = {};
             var cantBotellas = 0;
             var cantCajas = 0;
+            var botellasEquiv = 0;
+            var cantBotellasCajas = parseInt(formato.split("x")[0]);
             if (Object.entries(data).length!=0)
             {
                 botellas = data.filter(element => element.tipo == "Botella");
                 cajas = data.filter(element => element.tipo == "Caja");
                 cantBotellas = botellas.length;
                 cantCajas = cajas.length;
+                botellasEquiv = cantCajas*cantBotellasCajas
             }
-            
-            //console.log(botellas);
-            //console.log(cajas);
-            //console.log(cantBotellas);
-            //console.log(cantCajas);
+            modal.style.display = "none";
             indicadorCantBotellas1(cantBotellas, botellasPlan);
             indicadorCantCajas1(cantCajas, cajasPlan);
-            indicadorVelocidadPorMin(OrdenFabricacion, 'botella');
-            indicadorVelocidadPorMin(OrdenFabricacion, 'caja');
-            BotCajMinHelper.CargarGrafico(OrdenFabricacion);
+            indicadorCantBotellasEquiv1(botellasEquiv, botellasPlan);
+            indicadorVelocidadPorMin(ordenFabricacion, 'Botella', fechaFabricacion);
+            indicadorVelocidadPorMin(ordenFabricacion, 'Caja', fechaFabricacion);
+            BotCajMinHelper.CargarGrafico(ordenFabricacion);
         }
     })
 }
@@ -591,23 +508,38 @@ function indicadorCantCajas1(cantCajas, cajasPlan) {
     document.getElementById("porcentCajas").innerHTML = "" + porcentaje + "% de avance";
 }
 
-function indicadorVelocidadPorMin(OrdenFabricacion, tipoMaterial) {
+/**
+ * Inserta la cantidad de botellas equivalentes respecto a la cantidad de cajas contabilizadas segun lo planificado
+ * @param {any} cantBotellasEquiv
+ * @param {any} botellasPlan
+ */
+function indicadorCantBotellasEquiv1(cantBotellasEquiv, botellasPlan) {
+    porcentaje = roundToTwo((cantBotellasEquiv * 100.0) / botellasPlan);
+    document.getElementById("cantBotellasEquiv").innerHTML = cantBotellasEquiv;
+    document.getElementById("progresoBotellasEquiv").innerHTML = "<div class='progress-bar' style='width:" + porcentaje + "%'></div>";
+    document.getElementById("porcentBotellasEquiv").innerHTML = "" + porcentaje + "% de avance";
+}
+
+function indicadorVelocidadPorMin(ordenFabricacion, tipoMaterial, fechaFabricacion) {
+    modal = document.getElementById('myModal');
+    modal.style.display = "block";
     var datos = {
-        'OrdenFabricacion': OrdenFabricacion,
-        'TipoMaterial': tipoMaterial
+        'OrdenFabricacion': ordenFabricacion,
+        'TipoMaterial': tipoMaterial,
+        'FechaFabricacion': fechaFabricacion
     };
     $.ajax({
-        url: "/Proceso/GetVelocidadPorMin",
+        url: "/Resumen/GetVelocidadPorMin",
         method: "POST",
         data: datos,
         success: function (data) {
-            if (tipoMaterial == "botella") {
+            if (tipoMaterial == "Botella") {
                 document.getElementById("cantBotellasMin").innerHTML = data;
             }
             else {
                 document.getElementById("cantCajasMin").innerHTML = data;
             }
-
+            modal.style.display = "none";
             //console.log(data)
         }
     })
@@ -616,13 +548,41 @@ function indicadorVelocidadPorMin(OrdenFabricacion, tipoMaterial) {
 /*GRAFICO POR MINUTO */
 var AdministradorBotCajMin = {
     GetChartData: function (ordenFabricacion) {
+
+        /*var fechaSolPart = ("2020-09-10").split("-");
+        var fechaSol = new Date(fechaSolPart[0], fechaSolPart[1] - 1, fechaSolPart[2]);
+        var fechaActAux = fechaActual();
+        var fechaActualPart = fechaActAux.split("-");
+        var fechaAct = new Date(fechaActualPart[0], fechaActualPart[1]-1, fechaActualPart[2])
+
+        console.log("Comparación de fechas")
+        console.log("fecha enviada: " + fechaSol.getTime());
+        console.log("fecha actual: " + fechaAct.getTime());
+
+        if (fechaSol > fechaAct) {
+            console.log("La fecha solicitda es mayor a la actual");
+        }
+        else if (fechaSol.getTime() === fechaAct.getTime()) {
+            console.log("La fecha solicitada es igual a la actual");
+        }
+        else {
+            console.log("La fecha solicitada es menor a la actual");
+        }*/
+
         var objProd = "";
-        var jsonParams = { 'OrdenFabricacion': ordenFabricacion, 'fecha': fecha };
-        var serviceUrl = "/Resumen/GetMonitoreoMin/";
+        var jsonParams = { 'Fecha': fecha , 'OrdenFabricacion': ordenFabricacion};
+        var serviceUrl = "/Resumen/GetMonitoreo/";
         AdministradorBotCajMin.GetJsonResult(serviceUrl, jsonParams, false, false, onSuccess, onFailed);
 
         function onSuccess(jsonData) {
             objProd = jsonData;
+            if (Object.keys(objProd).length == 0 && mensajeOrdenGraficoMin == 0) {
+                mensajeOrdenGraficoMin = 1;
+                $('#title-confirm').text("Monitoreo por minuto");
+                $('#body-confirm').text("No existen registros para la orden seleccionada. Puede que aún no se haya iniciado o se encuentre finalizada en una fecha anterior.");
+                $("#modal-confirm").modal("show");
+            }
+            
         }
 
         function onFailed(error) {
@@ -633,10 +593,10 @@ var AdministradorBotCajMin = {
 
     GetJsonResult: function (serviceUrl, jsonParams, isAsync, isCache, successCallback, errorCallback) {
         $.ajax({
+            url: serviceUrl,
             method: "GET",
             async: isAsync,
             cache: isCache,
-            url: serviceUrl,
             data: jsonParams,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -733,8 +693,8 @@ var BotCajMinHelper = {
 var AdministradorBotCajHora = {
     GetChartData: function () {
         var objProd = "";
-        var jsonParams = { 'fecha': fecha };
-        var serviceUrl = "/Resumen/GetMonitoreoHora/";
+        var jsonParams = { 'Fecha': fecha, 'OrdenFabricacion':-1 };
+        var serviceUrl = "/Resumen/GetMonitoreo/";
         AdministradorBotCajHora.GetJsonResult(serviceUrl, jsonParams, false, false, onSuccess, onFailed);
 
         function onSuccess(jsonData) {
@@ -749,10 +709,10 @@ var AdministradorBotCajHora = {
 
     GetJsonResult: function (serviceUrl, jsonParams, isAsync, isCache, successCallback, errorCallback) {
         $.ajax({
+            url: serviceUrl,
             method: "GET",
             async: isAsync,
             cache: isCache,
-            url: serviceUrl,
             data: jsonParams,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -844,15 +804,18 @@ var BotCajHoraHelper = {
 function actualizarIndicadores() {
     var ordenSelect = document.getElementById("numeroOrden");
     var numeroOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
-    for (var i = 0; (modelo != null || modelo != "") && i < modelo.length; i++) {
-        if (numeroOrden == modelo[i]["ordenFabricacion"] && modelo[i]["estado"] == 1) {
-            monitoreo(modelo[i]["ordenFabricacion"], (modelo[i]["fechaFabricacion"]).split('T')[0], modelo[i]["botellasPlanificadas"], modelo[i]["cajasPlanificadas"]);
-            break;
+    if (modelo != null || modelo != "" || typeof modelo != 'undefined') {
+        for (var i = 0; i < modelo.length; i++) {
+            if (numeroOrden == modelo[i]["ordenFabricacion"] && modelo[i]["estado"] == 1) {
+                monitoreo(modelo[i]["ordenFabricacion"], (modelo[i]["fechaFabricacion"]).split('T')[0], modelo[i]["botellasPlanificadas"], modelo[i]["cajasPlanificadas"], modelo[i]["formato"]);
+                break;
+            }
         }
+        indicadoresDia();
+        document.getElementById("horaActualizacionIndicadoresOrden").innerHTML = obtenerHora();
+        document.getElementById("horaActualizacionIndicadoresDia").innerHTML = obtenerHora();
     }
-    indicadoresDia();
-    document.getElementById("horaActualizacionIndicadoresOrden").innerHTML = obtenerHora();
-    document.getElementById("horaActualizacionIndicadoresDia").innerHTML = obtenerHora();
+    
 
 
 }

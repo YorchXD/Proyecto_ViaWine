@@ -46,7 +46,7 @@
         <div class="col-lg-12 text-right">
             <p style="color:black;">Última actualización: <span id="horaActualizacionIndicadoresOrden">--:--</span>hrs</p>
         </div>
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="col-md-4 col-sm-6 col-xs-12">
             <div class="info-box bg-gray">
                 <span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
 
@@ -65,7 +65,7 @@
         </div>
         <!-- ./col -->
 
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="col-md-4 col-sm-6 col-xs-12">
             <div class="info-box bg-gray">
                 <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
 
@@ -85,7 +85,27 @@
             <!-- /.info-box -->
         </div>
         <!-- ./col -->
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="col-md-4 col-sm-12 col-xs-12">
+            <div class="info-box bg-gray">
+                <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Botellas equivalentes</span>
+                    <span class="info-box-number" id="cantBotellasEquiv">-</span>
+
+                    <div class="progress" id="progresoBotellasEquiv">
+                        <!--div class="progress-bar" style="width: 70%"></div-->
+                    </div>
+                    <span class="progress-description" id="porcentBotellasEquiv">
+                        -% de avance
+                    </span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- ./col -->
+        <div class="col-md-6 col-sm-6 col-xs-12">
             <div class="info-box">
                 <span class="info-box-icon"><i class="fa fa-star-o"></i></span>
 
@@ -98,7 +118,7 @@
             <!-- /.info-box -->
         </div>
         <!-- ./col -->
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="col-md-6 col-sm-6 col-xs-12">
             <div class="info-box">
                 <span class="info-box-icon"><i class="fa fa-files-o"></i></span>
 
@@ -146,21 +166,23 @@
                 <div class="box-body">
                     <dl class="dl-horizontal">
                         <dt>SKU</dt>
-                        <dd id="SKU"></dd>
+                        <dd id="SKU">-</dd>
                         <dt>Descripción del producto</dt>
-                        <dd id="descripcionProducto"></dd>
+                        <dd id="descripcionProducto">-</dd>
                         <dt>Cantidad de cajas planificadas</dt>
-                        <dd id="cantCajasPlan"></dd>
+                        <dd id="cantCajasPlan">-</dd>
                         <dt>Cantidad de botellas planificadas</dt>
-                        <dd id="cantBotellasPlan"></dd>
+                        <dd id="cantBotellasPlan">-</dd>
                         <dt>Hora de inicio planificada</dt>
-                        <dd id="horaInicioPlan"></dd>
+                        <dd id="horaInicioPlan">-</dd>
                         <dt>Hora de término planificada</dt>
-                        <dd id="horaTerminoPlan"></dd>
+                        <dd id="horaTerminoPlan">-</dd>
                         <dt>Fecha planificada</dt>
-                        <dd id="fechaPlan"></dd>
+                        <dd id="fechaPlan">-</dd>
+                        <dt>Formato de caja</dt>
+                        <dd id="formatoCaja">-</dd>
                         <dt>Estado</dt>
-                        <dd id="estado"></dd>
+                        <dd id="estado">-</dd>
 
                     </dl>
                 </div>
