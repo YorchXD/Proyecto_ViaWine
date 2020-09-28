@@ -70,7 +70,7 @@
                 <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
 
                 <div class="info-box-content">
-                    <span class="info-box-text">Cajas finalizadas</span>
+                    <span class="info-box-text">Cajas contabilizadas</span>
                     <span class="info-box-number" id="cantCajas">-</span>
 
                     <div class="progress" id="progresoCajas">
@@ -153,6 +153,7 @@
             <div class="col-lg-12 col-md-12 col-sm-6 col-xs-6" style="padding:1%;">
                 <button type="button" id="btnFinalizar" class="btn btn-block bg-olive" style="height:45px">Finalizar</button>
             </div>
+
         </div>
         <!-- ./col -->
 
@@ -240,7 +241,7 @@
         <!-- /.col -->
     </div>
     <!-- /.row -->
-
+    <!---------------------------Modals de pausa---------------------------------->
     <div class="modal fade" id="modal-inicio">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -263,8 +264,8 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
-
-
+    <!---------------------------Fin modals de pausa---------------------------------->
+    <!---------------------------Modals de pausa---------------------------------->
     <div class="modal fade" id="modal-pausar">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -287,8 +288,8 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
-
-
+    <!---------------------------Fin modals de pausa---------------------------------->
+    <!---------------------------Modals de posponer---------------------------------->
     <div class="modal fade" id="modal-posponer">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -311,8 +312,8 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
-
-
+    <!---------------------------Fin modals de posponer---------------------------------->
+    <!---------------------------Modals de finalizar---------------------------------->
     <div class="modal fade" id="modal-finalizar">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -335,8 +336,102 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
+    <!---------------------------Fin modals de finalizar---------------------------------->
 
+    <div class="modal fade" data-backdrop="static" data-keyboard="false" id="modal-Incidencia">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div id="modal-header-incicente" class="modal-header bg-orange">
+                    <h4 class="modal-title" id="title-incidencia">Ingreso de incidencia</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <select class="form-control select2" style="width: 100%;" id="opcionIncidencia" onchange="tipoIngresoIncidencia()">
+                            <option selected value="1">Ingresar incidencia por código</option>
+                            <option value="2">Ingresar incidencia por formulario</option>
+                        </select>
+                    </div>
 
+                    <!---------------------------incidencia por codigo---------------------------------->
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="codigoIncidenciadiv">
+                        <select class="form-control select2" style="width: 100%;" id="codigoIncidencia" onchange="mostrarIncidenciaCodigo()">
+                            <option disabled selected value="-1">Seleccione el código de la incidencia</option>
+                        </select>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="descripcionIncidente1">
+                        <div class="box box-solid">
+                            <div class="box-header with-border">
+                                <i class="fa fa-text-width"></i>
+                                <h3 class="box-title">Detalle de la incidencia</h3>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <dl class="dl-horizontal">
+                                    <dt>Tipo de tiempo</dt>
+                                    <dd id="nombreAgrupacionTiempo1">-</dd>
+                                    <dt>Clasificación</dt>
+                                    <dd id="descripcionClasificacion1">-</dd>
+                                    <dt>Aclaración</dt>
+                                    <dd id="aclaracionClasificacion1">-</dd>
+                                    <dt>Nombre zona</dt>
+                                    <dd id="nombreZona1">-</dd>
+                                </dl>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    <!-- ./col -->
+                    <!---------------------------fin incidencia por codigo---------------------------------->
+                    <!---------------------------incidencia por formulario---------------------------------->
+                    <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12" id="tiempodiv">
+                        <select class="form-control select2" style="width: 100%;" id="tiempo" onchange="iniciarSelectClasificacionIncidencia()">
+                            <option disabled selected value="null">Seleccione el tipo de tiempo</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12" id="clasificaciondiv">
+                        <select class="form-control select2" style="width: 100%;" id="clasificacion" onchange="mostrarIncidenciaCodigo1()">
+                            <option disabled selected value="null">Seleccione la clasificación</option>
+                        </select>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="descripcionIncidente2">
+                        <div class="box box-solid">
+                            <div class="box-header with-border">
+                                <i class="fa fa-text-width"></i>
+                                <h3 class="box-title">Detalle de la incidencia</h3>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <dl class="dl-horizontal">
+                                    <dt>Aclaración</dt>
+                                    <dd id="aclaracionClasificacion2">-</dd>
+                                    <dt>Nombre zona</dt>
+                                    <dd id="nombreZona2">-</dd>
+                                </dl>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    <!-- ./col -->
+                    <!---------------------------fin incidencia por formulario---------------------------------->
+
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="observaciondiv">
+                        <input class="form-control" type="text" placeholder="Ingrese una observación clara de la falla..." id="observacion">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!--button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button-->
+                    <button type="button" id="btnConfirmarIncidencia" class="btn bg-black">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 
     <div class="modal fade" id="modal-alerta">
         <div class="modal-dialog">
@@ -363,7 +458,7 @@
     <div class="modal fade" id="modal-confirm">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header bg-purple">
+                <div id="modal-header-confirm" class="modal-header bg-purple">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -399,17 +494,6 @@
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 <script type="text/javascript" src="~/js/proceso.js"></script>
 
-<script>
-    $('#btnInicio').click(function () { exist_proces_ini(1); });
-    $('#btnInicioProceso').click(function () { Actualizar_Estado(1); });
-    $('#btnPausar').click(function () { exist_proces_ini(2); });
-    $('#btnPausarProceso').click(function () { Actualizar_Estado(2); });
-    $('#btnPosponer').click(function () { exist_proces_ini(3); });
-    $('#btnPosponerProceso').click(function () { Actualizar_Estado(3); });
-    $('#btnFinalizar').click(function () { exist_proces_ini(4); });
-    $('#btnFinalizarProceso').click(function () { Actualizar_Estado(4); });
-    $('#btnConfirm').click(function () { location.reload(); });
-</script>
 
 <style>
     .ordenesDia a {
@@ -503,6 +587,7 @@
         $.fn.DataTable.ext.pager.numbers_length = 4;
         //cambiarTipo();
         obtenerOrdenesAbiertas();
+        obtenerInicidencias();
     });
 </script>
 

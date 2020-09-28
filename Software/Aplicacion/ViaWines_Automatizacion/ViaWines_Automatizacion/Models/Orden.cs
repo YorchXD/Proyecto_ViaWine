@@ -9,6 +9,7 @@ namespace ViaWines_Automatizacion.Models
 {
     public class Orden
     {
+        public int Id { get; set; }
         public int OrdenFabricacion { get; set; }
         public string Version { get; set; }
         public string Cliente { get; set; }

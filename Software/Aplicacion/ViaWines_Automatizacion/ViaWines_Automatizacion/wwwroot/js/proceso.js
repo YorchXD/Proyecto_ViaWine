@@ -1,6 +1,170 @@
 ﻿var ordenes = "";
+var incidentes = "";
+var incidenteSeleccionado = "";
 var fecha = "";
 var modal = "";
+var cantCajasPlanAux = 0;
+var cantCajasAux=0
+
+$('#btnInicio').click(function () { exist_proces_ini(1); });
+$('#btnInicioProceso').click(function () {
+    var ordenSelect = document.getElementById("numeroOrden");
+    var idOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
+    Finalizar_Incidencia(idOrden);
+    Actualizar_Estado(1);
+});
+$('#btnPausar').click(function () {
+    exist_proces_ini(2);
+});
+$('#btnPausarProceso').click(function () {
+    Actualizar_Estado(2);
+});
+$('#btnPosponer').click(function () { exist_proces_ini(3); });
+$('#btnPosponerProceso').click(function () {
+    var ordenSelect = document.getElementById("numeroOrden");
+    var idOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
+    Finalizar_Incidencia(idOrden);
+    Actualizar_Estado(3);
+});
+$('#btnFinalizar').click(function () { exist_proces_ini(4); });
+$('#btnFinalizarProceso').click(function () { Actualizar_Estado(4); });
+$('#btnConfirm').click(function () {
+    estado = "";
+    location.reload();
+});
+
+$('#btnConfirmarIncidencia').click(function () {
+    if (incidenteSeleccionado.length != 0) {
+        //console.log(incidenteSeleccionado);
+
+        var ordenSelect = document.getElementById("numeroOrden");
+        var numeroOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
+
+        var orden = ordenes.filter(orden => orden.id == numeroOrden);
+        console.log(orden[0]);
+        var estadoOrden = ""
+
+        switch (orden[0]["estado"]) {
+            case 2:
+                estadoOrden = "Pausada";
+                break;
+            case 3:
+                estadoOrden = "Pospuesta";
+                break;
+        }
+
+        var datos = "";
+        var progresoOrden = parseFloat((cantCajasAux / cantCajasPlanAux) * 100).toFixed(2).replace(".", ",");
+        //var progresoOrden = Number(((cantCajasAux / cantCajasPlanAux) * 100).toFixed(2));
+        console.log(progresoOrden);
+        if (incidenteSeleccionado[0]["reqObservacion"] == 'No') {
+            datos = {
+                'IdOrden': numeroOrden,
+                'IdIncidente': incidenteSeleccionado[0]["idIncidente"],
+                'EstadoOrden': estadoOrden,
+                'FechaHoraInicio': moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+                'Observacion': 'Sin Observación',
+                'Progreso': progresoOrden,
+            };
+            //console.log(datos);
+            registrarIncidencia(datos);
+            $("#modal-Incidencia").modal("hide");
+            resetearDatosIncidencia();
+            incidenteSeleccionado = "";
+            
+        }
+        else {
+            if ($("#observacion").val() != "") {
+                datos = {
+                    'IdOrden': numeroOrden,
+                    'IdIncidente': incidenteSeleccionado[0]["idIncidente"],
+                    'EstadoOrden': estadoOrden,
+                    'FechaHoraInicio': moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+                    'Observacion': $("#observacion").val()
+                };
+                registrarIncidencia(datos);
+                $("#modal-Incidencia").modal("hide");
+                resetearDatosIncidencia();
+                incidenteSeleccionado = "";
+                //console.log(datos);
+            }
+            else {
+                $('#title-alert').text("Alerta");
+                $('#body-alert').text("Existen campos incompletos. Favor de completar el formulario de incidencia.");
+                $("#modal-alerta").modal("show");
+            }
+        }
+    }
+    else {
+        $('#title-alert').text("Alerta");
+        $('#body-alert').text("Existen campos incompletos. Favor de completar el formulario de incidencia.");
+        $("#modal-alerta").modal("show");
+    }
+});
+
+function registrarIncidencia(datos) {
+    //console.log(datos);
+    $.ajax({
+        url: "/Proceso/RegistrarIncidencia",
+        method: "POST",
+        async: "false",
+        data: datos,
+        success: function (data) {
+            //console.log(data);
+            if (data.registroExitoso) {
+
+                if (document.getElementById('modal-header-confirm').classList.contains('bg-orange')) {
+                    document.getElementById('modal-header-confirm').classList.toggle('bg-orange');
+
+                }
+                else if (document.getElementById('modal-header-confirm').classList.contains('bg-maroon')) {
+                    document.getElementById('modal-header-confirm').classList.toggle('bg-maroon');
+                }
+
+                if (datos.EstadoOrden == "Pausada") {
+                    document.getElementById('modal-header-confirm').classList.toggle('bg-orange');
+                    //$("#modal-pausar").modal('hide');
+                    $('#title-confirm').text("Pausar proceso");
+                    $('#body-confirm').text('El proceso se ha pausado correctamente');
+                    $("#modal-confirm").modal("show");
+                }
+                else if (datos.EstadoOrden == "Pospuesta") {
+                    document.getElementById('modal-header-confirm').classList.toggle('bg-maroon');
+                    //$("#modal-posponer").modal('hide');
+                    $('#title-confirm').text("Posponer proceso");
+                    $('#body-confirm').text('El proceso se ha pospueto correctamente');
+                    $("#modal-confirm").modal("show");
+                }
+            }
+            else {
+                $('#title-alert').text("Alerta");
+                $('#body-alert').text("No se ha registrado la incidencia correctamente. Intentelo nuevamente.");
+                $("#modal-alerta").modal("show");
+            }
+        }
+    });
+}
+
+/**
+ * Funcion que ingresa fecha y hora de termino de una incidencia en caso de que exista una sin terminar
+ * @param {any} IdOrden
+ */
+function Finalizar_Incidencia(IdOrden) {
+    $.ajax({
+        url: "/Proceso/FinalizarIncidencia",
+        method: "POST",
+        async: "false",
+        data: { "IdOrden": IdOrden },
+        success: function (data) {
+            if (data == 1) {
+                console.log("Si la orden ha estado pospuesta o pausada, se ha registrado el tiempo en que finalizó en caso contrario, como existia incidencia");
+            }
+            else if (data == -1) {
+                console.log("Existe un proble al momento de registrar el fin de la incidencia en caso de que la orden se encontrara pospuesta o pausada.")
+            }
+        }
+    });
+}
 
 /**
  * Se encarga de actualizar el estado de una orden en particular
@@ -8,10 +172,11 @@ var modal = "";
  */
 function Actualizar_Estado(estado)
 {
-    var orden = $("#numeroOrden").val();
+    var idOrden = $("#numeroOrden").val();
     var fecha = $("#datepicker").datepicker({ dateFormat: 'yy-mm-dd' }).val();
     var datos = {
-        'OrdenFabricacion': orden,
+        //'OrdenFabricacion': orden,
+        'Id': idOrden,
         'Estado': estado,
         'Fecha': fecha
     };
@@ -19,38 +184,83 @@ function Actualizar_Estado(estado)
         {
             url: '/Proceso/ActualizarEstadoProceso',
             data: datos,
-            //contentType: "application/json; charset=utf-8",
             datatype: "json",
             type: 'POST',
             success: function (data) {
+
+                if (document.getElementById('modal-header-confirm').classList.contains('bg-purple')) {
+                    document.getElementById('modal-header-confirm').classList.toggle('bg-purple');
+                }
+                else if (document.getElementById('modal-header-confirm').classList.contains('bg-orange')) {
+                    document.getElementById('modal-header-confirm').classList.toggle('bg-orange');
+
+                }
+                else if (document.getElementById('modal-header-confirm').classList.contains('bg-maroon')) {
+                    document.getElementById('modal-header-confirm').classList.toggle('bg-maroon');
+                }
+                else if (document.getElementById('modal-header-confirm').classList.contains('bg-olive')) {
+                    document.getElementById('modal-header-confirm').classList.toggle('bg-olive');
+                }
+
                 switch (estado) {
                     case 1:
+                        document.getElementById('modal-header-confirm').classList.toggle('bg-purple');
                         $('#modal-inicio').modal('hide');
                         $('#title-confirm').text("Iniciar proceso");
                         $('#body-confirm').text('El proceso se ha iniciado correctamente');
                         $("#modal-confirm").modal("show");
-                        //alert('El proceso se ha iniciado correctamente');
                         break;
                     case 2:
+                        for (var i = 0; i < ordenes.length; i++) {
+                            if (ordenes[i]["id"] == idOrden) {
+                                ordenes[i]["estado"] = 2;
+                                break;
+                            }
+                        }
                         $("#modal-pausar").modal('hide');
-                        $('#title-confirm').text("Pausar proceso");
-                        $('#body-confirm').text('El proceso se ha iniciado correctamente');
-                        $("#modal-confirm").modal("show");
-                        //alert('El proceso se ha pausado correctamente');
+                        resetearDatosIncidencia();
+                        tipoIngresoIncidencia();
+                        iniciarSelectPrincipalesIncidentes();
+
+                        if (document.getElementById('modal-header-incicente').classList.contains('bg-maroon')) {
+                            document.getElementById('modal-header-incicente').classList.toggle('bg-maroon');
+                        }
+
+                        if (!document.getElementById('modal-header-incicente').classList.contains('bg-orange')) {
+                            document.getElementById('modal-header-incicente').classList.toggle('bg-orange');
+                        }
+
+                        $("#modal-Incidencia").modal("show");
                         break;
                     case 3:
+                        for (var i = 0; i < ordenes.length; i++) {
+                            if (ordenes[i]["id"] == idOrden) {
+                                ordenes[i]["estado"] = 3;
+                                break;
+                            }
+                        }
                         $("#modal-posponer").modal('hide');
-                        $('#title-confirm').text("Posponer proceso");
-                        $('#body-confirm').text('El proceso se ha pospueto correctamente');
-                        $("#modal-confirm").modal("show");
-                        //alert('El proceso se ha pospueto correctamente');
+                        resetearDatosIncidencia();
+                        tipoIngresoIncidencia();
+                        iniciarSelectPrincipalesIncidentes();
+
+                        if (document.getElementById('modal-header-incicente').classList.contains('bg-orange')) {
+                            document.getElementById('modal-header-incicente').classList.toggle('bg-orange');
+                        }
+
+                        if (!document.getElementById('modal-header-incicente').classList.contains('bg-maroon')) {
+                            document.getElementById('modal-header-incicente').classList.toggle('bg-maroon');
+                        }
+
+                        $("#modal-Incidencia").modal("show");
+                        
                         break;
                     default:
+                        document.getElementById('modal-header-confirm').classList.toggle('bg-olive');
                         $("#modal-finalizar").modal('hide');
                         $('#title-confirm').text("Finalizar proceso");
                         $('#body-confirm').text('El proceso se ha finalizado correctamente');
                         $("#modal-confirm").modal("show");
-                        //alert('El proceso se ha finalizado correctamente');
                         break;
                 }
                 
@@ -59,7 +269,6 @@ function Actualizar_Estado(estado)
                 $('#title-alert').text("Alerta");
                 $('#body-alert').text("El proceso no se ha iniciado correctamente. Intentelo mas tarde.");
                 $("#modal-alerta").modal("show");
-                //alert('El proceso no se ha iniciado correctamente. Intentelo mas tarde.')
             }
         });
 }
@@ -70,12 +279,12 @@ function Actualizar_Estado(estado)
  */
 function exist_proces_ini(tipoAccion)
 {
-    var orden = $("#numeroOrden").val();
-    if (orden == null) {
-        orden = -1;
+    var idOrden = $("#numeroOrden").val();
+    if (idOrden == null) {
+        idOrden = -1;
     }
     var datos = {
-        'OrdenFabricacion': orden,
+        'IdOrden': idOrden,
         'OpcionAccion': tipoAccion
     };
     $.ajax(
@@ -135,7 +344,7 @@ function mostrarOrden()
     var ordenSelect = document.getElementById("numeroOrden");
     var numeroOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
     if (ordenes != null) {
-        var orden = ordenes.filter(orden => orden.ordenFabricacion == numeroOrden);
+        var orden = ordenes.filter(orden => orden.id == numeroOrden);
         Orden(orden[0]);
     }
 }
@@ -180,7 +389,7 @@ function Orden(modelo)
         default:
             document.getElementById("estado").innerHTML = 'Finalizada';
     }
-    monitoreo(modelo["ordenFabricacion"], modelo["botellasPlanificadas"], modelo["cajasPlanificadas"], modelo["formatoCaja"]);
+    monitoreo(modelo["id"], modelo["botellasPlanificadas"], modelo["cajasPlanificadas"], modelo["formatoCaja"]);
 }
 
 
@@ -189,16 +398,14 @@ function Orden(modelo)
  * Ayuda a obtener la cantidad de cajas y botellas para insertarla en los indicadores correspondiente. Ademas ayuda a la creacion de las tablas que 
  * muestran los registros de cajas y botelllas. Para ello obtiene un listado de botellas y cajas para luego separarlo en dos lista y enviarlo a las
  * funciones encargadas completar los indicadores de cantidad de botellas y cajas y al las tablas de registros de botellas y cajas
- * @param {int} OrdenFabricacion
+ * @param {int} idOrden
  * @param {int} botellasPlan
  * @param {int} cajasPlan
  */
-function monitoreo(OrdenFabricacion, botellasPlan, cajasPlan, formato)
+function monitoreo(idOrden, botellasPlan, cajasPlan, formato)
 {
-    fecha = $("#datepicker").datepicker({ dateFormat: 'yy-mm-dd' }).val();
     var datos = {
-        'OrdenFabricacion': OrdenFabricacion,
-        'Fecha': fecha
+        'IdOrden': idOrden
     };
     $.ajax({
         url: "/Proceso/GetMonitoreoMateriales",
@@ -220,11 +427,14 @@ function monitoreo(OrdenFabricacion, botellasPlan, cajasPlan, formato)
                 botellasEquiv = cantCajas * cantBotellasCajas
             }
 
+            cantCajasAux = cantCajas;
+            cantCajasPlanAux = cajasPlan;
+
             indicadorCantBotellas1(cantBotellas, botellasPlan);
             indicadorCantCajas1(cantCajas, cajasPlan);
             indicadorCantBotellasEquiv1(botellasEquiv, botellasPlan);
-            indicadorVelocidadPorMin(OrdenFabricacion, 'botella');
-            indicadorVelocidadPorMin(OrdenFabricacion, 'caja');
+            indicadorVelocidadPorMin(idOrden, 'botella');
+            indicadorVelocidadPorMin(idOrden, 'caja');
             monitoreoBotellas1(botellas);
             monitoreoCajas1(cajas);
         }
@@ -276,9 +486,9 @@ function indicadorCantBotellasEquiv1(cantBotellasEquiv, botellasPlan) {
     document.getElementById("porcentBotellasEquiv").innerHTML = "" + porcentaje + "% de avance";
 }
 
-function indicadorVelocidadPorMin(OrdenFabricacion, tipoMaterial) {
+function indicadorVelocidadPorMin(idOrden, tipoMaterial) {
     var datos = {
-        'OrdenFabricacion': OrdenFabricacion,
+        'IdOrden': idOrden,
         'TipoMaterial': tipoMaterial
     };
     $.ajax({
@@ -313,6 +523,9 @@ function monitoreoBotellas1(botellas) {
     });
 }
 
+/**
+ * Obtiene la hora actual y la convierte en un formato estandarizado hh:mm
+ * */
 function obtenerHora() {
     var today = new Date();
     var h = today.getHours();
@@ -326,6 +539,21 @@ function obtenerHora() {
         m = '0' + m;
     }
     return h + ":" + m;
+}
+
+/**
+ * Obtiene la fecha actual y la convierte en formato estandarizado YYYY-MM-DD
+ * */
+function fechaActual() {
+    var fecha = new Date();
+    var mes = fecha.getMonth() + 1;
+    var dia = fecha.getDate();
+
+    var output = fecha.getFullYear() + '-'
+        + (mes < 10 ? '0' : '') + mes + '-'
+        + (dia < 10 ? '0' : '') + dia;
+
+    return output;
 }
 
 function monitoreoCajas1(cajas) {
@@ -397,11 +625,11 @@ function iniciarOrdenesSelect(ordenes) {
 
     for (var i = 0; ordenes != null && i < ordenes.length; i++) {
         if (ordenes[i]["estado"] == 1 || ordenes[i]["estado"] == 2) {
-            $('#numeroOrden').append("<option value='" + ordenes[i]["ordenFabricacion"] + "'selected><span class='label bg-start'>" + ordenes[i]["ordenFabricacion"] + "</span ></option >");
+            $('#numeroOrden').append("<option value='" + ordenes[i]["id"] + "'selected>" + ordenes[i]["ordenFabricacion"] + "</option >");
             Orden(ordenes[i]);
         }
         else {
-            $('#numeroOrden').append("<option  value='" + ordenes[i]["ordenFabricacion"] + "'> <span class='label bg-gray'>" + ordenes[i]["ordenFabricacion"] + "</span></option>");
+            $('#numeroOrden').append("<option  value='" + ordenes[i]["id"] + "'>" + ordenes[i]["ordenFabricacion"] + "</option>");
         }
     }
 }
@@ -448,17 +676,7 @@ function resetear() {
     }
 }
 
-function fechaActual() {
-    var fecha = new Date();
-    var mes = fecha.getMonth() + 1;
-    var dia = fecha.getDate();
 
-    var output = fecha.getFullYear() + '-'
-        + (mes < 10 ? '0' : '') + mes + '-'
-        + (dia < 10 ? '0' : '') + dia;
-
-    return output;
-}
 
 function obtenerOrdenes() {
     modal = document.getElementById('myModal');
@@ -580,9 +798,9 @@ function actualizarTablasMonitoreo()
     var numeroOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
 
     if ((ordenes != null || ordenes != "" || typeof ordenes != 'undefined') && ordenes.length > 0 && numeroOrden!='-1' ) {
-        var orden = ordenes.filter(orden => orden.estado == 1 && orden.ordenFabricacion == numeroOrden);
+        var orden = ordenes.filter(orden => orden.estado == 1 && orden.id == numeroOrden);
         obtenerOrdenesAbiertasActualizadas();
-        var ordenAux = ordenes.filter(orden => orden.ordenFabricacion == numeroOrden);
+        var ordenAux = ordenes.filter(orden => orden.id == numeroOrden);
         if (orden.length != 0 && ordenAux.length != 0) {
             if (ordenAux[0].estado != orden[0].estado) {
                 location.reload();
@@ -591,13 +809,13 @@ function actualizarTablasMonitoreo()
                 monitoreo(numeroOrden, orden[0]["botellasPlanificadas"], orden[0]["cajasPlanificadas"], orden[0]["formatoCaja"]);
             }
         }
-        else if (ordenAux.length != 0) {
+        /*else if (ordenAux.length != 0) {
             location.reload();
-        }
+        }*/
     }
     document.getElementById("horaActualizacionIndicadoresOrden").innerHTML = obtenerHora();
 }
-setInterval(actualizarTablasMonitoreo, 30000);
+setInterval(actualizarTablasMonitoreo, 60000);
 
 var moviendo = false;
 $(document).on('mousemove', function () {
@@ -617,4 +835,177 @@ function actualizarPagina() {
         moviendo = false;
     }
 }
-setInterval(actualizarPagina, 60000*2);
+setInterval(actualizarPagina, 60000 * 2);
+
+
+/**
+ * Obtiene las incidencias de la base de datos para ser seleecionable al momento de registrar una de estas a las ordenes
+ * */
+function obtenerInicidencias() {
+    $.ajax({
+        type: 'POST',
+        url: '/Proceso/LeerIncidencias',
+        async: 'false',
+        data: {},
+        dataType: 'json',
+        async: false,
+        success: function (data) {
+            if (data.length != 0) {
+                incidentes = data;
+            }
+        }
+    });
+}
+
+/**
+ * Muestra los componentes del modal de registro de incidente segun el tipo, si es por código o por formulario.
+ * */
+function tipoIngresoIncidencia() {
+    var tipoIncidenteSelect = document.getElementById("opcionIncidencia");
+    var tipoIncidente = tipoIncidenteSelect.options[tipoIncidenteSelect.selectedIndex].value;
+
+    var codigoIncidencia = document.getElementById('codigoIncidenciadiv');
+    var descripcionIncidente1 = document.getElementById('descripcionIncidente1');
+    var tiempo = document.getElementById('tiempodiv');
+    var clasificacion = document.getElementById('clasificaciondiv');
+    var descripcionIncidente2 = document.getElementById('descripcionIncidente2');
+    var observacion = document.getElementById('observaciondiv');
+
+    if (tipoIncidente == 1) {
+        codigoIncidencia.style.display = 'block';
+        descripcionIncidente1.style.display = 'block';
+        tiempo.style.display = 'none';
+        clasificacion.style.display = 'none';
+        descripcionIncidente2.style.display = 'none';
+
+    }
+    else {
+        codigoIncidencia.style.display = 'none';
+        descripcionIncidente1.style.display = 'none';
+        tiempo.style.display = 'block';
+        clasificacion.style.display = 'block';
+        descripcionIncidente2.style.display = 'block';
+    }
+    iniciarSelectPrincipalesIncidentes();
+    resetearDatosIncidencia();
+    $('#clasificacion').empty();
+    $('#clasificacion').append('<option disabled selected value="-1">Seleccione la clasificación</option>');
+    observacion.style.display = 'none';
+
+}
+
+/**
+ * Inicializa los select principales del modal incidencias. Estos son #condigoIncidencia para cuando el usuario seleccione que desea buscar la incidencia directa 
+ * por el codigo corto y #tiempo que es el select de las agrupaciones de tiempo
+ * */
+function iniciarSelectPrincipalesIncidentes() {
+    $('#codigoIncidencia').empty();
+    $('#codigoIncidencia').append('<option disabled selected value="-1">Seleccione el código de la incidencia</option>');
+
+    for (var i = 0; incidentes != "" && i < incidentes.length; i++) {
+        $('#codigoIncidencia').append("<option  value='" + incidentes[i]["idIncidente"] + "'>" + incidentes[i]["idIncidente"] + "</option>");
+    }
+
+    var agrupacionTiempo = [];
+    var idAgrupacionAux = [];
+    for (var i = 0; incidentes != "" && i < incidentes.length; i++)
+    {
+        if (agrupacionTiempo.length != 0) {
+            idAgrupacionAux = agrupacionTiempo.filter(agrupacion => agrupacion.idAgrupacionTiempo == incidentes[i]["idAgrupacionTiempo"]);
+            if (idAgrupacionAux.length == 0) {
+                agrupacionTiempo.push({
+                    'idAgrupacionTiempo': incidentes[i]["idAgrupacionTiempo"],
+                    'nombreAgrupacionTiempo': incidentes[i]["nombreAgrupacionTiempo"]
+                });
+            }
+        }
+        else {
+            agrupacionTiempo.push({
+                'idAgrupacionTiempo': incidentes[i]["idAgrupacionTiempo"],
+                'nombreAgrupacionTiempo': incidentes[i]["nombreAgrupacionTiempo"]
+            });
+        }        
+    }
+
+    $('#tiempo').empty();
+    $('#tiempo').append('<option disabled selected value="-1">Seleccione el tipo de tiempo</option>');
+    
+    for (var i = 0; agrupacionTiempo != "" && i < agrupacionTiempo.length; i++) {
+        $('#tiempo').append("<option  value='" + agrupacionTiempo[i]["idAgrupacionTiempo"] + "'>" + agrupacionTiempo[i]["nombreAgrupacionTiempo"] + "</option>");
+    }    
+}
+
+function mostrarIncidenciaCodigo() {
+    var codigoIncidenciaSelec = document.getElementById("codigoIncidencia");
+    var codigoIncidente = codigoIncidenciaSelec.options[codigoIncidenciaSelec.selectedIndex].value;
+    incidenteSeleccionado = incidentes.filter(incidente => incidente.idIncidente == codigoIncidente);
+
+    document.getElementById("nombreAgrupacionTiempo1").innerHTML = incidenteSeleccionado[0]["nombreAgrupacionTiempo"];
+    document.getElementById("descripcionClasificacion1").innerHTML = incidenteSeleccionado[0]["descripcionClasificacion"];
+    document.getElementById("aclaracionClasificacion1").innerHTML = incidenteSeleccionado[0]["aclaracionClasificacion"];
+    document.getElementById("nombreZona1").innerHTML = incidenteSeleccionado[0]["nombreZona"];
+
+    var observacion = document.getElementById('observaciondiv');
+    if (incidenteSeleccionado[0]["reqObservacion"] == "Si") {
+        observacion.style.display = 'block';
+    }
+    else {
+        observacion.style.display = 'none';
+    }
+}
+
+
+function iniciarSelectClasificacionIncidencia() {
+    var idTiempoIncidenciaSelect = document.getElementById("tiempo");
+    var idTiempo = idTiempoIncidenciaSelect.options[idTiempoIncidenciaSelect.selectedIndex].value;
+    var clasificacionInicidentes = incidentes.filter(incidente => incidente.idAgrupacionTiempo == idTiempo);
+
+    $('#clasificacion').empty();
+    $('#clasificacion').append('<option disabled selected value="-1">Seleccione la clasificación</option>');
+
+    for (var i = 0; i < clasificacionInicidentes.length; i++) {
+        if (clasificacionInicidentes[i]["descripcionClasificacion"] == "Transporte") {
+            $('#clasificacion').append("<option  value='" + clasificacionInicidentes[i]["idClasificacion"] + "'>" + clasificacionInicidentes[i]["descripcionClasificacion"] + " - " + clasificacionInicidentes[i]["nombreZona"] + "</option>");
+        }
+        else {
+            $('#clasificacion').append("<option  value='" + clasificacionInicidentes[i]["idClasificacion"] + "'>" + clasificacionInicidentes[i]["descripcionClasificacion"] + "</option>");
+
+        }
+        
+    }
+    var observacion = document.getElementById('observaciondiv');
+    observacion.style.display = 'none';
+    resetearDatosIncidencia();
+}
+
+function mostrarIncidenciaCodigo1() {
+    var agrupacionTiempoIncidenciaSelect = document.getElementById("tiempo");
+    var idAgrupacionTiempoIncidencia = agrupacionTiempoIncidenciaSelect.options[agrupacionTiempoIncidenciaSelect.selectedIndex].value;
+
+    var clasificacionInicdenteSelect = document.getElementById("clasificacion");
+    var idClasificacionInicdente = clasificacionInicdenteSelect.options[clasificacionInicdenteSelect.selectedIndex].value;
+
+    incidenteSeleccionado = incidentes.filter(incidente => incidente.idAgrupacionTiempo == idAgrupacionTiempoIncidencia && incidente.idClasificacion == idClasificacionInicdente);
+
+    document.getElementById("aclaracionClasificacion2").innerHTML = incidenteSeleccionado[0]["aclaracionClasificacion"];
+    document.getElementById("nombreZona2").innerHTML = incidenteSeleccionado[0]["nombreZona"];
+
+    var observacion = document.getElementById('observaciondiv');
+    if (incidenteSeleccionado[0]["reqObservacion"] == "Si") {
+        observacion.style.display = 'block';
+    }
+    else {
+        observacion.style.display = 'none';
+    }
+}
+
+function resetearDatosIncidencia() {
+    document.getElementById("nombreAgrupacionTiempo1").innerHTML = "-";
+    document.getElementById("descripcionClasificacion1").innerHTML = "-";
+    document.getElementById("aclaracionClasificacion1").innerHTML = "-";
+    document.getElementById("nombreZona1").innerHTML = "-";
+    document.getElementById("aclaracionClasificacion2").innerHTML = "-";
+    document.getElementById("nombreZona2").innerHTML = "-";
+    document.getElementById("observacion").value = "";
+}
+

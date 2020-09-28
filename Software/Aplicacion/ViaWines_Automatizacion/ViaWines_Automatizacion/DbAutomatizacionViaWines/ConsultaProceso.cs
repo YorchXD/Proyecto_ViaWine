@@ -10,14 +10,14 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
 {
     public class ConsultaProceso
     {
-        public static int ActualizarEstadoOrden(int OrdenFabricacion, int Estado, String Fecha)
+        public static int ActualizarEstadoOrden(int Id, int Estado, String Fecha)
         {
             try
             {
-                var command = new SqlCommand() { CommandText = "Actualizar_Estado_Orden_1", CommandType = System.Data.CommandType.StoredProcedure };
-                command.Parameters.Add(new SqlParameter() { ParameterName = "OrdenFabricacion", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
+                var command = new SqlCommand() { CommandText = "Actualizar_Estado_Orden", CommandType = System.Data.CommandType.StoredProcedure };
+                command.Parameters.Add(new SqlParameter() { ParameterName = "Id", Direction = System.Data.ParameterDirection.Input, Value = Id });
                 command.Parameters.Add(new SqlParameter() { ParameterName = "Estado", Direction = System.Data.ParameterDirection.Input, Value = Estado });
-                command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
+                //command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
                 ContexDb.ExecuteProcedure(command);
                 return 1;
             }
@@ -87,6 +87,8 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             return null;
         }
 
+        /*
+         * de momento no se utilizará esta funcion
         public static void InsertarLogEstadoOrden(int OrdenFabricacion, int Estado)
         {
             string fecha = DateTime.Today.ToString("yyyy-MM-dd");
@@ -114,7 +116,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             command.Parameters.Add(new SqlParameter() { ParameterName = "hora", Direction = System.Data.ParameterDirection.Input, Value = hora });
             command.Parameters.Add(new SqlParameter() { ParameterName = "evento", Direction = System.Data.ParameterDirection.Input, Value = evento });
             ContexDb.ExecuteProcedure(command);
-        }
+        }*/
 
         /// <summary>
         /// Obtiene las ordenes que se encuentren iniciadas.
@@ -250,6 +252,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                         var prodData = row;
                         var orden = new Orden()
                         {
+                            Id = Convert.ToInt32(prodData["id"]),
                             OrdenFabricacion = Convert.ToInt32(prodData["ordenFabricacion"]),
                             Version = prodData["version"].ToString(),
                             Cliente = prodData["cliente"].ToString(),
@@ -258,8 +261,8 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                             BotellasPlanificadas = Convert.ToInt32(prodData["botellasPlanificadas"]),
                             CajasPlanificadas = Convert.ToInt32(prodData["cajasPlanificadas"]),
                             FechaFabricacion = Convert.ToDateTime(prodData["fechaFabricacion"]),
-                            HoraInicioPlanificada = prodData["horaInicioPlanificada"].ToString(),
-                            HoraTerminoPlanificada = prodData["horaTerminoPlanificada"].ToString(),
+                            FechaHoraInicio = Convert.ToDateTime(prodData["fechaHoraInicio"]),
+                            FechaHoraTermino = Convert.ToDateTime(prodData["fechaHoraTermino"]),
                             FormatoCaja = prodData["formatoCaja"].ToString(),
                             Estado = Convert.ToInt32(prodData["estado"]),
                             Secuencia = Convert.ToInt32(prodData["secuencia"])
@@ -295,6 +298,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                         var prodData = row;
                         var orden = new Orden()
                         {
+                            Id = Convert.ToInt32(prodData["id"]),
                             OrdenFabricacion = Convert.ToInt32(prodData["ordenFabricacion"]),
                             Version = prodData["version"].ToString(),
                             Cliente = prodData["cliente"].ToString(),
@@ -323,14 +327,54 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             return null;
         }
 
-        public static List<Material> LeerMaterial(int OrdenFabricacion, String Fecha)
+        public static int RegistrarIncidencia(int IdOrden, int IdIncidente, string EstadoOrden, DateTime FechaHoraInicio, string Observacion, float Progreso)
         {
             try
             {
-                var command = new SqlCommand() { CommandText = "Leer_Material", CommandType = System.Data.CommandType.StoredProcedure };
-                command.Parameters.Add(new SqlParameter() { ParameterName = "OrdenFabricacion", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
-                /*El parametro fecha se debe eliminar ya que ahora extraerá todos los materiales tanto de dias anteriores como del dia actual y así saber el avance que tiene una orden*/
-                command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
+                var command = new SqlCommand() { CommandText = "InsertarIncidente", CommandType = System.Data.CommandType.StoredProcedure };
+                command.Parameters.Add(new SqlParameter() { ParameterName = "IdOrden", Direction = System.Data.ParameterDirection.Input, Value = IdOrden });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "IdIncidente", Direction = System.Data.ParameterDirection.Input, Value = IdIncidente });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "EstadoOrden", Direction = System.Data.ParameterDirection.Input, Value = EstadoOrden });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "FechaHoraInicio", Direction = System.Data.ParameterDirection.Input, Value = FechaHoraInicio });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "Observacion", Direction = System.Data.ParameterDirection.Input, Value = Observacion });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "Progreso", Direction = System.Data.ParameterDirection.Input, Value = Progreso });
+                var datos = ContexDb.GetDataSet(command);
+                if (datos.Tables[0].Rows.Count == 1)
+                {
+                    var prodData = datos.Tables[0].Rows[0];
+                    return Convert.ToInt32(prodData["id"]);
+                    
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            return -1;
+        }
+
+        public static int FinalizarIncidencia(int IdOrden)
+        {
+            try
+            {
+                var command = new SqlCommand() { CommandText = "Finalizar_Incidencia", CommandType = System.Data.CommandType.StoredProcedure };
+                command.Parameters.Add(new SqlParameter() { ParameterName = "IdOrden", Direction = System.Data.ParameterDirection.Input, Value = IdOrden });
+                ContexDb.ExecuteProcedure(command);
+                return 1;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            return -1;
+        }
+
+        public static List<Material> LeerMaterial(int IdOrden)
+        {
+            try
+            {
+                var command = new SqlCommand() { CommandText = "Leer_Material_1", CommandType = System.Data.CommandType.StoredProcedure };
+                command.Parameters.Add(new SqlParameter() { ParameterName = "IdOrden", Direction = System.Data.ParameterDirection.Input, Value = IdOrden });
                 var datos = ContexDb.GetDataSet(command);
                 List<Material> materiales = new List<Material>();
                 //string format = "yyyy-MM-dd HH:mm:ss";
@@ -491,8 +535,8 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
         {
             try
             {
-                var command = new SqlCommand() { CommandText = "Leer_Velocidad_Material", CommandType = System.Data.CommandType.StoredProcedure };
-                command.Parameters.Add(new SqlParameter() { ParameterName = "RefOrden", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
+                var command = new SqlCommand() { CommandText = "Leer_Velocidad_Material_Actualizada", CommandType = System.Data.CommandType.StoredProcedure };
+                command.Parameters.Add(new SqlParameter() { ParameterName = "IdOrden", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
                 command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
                 command.Parameters.Add(new SqlParameter() { ParameterName = "Hora", Direction = System.Data.ParameterDirection.Input, Value = Hora });
                 command.Parameters.Add(new SqlParameter() { ParameterName = "TipoMaterial", Direction = System.Data.ParameterDirection.Input, Value = TipoMaterial });
@@ -517,6 +561,45 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                 Console.WriteLine(ex.ToString());
             }
             return -1;
+        }
+
+        public static List<Incidente> LeerIncidencias()
+        {
+            try
+            {
+                var command = new SqlCommand() { CommandText = "Leer_Incidentes", CommandType = System.Data.CommandType.StoredProcedure };
+                var datos = ContexDb.GetDataSet(command);
+                List<Incidente> incidencias = new List<Incidente>();
+
+                if (datos.Tables[0].Rows.Count > 0)
+                {
+                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
+                    {
+                        var prodData = row;
+                        Incidente incidetente = new Incidente()
+                        {
+                            IdIncidente = Convert.ToInt32(prodData["idIncidente"]),
+                            IdAgrupacionTiempo = prodData["idAgrupacion"].ToString(),
+                            NombreAgrupacionTiempo = prodData["nombreAgrupacion"].ToString(),
+                            IdClasificacion = prodData["idClasificacion"].ToString(),
+                            DescripcionClasificacion = prodData["descripcionClasificacion"].ToString(),
+                            AclaracionClasificacion = prodData["aclaracionClasificacion"].ToString(),
+                            ReqObservacion = prodData["reqObservacionClasificacion"].ToString(),
+                            IdZona = prodData["idZona"].ToString(),
+                            NombreZona = prodData["nombreZona"].ToString()
+                        };
+                        incidencias.Add(incidetente);
+                    }
+                    return incidencias;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+            return null;
         }
     }
 }

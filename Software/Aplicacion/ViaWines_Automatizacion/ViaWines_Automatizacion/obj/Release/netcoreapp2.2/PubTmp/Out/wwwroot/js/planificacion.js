@@ -14,7 +14,7 @@ function mostrarTablaOrdenes(fecha, opcion) {
     $('#tabla').DataTable({
         'responsive': true,
         'dom': "Bfrtip",
-        'searching': true,
+        'searching': false,
         'ordering': true,
         'info': false,
         'autoWidth': true,
@@ -57,7 +57,7 @@ function mostrarTablaOrdenes(fecha, opcion) {
                     $('#body-alert').text("Puede que aún no existan ordenes cargadas para fecha " + fecha + " en el sistema o existe algun problema con un campo de una orden. Verifique los campos en SAP como por ejemplo el Formato o la Unidad (caja o botella) e intentelo nuevamente. Si el problema persiste contáctese con TIBOX");
                     $("#modal-alerta").modal("show");
                 }
-                console.log(data)
+                //console.log(data)
                 
                 return data.ordenes;
             } ,
@@ -395,3 +395,12 @@ function resetear() {
     document.getElementById("fechaPlan").innerHTML = "-";
     document.getElementById("datepickerAgregar").innerHTML = "";
 }
+
+
+
+function actualizarTablaPlanificacion() {
+    var opcion = $('#tipoOrden').val();
+    fecha = $("#datepicker").datepicker({ dateFormat: 'yy-mm-dd' }).val();
+    mostrarTablaOrdenes(fecha, opcion);
+}
+setInterval(actualizarTablaPlanificacion, 60000*5);

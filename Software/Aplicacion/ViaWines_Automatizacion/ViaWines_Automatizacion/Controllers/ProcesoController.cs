@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ViaWines_Automatizacion.DbAutomatizacionViaWines;
@@ -36,10 +37,8 @@ namespace ViaWines_Automatizacion.Controllers
                 ordenes = ordenes
             };
 
-
             /*Manda un objeto vacio para que se active "zero records" y muestre que no hay información en la tabla*/
             return Json(datos);
-
         }
 
 
@@ -86,10 +85,10 @@ namespace ViaWines_Automatizacion.Controllers
         }*/
 
         [HttpPost]
-        public JsonResult ActualizarEstadoProceso(int OrdenFabricacion, int Estado, String Fecha)//ActualizarOrden orden)
+        public JsonResult ActualizarEstadoProceso(int Id, int Estado, String Fecha)//ActualizarOrden orden)
         {
-            ConsultaProceso.InsertarLogEstadoOrden(OrdenFabricacion, Estado);
-            int actualizacion = ConsultaProceso.ActualizarEstadoOrden(OrdenFabricacion, Estado, Fecha);
+            //ConsultaProceso.InsertarLogEstadoOrden(Id, Estado);
+            int actualizacion = ConsultaProceso.ActualizarEstadoOrden(Id, Estado, Fecha);
             if(actualizacion==1)
             {
                 return Json(true);
@@ -112,10 +111,10 @@ namespace ViaWines_Automatizacion.Controllers
         /**
          * Verifica si la orden iniciada o pausada es diferente a la que se quiere reanudar
          */
-        public Boolean OrdenesIniciadasPausadasDiferente(List<Orden> Ordenes, int OrdenFabricacion)
+        public Boolean OrdenesIniciadasPausadasDiferente(List<Orden> Ordenes, int IdOrden)
         {
 
-            if (Ordenes.Where(orden => (orden.Estado == 1 || orden.Estado == 2) && orden.OrdenFabricacion != OrdenFabricacion).Count() > 0)
+            if (Ordenes.Where(orden => (orden.Estado == 1 || orden.Estado == 2) && orden.Id != IdOrden).Count() > 0)
             {
                 return true;
             }
@@ -126,9 +125,9 @@ namespace ViaWines_Automatizacion.Controllers
         /*
          * Consulta si una orden en particular se encuentra iniciada
          */
-        public Boolean OrdenIniciada(List<Orden> Ordenes, int OrdenFabricacion)
+        public Boolean OrdenIniciada(List<Orden> Ordenes, int IdOrden)
         {
-            if (Ordenes.Where(orden => orden.OrdenFabricacion == OrdenFabricacion && orden.Estado == 1).Count() > 0)
+            if (Ordenes.Where(orden => orden.Id == IdOrden && orden.Estado == 1).Count() > 0)
             {
                 return true;
             }
@@ -139,9 +138,9 @@ namespace ViaWines_Automatizacion.Controllers
         /*
          * Consulta si una orden en particular se encuentra pausada
          */
-        public Boolean OrdenPausada(List<Orden> Ordenes, int OrdenFabricacion)
+        public Boolean OrdenPausada(List<Orden> Ordenes, int IdOrden)
         {
-            if (Ordenes.Where(orden => orden.OrdenFabricacion == OrdenFabricacion && orden.Estado == 2).Count() > 0)
+            if (Ordenes.Where(orden => orden.Id == IdOrden && orden.Estado == 2).Count() > 0)
             {
                 return true;
             }
@@ -152,9 +151,9 @@ namespace ViaWines_Automatizacion.Controllers
         /*
          * Consulta si una orden en particular se encuentra pospuesta
          */
-        public Boolean OrdenPospuesta(List<Orden> Ordenes, int OrdenFabricacion)
+        public Boolean OrdenPospuesta(List<Orden> Ordenes, int IdOrden)
         {
-            if (Ordenes.Where(orden => orden.OrdenFabricacion == OrdenFabricacion && orden.Estado == 3).Count() > 0)
+            if (Ordenes.Where(orden => orden.Id == IdOrden && orden.Estado == 3).Count() > 0)
             {
                 return true;
             }
@@ -164,9 +163,9 @@ namespace ViaWines_Automatizacion.Controllers
         /*
          * Consulta si una orden en particular se encuentra finalizada
          */
-        public Boolean OrdenFinalizada(List<Orden> Ordenes, int OrdenFabricacion)
+        public Boolean OrdenFinalizada(List<Orden> Ordenes, int IdOrden)
         {
-            if (Ordenes.Where(orden => orden.OrdenFabricacion == OrdenFabricacion && orden.Estado == 4).Count() > 0)
+            if (Ordenes.Where(orden => orden.Id == IdOrden && orden.Estado == 4).Count() > 0)
             {
                 return true;
             }
@@ -174,11 +173,11 @@ namespace ViaWines_Automatizacion.Controllers
         }
 
         [HttpGet]
-        public JsonResult Exit_proces_ini(int OpcionAccion, int OrdenFabricacion)//ActualizarOrden orden)
+        public JsonResult Exit_proces_ini(int OpcionAccion, int IdOrden)//ActualizarOrden orden)
         {
             var resultado = new VistaModalIniciarProceso();
 
-            if(OrdenFabricacion == -1)
+            if(IdOrden == -1)
             {
                 switch(OpcionAccion)
                 {
@@ -209,12 +208,13 @@ namespace ViaWines_Automatizacion.Controllers
                 //String fecha = "2020-05-08";
                 //String fecha = DateTime.Now.ToString("yyyy-MM-dd");
                 List<Orden> Ordenes = ConsultaProceso.LeerOrdenesAbiertas();
+                Orden orden = Ordenes.Find(ordenAux => ordenAux.Id == IdOrden);
                 Boolean ordenesIniciadasPausadas = OrdenesIniciadasPausadas(Ordenes);
-                Boolean ordenIniciadasPausadasDiferente = OrdenesIniciadasPausadasDiferente(Ordenes, OrdenFabricacion);
-                Boolean iniciada = OrdenIniciada(Ordenes, OrdenFabricacion);
-                Boolean pausada = OrdenPausada(Ordenes, OrdenFabricacion);
-                Boolean pospuesta = OrdenPospuesta(Ordenes, OrdenFabricacion);
-                Boolean finalizada = OrdenFinalizada(Ordenes, OrdenFabricacion);
+                Boolean ordenIniciadasPausadasDiferente = OrdenesIniciadasPausadasDiferente(Ordenes, IdOrden);
+                Boolean iniciada = OrdenIniciada(Ordenes, IdOrden);
+                Boolean pausada = OrdenPausada(Ordenes, IdOrden);
+                Boolean pospuesta = OrdenPospuesta(Ordenes, IdOrden);
+                Boolean finalizada = OrdenFinalizada(Ordenes, IdOrden);
                 switch (OpcionAccion)
                 {
                     /*
@@ -225,14 +225,14 @@ namespace ViaWines_Automatizacion.Controllers
                         if (!ordenesIniciadasPausadas && !finalizada && !pospuesta)
                         {
                             resultado.Titulo = "Iniciar proceso";
-                            resultado.Contenido = "¿Está seguro que desea iniciar el proceso de la orden N°" + OrdenFabricacion + " ?";
+                            resultado.Contenido = "¿Está seguro que desea iniciar el proceso de la orden N°" + orden.OrdenFabricacion + " ?";
                             resultado.ExisteProceso = true;
                         }
                         /*Se puede reanudar una orden en particular si se encuentra pospuesta o pausada*/
                         else if((pausada || pospuesta) && !ordenIniciadasPausadasDiferente )
                         {
                             resultado.Titulo = "Reanudar proceso";
-                            resultado.Contenido = "¿Está seguro que desea reaundar el proceso de la orden N°" + OrdenFabricacion + " ?";
+                            resultado.Contenido = "¿Está seguro que desea reaundar el proceso de la orden N°" + orden.OrdenFabricacion + " ?";
                             resultado.ExisteProceso = true;
                         }
                         /*
@@ -241,7 +241,7 @@ namespace ViaWines_Automatizacion.Controllers
                         else
                         {
                             resultado.Titulo = "Falló iniciar proceso";
-                            resultado.Contenido = "No se puede iniciar proceso de la orden N°" + OrdenFabricacion + ". Puede que la orden se encuentra en ejecución o finalizada, o puede que exista otra orden iniciada o pausada.";
+                            resultado.Contenido = "No se puede iniciar proceso de la orden N°" + orden.OrdenFabricacion + ". Puede que la orden se encuentra en ejecución o finalizada, o puede que exista otra orden iniciada o pausada.";
                             resultado.ExisteProceso = false;
                         }
                         break;
@@ -250,13 +250,13 @@ namespace ViaWines_Automatizacion.Controllers
                         if (iniciada)
                         {
                             resultado.Titulo = "Pausar proceso";
-                            resultado.Contenido = "¿Está seguro que desea pausar el proceso de la orden N°" + OrdenFabricacion + " ?";
+                            resultado.Contenido = "¿Está seguro que desea pausar el proceso de la orden N°" + orden.OrdenFabricacion + " ?";
                             resultado.ExisteProceso = true;
                         }
                         else
                         {
                             resultado.Titulo = "Falló pausar proceso";
-                            resultado.Contenido = "No se puede pausar el proceso de la orden N°" + OrdenFabricacion + ". Esto puede ocurrir porque la orden ya se encuentra pausada, no se haya inicializado, esté pospuesta, esté finalizada o exista otra orden en ejecución";
+                            resultado.Contenido = "No se puede pausar el proceso de la orden N°" + orden.OrdenFabricacion + ". Esto puede ocurrir porque la orden ya se encuentra pausada, no se haya inicializado, esté pospuesta, esté finalizada o exista otra orden en ejecución";
                             resultado.ExisteProceso = false;
                         }
                         break;
@@ -265,13 +265,13 @@ namespace ViaWines_Automatizacion.Controllers
                         if (iniciada || pausada)
                         {
                             resultado.Titulo = "Posponer proceso";
-                            resultado.Contenido = "¿Está seguro que desea posponer el proceso de la orden N°" + OrdenFabricacion + " ?";
+                            resultado.Contenido = "¿Está seguro que desea posponer el proceso de la orden N°" + orden.OrdenFabricacion + " ?";
                             resultado.ExisteProceso = true;
                         }
                         else
                         {
                             resultado.Titulo = "Falló posponer proceso";
-                            resultado.Contenido = "No se puede posponer el proceso de la orden N°" + OrdenFabricacion + ". Esto puede ocurrir porque la orden ya se encuentra pospuesta, no se haya inicializado, esté finalizada o exista otra orden en ejecución";
+                            resultado.Contenido = "No se puede posponer el proceso de la orden N°" + orden.OrdenFabricacion + ". Esto puede ocurrir porque la orden ya se encuentra pospuesta, no se haya inicializado, esté finalizada o exista otra orden en ejecución";
                             resultado.ExisteProceso = false;
                         }
                         break;
@@ -280,13 +280,13 @@ namespace ViaWines_Automatizacion.Controllers
                         if (iniciada || pausada || pospuesta)
                         {
                             resultado.Titulo = "Finalizar proceso";
-                            resultado.Contenido = "¿Está seguro que desea finalizar de la orden N°" + OrdenFabricacion + " ?";
+                            resultado.Contenido = "¿Está seguro que desea finalizar de la orden N°" + orden.OrdenFabricacion + " ?";
                             resultado.ExisteProceso = true;
                         }
                         else
                         {
                             resultado.Titulo = "Falló finalizar proceso";
-                            resultado.Contenido = "No se puede finalizar el proceso de la orden N°" + OrdenFabricacion + ". Esto puede ocurrir porque la orden ya se encuentra finalizada o no se haya inicializado";
+                            resultado.Contenido = "No se puede finalizar el proceso de la orden N°" + orden.OrdenFabricacion + ". Esto puede ocurrir porque la orden ya se encuentra finalizada o no se haya inicializado";
                             resultado.ExisteProceso = false;
                         }
 
@@ -297,9 +297,9 @@ namespace ViaWines_Automatizacion.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetMonitoreoMateriales(int OrdenFabricacion, String Fecha)
+        public JsonResult GetMonitoreoMateriales(int IdOrden)
         {
-            List<Material> materiales = ConsultaProceso.LeerMaterial(OrdenFabricacion, Fecha);
+            List<Material> materiales = ConsultaProceso.LeerMaterial(IdOrden);
             if (materiales != null)
             {
                 return Json(materiales);
@@ -309,12 +309,12 @@ namespace ViaWines_Automatizacion.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetVelocidadPorMin(int OrdenFabricacion, string TipoMaterial)
+        public JsonResult GetVelocidadPorMin(int IdOrden, string TipoMaterial)
         {
             //String fecha = "2020-05-13";
             String fecha = DateTime.Now.ToString("yyyy-MM-dd");
             String hora = DateTime.Now.AddMinutes(-1).ToString("HH:mm");
-            int cantTpoMaterial = ConsultaProceso.LeerVelocidadMaterial(fecha, hora, OrdenFabricacion, TipoMaterial);
+            int cantTpoMaterial = ConsultaProceso.LeerVelocidadMaterial(fecha, hora, IdOrden, TipoMaterial);
             if (cantTpoMaterial == -1)
             {
                 cantTpoMaterial = 0;
@@ -336,6 +336,47 @@ namespace ViaWines_Automatizacion.Controllers
                 return Json(ordenes);
             }
             return Json(new object());
+        }
+
+        public JsonResult LeerIncidencias()
+        {
+            List<Incidente> incidencias = ConsultaProceso.LeerIncidencias();
+            if (incidencias != null)
+            {
+                return Json(incidencias);
+            }
+            return Json(new object());
+        }
+
+        public JsonResult RegistrarIncidencia(int IdOrden, int IdIncidente, String EstadoOrden, DateTime FechaHoraInicio, String Observacion, float Progreso)
+        {
+            int IdIncidenteRegistrado = ConsultaProceso.RegistrarIncidencia(IdOrden, IdIncidente, EstadoOrden, FechaHoraInicio, Observacion, Progreso);
+            var resultado = new VistaModalIncidente();
+
+            
+            if(IdIncidenteRegistrado!=-1)
+            {
+                resultado.Titulo = "Registro exitoso";
+                resultado.Contenido = "La incidencia se ha registrado exitosamente.";
+                resultado.RegistroExitoso = true;
+            }
+            else
+            {
+                resultado.Titulo = "Falló ingresar la incidencia";
+                resultado.Contenido = "No se ha podido ingresar la orden. Intentelo nuevamente.";
+                resultado.RegistroExitoso = false;
+                
+            }
+            resultado.IdIncidente = IdIncidenteRegistrado;
+
+            return Json(resultado);
+        }
+
+        [HttpPost]
+        public JsonResult FinalizarIncidencia(int IdOrden)
+        {
+            int validacion = ConsultaProceso.FinalizarIncidencia(IdOrden);
+            return Json(validacion);
         }
 
         /*[HttpPost]
