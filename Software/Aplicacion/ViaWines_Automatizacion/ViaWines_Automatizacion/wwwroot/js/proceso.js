@@ -59,7 +59,8 @@ $('#btnConfirmarIncidencia').click(function () {
         }
 
         var datos = "";
-        var progresoOrden = parseFloat((cantCajasAux / cantCajasPlanAux) * 100).toFixed(2).replace(".", ",");
+        var progresoOrden = (cantCajasAux / cantCajasPlanAux) * 100;
+        //var progresoOrden = parseFloat((cantCajasAux / cantCajasPlanAux) * 100).toFixed(2).replace(".", ",");
         //var progresoOrden = Number(((cantCajasAux / cantCajasPlanAux) * 100).toFixed(2));
         //console.log(progresoOrden);
 
@@ -69,7 +70,10 @@ $('#btnConfirmarIncidencia').click(function () {
                 'IdIncidente': incidenteSeleccionado[0]["idIncidente"],
                 'EstadoOrden': estadoOrden,
                 'FechaHoraInicio': moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-                'Observacion': $("#observacion").val()
+                'Observacion': $("#observacion").val(),
+                'CantCajas': cantCajasAux,
+                'CantCajasPlan': cantCajasPlanAux
+                //'Progreso': progresoOrden
             };
         }
         else {
@@ -79,7 +83,9 @@ $('#btnConfirmarIncidencia').click(function () {
                 'EstadoOrden': estadoOrden,
                 'FechaHoraInicio': moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                 'Observacion': 'Sin Observación',
-                'Progreso': progresoOrden,
+                'CantCajas': cantCajasAux,
+                'CantCajasPlan': cantCajasPlanAux
+                //'Progreso': progresoOrden
             };
         }
         registrarIncidencia(datos);

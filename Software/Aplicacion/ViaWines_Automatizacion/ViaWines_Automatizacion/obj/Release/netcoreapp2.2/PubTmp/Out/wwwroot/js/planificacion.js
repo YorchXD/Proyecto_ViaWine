@@ -270,6 +270,16 @@ function fechasOrdenes(opcion, estilo, fecha) {
     });
 }
 
+function actualizarTablaPlanificacion() {
+    var opcion = $('#tipoOrden').val();
+    fecha = $("#datepicker").datepicker({ dateFormat: 'yy-mm-dd' }).val();
+    mostrarTablaOrdenes(fecha, opcion);
+}
+setInterval(actualizarTablaPlanificacion, 60000 * 5);
+
+/**
+ * Funciones para modal agregar
+ * */
 function fechasOrdenesAgregar() {
     modal = document.getElementById('myModal');
     modal.style.display = "block";
@@ -396,11 +406,4 @@ function resetear() {
     document.getElementById("datepickerAgregar").innerHTML = "";
 }
 
-
-
-function actualizarTablaPlanificacion() {
-    var opcion = $('#tipoOrden').val();
-    fecha = $("#datepicker").datepicker({ dateFormat: 'yy-mm-dd' }).val();
-    mostrarTablaOrdenes(fecha, opcion);
-}
-setInterval(actualizarTablaPlanificacion, 60000*5);
+/**FIN FUNCIONES MODAL */

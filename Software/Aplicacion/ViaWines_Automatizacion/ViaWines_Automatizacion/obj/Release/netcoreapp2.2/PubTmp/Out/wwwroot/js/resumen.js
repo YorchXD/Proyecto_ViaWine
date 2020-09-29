@@ -534,26 +534,6 @@ function indicadorVelocidadPorMin(ordenFabricacion, tipoMaterial, fechaFabricaci
 var AdministradorBotCajMin = {
     GetChartData: function (ordenFabricacion) {
 
-        /*var fechaSolPart = ("2020-09-10").split("-");
-        var fechaSol = new Date(fechaSolPart[0], fechaSolPart[1] - 1, fechaSolPart[2]);
-        var fechaActAux = fechaActual();
-        var fechaActualPart = fechaActAux.split("-");
-        var fechaAct = new Date(fechaActualPart[0], fechaActualPart[1]-1, fechaActualPart[2])
-
-        console.log("Comparación de fechas")
-        console.log("fecha enviada: " + fechaSol.getTime());
-        console.log("fecha actual: " + fechaAct.getTime());
-
-        if (fechaSol > fechaAct) {
-            console.log("La fecha solicitda es mayor a la actual");
-        }
-        else if (fechaSol.getTime() === fechaAct.getTime()) {
-            console.log("La fecha solicitada es igual a la actual");
-        }
-        else {
-            console.log("La fecha solicitada es menor a la actual");
-        }*/
-
         var objProd = "";
         var jsonParams = { 'Fecha': fecha , 'OrdenFabricacion': ordenFabricacion};
         var serviceUrl = "/Resumen/GetMonitoreo/";
@@ -792,7 +772,7 @@ function actualizarIndicadores() {
     var fechaAct = fechaActual();
 
     if (modelo.length > 0 && (modelo != null || modelo != "" || typeof modelo != 'undefined') && numeroOrden!='-1') {
-        var orden = modelo.filter(orden => orden.estado == 1 && orden.ordenFabricacion == numeroOrden);
+        var orden = modelo.filter(orden => (orden.estado == 1 || orden.estado == 2) && orden.ordenFabricacion == numeroOrden);
         buscarPlanificacionActualizada();
         var ordenAux = modelo.filter(orden => orden.ordenFabricacion == numeroOrden);
         if (orden.length != 0 && ordenAux.length != 0) {

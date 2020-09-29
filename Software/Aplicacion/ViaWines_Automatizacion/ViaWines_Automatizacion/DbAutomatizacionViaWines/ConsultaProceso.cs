@@ -327,7 +327,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             return null;
         }
 
-        public static int RegistrarIncidencia(int IdOrden, int IdIncidente, string EstadoOrden, DateTime FechaHoraInicio, string Observacion, float Progreso)
+        public static int RegistrarIncidencia(int IdOrden, int IdIncidente, string EstadoOrden, DateTime FechaHoraInicio, string Observacion, double Progreso)
         {
             try
             {

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage;
 using ViaWines_Automatizacion.DbAutomatizacionViaWines;
 using ViaWines_Automatizacion.Models;
 
@@ -348,8 +349,10 @@ namespace ViaWines_Automatizacion.Controllers
             return Json(new object());
         }
 
-        public JsonResult RegistrarIncidencia(int IdOrden, int IdIncidente, String EstadoOrden, DateTime FechaHoraInicio, String Observacion, float Progreso)
+        public JsonResult RegistrarIncidencia(int IdOrden, int IdIncidente, String EstadoOrden, DateTime FechaHoraInicio, String Observacion, double CantCajas, double CantCajasPlan /*double Progreso*/)
         {
+            double Progreso = (CantCajas / CantCajasPlan) * 100;
+            Progreso = Math.Round(Progreso, 2);
             int IdIncidenteRegistrado = ConsultaProceso.RegistrarIncidencia(IdOrden, IdIncidente, EstadoOrden, FechaHoraInicio, Observacion, Progreso);
             var resultado = new VistaModalIncidente();
 
