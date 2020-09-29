@@ -27,7 +27,12 @@ $('#btnPosponerProceso').click(function () {
     Actualizar_Estado(3);
 });
 $('#btnFinalizar').click(function () { exist_proces_ini(4); });
-$('#btnFinalizarProceso').click(function () { Actualizar_Estado(4); });
+$('#btnFinalizarProceso').click(function () {
+    var ordenSelect = document.getElementById("numeroOrden");
+    var idOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
+    Finalizar_Incidencia(idOrden);
+    Actualizar_Estado(4);
+});
 $('#btnConfirm').click(function () {
     estado = "";
     location.reload();
@@ -41,7 +46,7 @@ $('#btnConfirmarIncidencia').click(function () {
         var numeroOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
 
         var orden = ordenes.filter(orden => orden.id == numeroOrden);
-        console.log(orden[0]);
+        //console.log(orden[0]);
         var estadoOrden = ""
 
         switch (orden[0]["estado"]) {
@@ -56,8 +61,33 @@ $('#btnConfirmarIncidencia').click(function () {
         var datos = "";
         var progresoOrden = parseFloat((cantCajasAux / cantCajasPlanAux) * 100).toFixed(2).replace(".", ",");
         //var progresoOrden = Number(((cantCajasAux / cantCajasPlanAux) * 100).toFixed(2));
-        console.log(progresoOrden);
-        if (incidenteSeleccionado[0]["reqObservacion"] == 'No') {
+        //console.log(progresoOrden);
+
+        if ($("#observacion").val() != "") {
+            datos = {
+                'IdOrden': numeroOrden,
+                'IdIncidente': incidenteSeleccionado[0]["idIncidente"],
+                'EstadoOrden': estadoOrden,
+                'FechaHoraInicio': moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+                'Observacion': $("#observacion").val()
+            };
+        }
+        else {
+            datos = {
+                'IdOrden': numeroOrden,
+                'IdIncidente': incidenteSeleccionado[0]["idIncidente"],
+                'EstadoOrden': estadoOrden,
+                'FechaHoraInicio': moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+                'Observacion': 'Sin Observación',
+                'Progreso': progresoOrden,
+            };
+        }
+        registrarIncidencia(datos);
+        $("#modal-Incidencia").modal("hide");
+        resetearDatosIncidencia();
+        incidenteSeleccionado = "";
+
+        /*if (incidenteSeleccionado[0]["reqObservacion"] == 'No') {
             datos = {
                 'IdOrden': numeroOrden,
                 'IdIncidente': incidenteSeleccionado[0]["idIncidente"],
@@ -93,7 +123,7 @@ $('#btnConfirmarIncidencia').click(function () {
                 $('#body-alert').text("Existen campos incompletos. Favor de completar el formulario de incidencia.");
                 $("#modal-alerta").modal("show");
             }
-        }
+        }*/
     }
     else {
         $('#title-alert').text("Alerta");
@@ -154,7 +184,10 @@ function Finalizar_Incidencia(IdOrden) {
         url: "/Proceso/FinalizarIncidencia",
         method: "POST",
         async: "false",
-        data: { "IdOrden": IdOrden },
+        data: {
+            "IdOrden": IdOrden,
+            'FechaHoraTermino': moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+        },
         success: function (data) {
             if (data == 1) {
                 console.log("Si la orden ha estado pospuesta o pausada, se ha registrado el tiempo en que finalizó en caso contrario, como existia incidencia");
@@ -164,6 +197,175 @@ function Finalizar_Incidencia(IdOrden) {
             }
         }
     });
+}
+
+/**
+ * Obtiene las incidencias de la base de datos para ser seleecionable al momento de registrar una de estas a las ordenes
+ * */
+function obtenerInicidencias() {
+    $.ajax({
+        type: 'POST',
+        url: '/Proceso/LeerIncidencias',
+        async: 'false',
+        data: {},
+        dataType: 'json',
+        async: false,
+        success: function (data) {
+            if (data.length != 0) {
+                incidentes = data;
+            }
+        }
+    });
+}
+
+/**
+ * Muestra los componentes del modal de registro de incidente segun el tipo, si es por código o por formulario.
+ * */
+function tipoIngresoIncidencia() {
+    var tipoIncidenteSelect = document.getElementById("opcionIncidencia");
+    var tipoIncidente = tipoIncidenteSelect.options[tipoIncidenteSelect.selectedIndex].value;
+
+    var codigoIncidencia = document.getElementById('codigoIncidenciadiv');
+    var descripcionIncidente1 = document.getElementById('descripcionIncidente1');
+    var tiempo = document.getElementById('tiempodiv');
+    var clasificacion = document.getElementById('clasificaciondiv');
+    var descripcionIncidente2 = document.getElementById('descripcionIncidente2');
+    //var observacion = document.getElementById('observaciondiv');
+
+    if (tipoIncidente == 1) {
+        codigoIncidencia.style.display = 'block';
+        descripcionIncidente1.style.display = 'block';
+        tiempo.style.display = 'none';
+        clasificacion.style.display = 'none';
+        descripcionIncidente2.style.display = 'none';
+
+    }
+    else {
+        codigoIncidencia.style.display = 'none';
+        descripcionIncidente1.style.display = 'none';
+        tiempo.style.display = 'block';
+        clasificacion.style.display = 'block';
+        descripcionIncidente2.style.display = 'block';
+    }
+    iniciarSelectPrincipalesIncidentes();
+    resetearDatosIncidencia();
+    $('#clasificacion').empty();
+    $('#clasificacion').append('<option disabled selected value="-1">Seleccione la clasificación</option>');
+    //observacion.style.display = 'none';
+
+}
+
+/**
+ * Inicializa los select principales del modal incidencias. Estos son #condigoIncidencia para cuando el usuario seleccione que desea buscar la incidencia directa 
+ * por el codigo corto y #tiempo que es el select de las agrupaciones de tiempo
+ * */
+function iniciarSelectPrincipalesIncidentes() {
+    $('#codigoIncidencia').empty();
+    $('#codigoIncidencia').append('<option disabled selected value="-1">Seleccione el código de la incidencia</option>');
+
+    for (var i = 0; incidentes != "" && i < incidentes.length; i++) {
+        $('#codigoIncidencia').append("<option  value='" + incidentes[i]["idIncidente"] + "'>" + incidentes[i]["idIncidente"] + "</option>");
+    }
+
+    var agrupacionTiempo = [];
+    var idAgrupacionAux = [];
+    for (var i = 0; incidentes != "" && i < incidentes.length; i++) {
+        if (agrupacionTiempo.length != 0) {
+            idAgrupacionAux = agrupacionTiempo.filter(agrupacion => agrupacion.idAgrupacionTiempo == incidentes[i]["idAgrupacionTiempo"]);
+            if (idAgrupacionAux.length == 0) {
+                agrupacionTiempo.push({
+                    'idAgrupacionTiempo': incidentes[i]["idAgrupacionTiempo"],
+                    'nombreAgrupacionTiempo': incidentes[i]["nombreAgrupacionTiempo"]
+                });
+            }
+        }
+        else {
+            agrupacionTiempo.push({
+                'idAgrupacionTiempo': incidentes[i]["idAgrupacionTiempo"],
+                'nombreAgrupacionTiempo': incidentes[i]["nombreAgrupacionTiempo"]
+            });
+        }
+    }
+
+    $('#tiempo').empty();
+    $('#tiempo').append('<option disabled selected value="-1">Seleccione el tipo de tiempo</option>');
+
+    for (var i = 0; agrupacionTiempo != "" && i < agrupacionTiempo.length; i++) {
+        $('#tiempo').append("<option  value='" + agrupacionTiempo[i]["idAgrupacionTiempo"] + "'>" + agrupacionTiempo[i]["nombreAgrupacionTiempo"] + "</option>");
+    }
+}
+
+function mostrarIncidenciaCodigo() {
+    var codigoIncidenciaSelec = document.getElementById("codigoIncidencia");
+    var codigoIncidente = codigoIncidenciaSelec.options[codigoIncidenciaSelec.selectedIndex].value;
+    incidenteSeleccionado = incidentes.filter(incidente => incidente.idIncidente == codigoIncidente);
+
+    document.getElementById("nombreAgrupacionTiempo1").innerHTML = incidenteSeleccionado[0]["nombreAgrupacionTiempo"];
+    document.getElementById("descripcionClasificacion1").innerHTML = incidenteSeleccionado[0]["descripcionClasificacion"];
+    document.getElementById("aclaracionClasificacion1").innerHTML = incidenteSeleccionado[0]["aclaracionClasificacion"];
+    document.getElementById("nombreZona1").innerHTML = incidenteSeleccionado[0]["nombreZona"];
+
+    /*var observacion = document.getElementById('observaciondiv');
+    if (incidenteSeleccionado[0]["reqObservacion"] == "Si") {
+        observacion.style.display = 'block';
+    }
+    else {
+        observacion.style.display = 'none';
+    }*/
+}
+
+
+function iniciarSelectClasificacionIncidencia() {
+    var idTiempoIncidenciaSelect = document.getElementById("tiempo");
+    var idTiempo = idTiempoIncidenciaSelect.options[idTiempoIncidenciaSelect.selectedIndex].value;
+    var clasificacionInicidentes = incidentes.filter(incidente => incidente.idAgrupacionTiempo == idTiempo);
+
+    $('#clasificacion').empty();
+    $('#clasificacion').append('<option disabled selected value="-1">Seleccione la clasificación</option>');
+
+    for (var i = 0; i < clasificacionInicidentes.length; i++) {
+        if (clasificacionInicidentes[i]["descripcionClasificacion"] == "Transporte") {
+            $('#clasificacion').append("<option  value='" + clasificacionInicidentes[i]["idClasificacion"] + "'>" + clasificacionInicidentes[i]["descripcionClasificacion"] + " - " + clasificacionInicidentes[i]["nombreZona"] + "</option>");
+        }
+        else {
+            $('#clasificacion').append("<option  value='" + clasificacionInicidentes[i]["idClasificacion"] + "'>" + clasificacionInicidentes[i]["descripcionClasificacion"] + "</option>");
+
+        }
+    }
+    /*var observacion = document.getElementById('observaciondiv');
+    observacion.style.display = 'none';*/
+    resetearDatosIncidencia();
+}
+
+function mostrarIncidenciaCodigo1() {
+    var agrupacionTiempoIncidenciaSelect = document.getElementById("tiempo");
+    var idAgrupacionTiempoIncidencia = agrupacionTiempoIncidenciaSelect.options[agrupacionTiempoIncidenciaSelect.selectedIndex].value;
+
+    var clasificacionInicdenteSelect = document.getElementById("clasificacion");
+    var idClasificacionInicdente = clasificacionInicdenteSelect.options[clasificacionInicdenteSelect.selectedIndex].value;
+
+    incidenteSeleccionado = incidentes.filter(incidente => incidente.idAgrupacionTiempo == idAgrupacionTiempoIncidencia && incidente.idClasificacion == idClasificacionInicdente);
+
+    document.getElementById("aclaracionClasificacion2").innerHTML = incidenteSeleccionado[0]["aclaracionClasificacion"];
+    document.getElementById("nombreZona2").innerHTML = incidenteSeleccionado[0]["nombreZona"];
+
+    /*var observacion = document.getElementById('observaciondiv');
+    if (incidenteSeleccionado[0]["reqObservacion"] == "Si") {
+        observacion.style.display = 'block';
+    }
+    else {
+        observacion.style.display = 'none';
+    }*/
+}
+
+function resetearDatosIncidencia() {
+    document.getElementById("nombreAgrupacionTiempo1").innerHTML = "-";
+    document.getElementById("descripcionClasificacion1").innerHTML = "-";
+    document.getElementById("aclaracionClasificacion1").innerHTML = "-";
+    document.getElementById("nombreZona1").innerHTML = "-";
+    document.getElementById("aclaracionClasificacion2").innerHTML = "-";
+    document.getElementById("nombreZona2").innerHTML = "-";
+    document.getElementById("observacion").value = "";
 }
 
 /**
@@ -185,6 +387,7 @@ function Actualizar_Estado(estado)
             url: '/Proceso/ActualizarEstadoProceso',
             data: datos,
             datatype: "json",
+            async:'false',
             type: 'POST',
             success: function (data) {
 
@@ -676,8 +879,6 @@ function resetear() {
     }
 }
 
-
-
 function obtenerOrdenes() {
     modal = document.getElementById('myModal');
     modal.style.display = "block";
@@ -836,176 +1037,3 @@ function actualizarPagina() {
     }
 }
 setInterval(actualizarPagina, 60000 * 2);
-
-
-/**
- * Obtiene las incidencias de la base de datos para ser seleecionable al momento de registrar una de estas a las ordenes
- * */
-function obtenerInicidencias() {
-    $.ajax({
-        type: 'POST',
-        url: '/Proceso/LeerIncidencias',
-        async: 'false',
-        data: {},
-        dataType: 'json',
-        async: false,
-        success: function (data) {
-            if (data.length != 0) {
-                incidentes = data;
-            }
-        }
-    });
-}
-
-/**
- * Muestra los componentes del modal de registro de incidente segun el tipo, si es por código o por formulario.
- * */
-function tipoIngresoIncidencia() {
-    var tipoIncidenteSelect = document.getElementById("opcionIncidencia");
-    var tipoIncidente = tipoIncidenteSelect.options[tipoIncidenteSelect.selectedIndex].value;
-
-    var codigoIncidencia = document.getElementById('codigoIncidenciadiv');
-    var descripcionIncidente1 = document.getElementById('descripcionIncidente1');
-    var tiempo = document.getElementById('tiempodiv');
-    var clasificacion = document.getElementById('clasificaciondiv');
-    var descripcionIncidente2 = document.getElementById('descripcionIncidente2');
-    var observacion = document.getElementById('observaciondiv');
-
-    if (tipoIncidente == 1) {
-        codigoIncidencia.style.display = 'block';
-        descripcionIncidente1.style.display = 'block';
-        tiempo.style.display = 'none';
-        clasificacion.style.display = 'none';
-        descripcionIncidente2.style.display = 'none';
-
-    }
-    else {
-        codigoIncidencia.style.display = 'none';
-        descripcionIncidente1.style.display = 'none';
-        tiempo.style.display = 'block';
-        clasificacion.style.display = 'block';
-        descripcionIncidente2.style.display = 'block';
-    }
-    iniciarSelectPrincipalesIncidentes();
-    resetearDatosIncidencia();
-    $('#clasificacion').empty();
-    $('#clasificacion').append('<option disabled selected value="-1">Seleccione la clasificación</option>');
-    observacion.style.display = 'none';
-
-}
-
-/**
- * Inicializa los select principales del modal incidencias. Estos son #condigoIncidencia para cuando el usuario seleccione que desea buscar la incidencia directa 
- * por el codigo corto y #tiempo que es el select de las agrupaciones de tiempo
- * */
-function iniciarSelectPrincipalesIncidentes() {
-    $('#codigoIncidencia').empty();
-    $('#codigoIncidencia').append('<option disabled selected value="-1">Seleccione el código de la incidencia</option>');
-
-    for (var i = 0; incidentes != "" && i < incidentes.length; i++) {
-        $('#codigoIncidencia').append("<option  value='" + incidentes[i]["idIncidente"] + "'>" + incidentes[i]["idIncidente"] + "</option>");
-    }
-
-    var agrupacionTiempo = [];
-    var idAgrupacionAux = [];
-    for (var i = 0; incidentes != "" && i < incidentes.length; i++)
-    {
-        if (agrupacionTiempo.length != 0) {
-            idAgrupacionAux = agrupacionTiempo.filter(agrupacion => agrupacion.idAgrupacionTiempo == incidentes[i]["idAgrupacionTiempo"]);
-            if (idAgrupacionAux.length == 0) {
-                agrupacionTiempo.push({
-                    'idAgrupacionTiempo': incidentes[i]["idAgrupacionTiempo"],
-                    'nombreAgrupacionTiempo': incidentes[i]["nombreAgrupacionTiempo"]
-                });
-            }
-        }
-        else {
-            agrupacionTiempo.push({
-                'idAgrupacionTiempo': incidentes[i]["idAgrupacionTiempo"],
-                'nombreAgrupacionTiempo': incidentes[i]["nombreAgrupacionTiempo"]
-            });
-        }        
-    }
-
-    $('#tiempo').empty();
-    $('#tiempo').append('<option disabled selected value="-1">Seleccione el tipo de tiempo</option>');
-    
-    for (var i = 0; agrupacionTiempo != "" && i < agrupacionTiempo.length; i++) {
-        $('#tiempo').append("<option  value='" + agrupacionTiempo[i]["idAgrupacionTiempo"] + "'>" + agrupacionTiempo[i]["nombreAgrupacionTiempo"] + "</option>");
-    }    
-}
-
-function mostrarIncidenciaCodigo() {
-    var codigoIncidenciaSelec = document.getElementById("codigoIncidencia");
-    var codigoIncidente = codigoIncidenciaSelec.options[codigoIncidenciaSelec.selectedIndex].value;
-    incidenteSeleccionado = incidentes.filter(incidente => incidente.idIncidente == codigoIncidente);
-
-    document.getElementById("nombreAgrupacionTiempo1").innerHTML = incidenteSeleccionado[0]["nombreAgrupacionTiempo"];
-    document.getElementById("descripcionClasificacion1").innerHTML = incidenteSeleccionado[0]["descripcionClasificacion"];
-    document.getElementById("aclaracionClasificacion1").innerHTML = incidenteSeleccionado[0]["aclaracionClasificacion"];
-    document.getElementById("nombreZona1").innerHTML = incidenteSeleccionado[0]["nombreZona"];
-
-    var observacion = document.getElementById('observaciondiv');
-    if (incidenteSeleccionado[0]["reqObservacion"] == "Si") {
-        observacion.style.display = 'block';
-    }
-    else {
-        observacion.style.display = 'none';
-    }
-}
-
-
-function iniciarSelectClasificacionIncidencia() {
-    var idTiempoIncidenciaSelect = document.getElementById("tiempo");
-    var idTiempo = idTiempoIncidenciaSelect.options[idTiempoIncidenciaSelect.selectedIndex].value;
-    var clasificacionInicidentes = incidentes.filter(incidente => incidente.idAgrupacionTiempo == idTiempo);
-
-    $('#clasificacion').empty();
-    $('#clasificacion').append('<option disabled selected value="-1">Seleccione la clasificación</option>');
-
-    for (var i = 0; i < clasificacionInicidentes.length; i++) {
-        if (clasificacionInicidentes[i]["descripcionClasificacion"] == "Transporte") {
-            $('#clasificacion').append("<option  value='" + clasificacionInicidentes[i]["idClasificacion"] + "'>" + clasificacionInicidentes[i]["descripcionClasificacion"] + " - " + clasificacionInicidentes[i]["nombreZona"] + "</option>");
-        }
-        else {
-            $('#clasificacion').append("<option  value='" + clasificacionInicidentes[i]["idClasificacion"] + "'>" + clasificacionInicidentes[i]["descripcionClasificacion"] + "</option>");
-
-        }
-        
-    }
-    var observacion = document.getElementById('observaciondiv');
-    observacion.style.display = 'none';
-    resetearDatosIncidencia();
-}
-
-function mostrarIncidenciaCodigo1() {
-    var agrupacionTiempoIncidenciaSelect = document.getElementById("tiempo");
-    var idAgrupacionTiempoIncidencia = agrupacionTiempoIncidenciaSelect.options[agrupacionTiempoIncidenciaSelect.selectedIndex].value;
-
-    var clasificacionInicdenteSelect = document.getElementById("clasificacion");
-    var idClasificacionInicdente = clasificacionInicdenteSelect.options[clasificacionInicdenteSelect.selectedIndex].value;
-
-    incidenteSeleccionado = incidentes.filter(incidente => incidente.idAgrupacionTiempo == idAgrupacionTiempoIncidencia && incidente.idClasificacion == idClasificacionInicdente);
-
-    document.getElementById("aclaracionClasificacion2").innerHTML = incidenteSeleccionado[0]["aclaracionClasificacion"];
-    document.getElementById("nombreZona2").innerHTML = incidenteSeleccionado[0]["nombreZona"];
-
-    var observacion = document.getElementById('observaciondiv');
-    if (incidenteSeleccionado[0]["reqObservacion"] == "Si") {
-        observacion.style.display = 'block';
-    }
-    else {
-        observacion.style.display = 'none';
-    }
-}
-
-function resetearDatosIncidencia() {
-    document.getElementById("nombreAgrupacionTiempo1").innerHTML = "-";
-    document.getElementById("descripcionClasificacion1").innerHTML = "-";
-    document.getElementById("aclaracionClasificacion1").innerHTML = "-";
-    document.getElementById("nombreZona1").innerHTML = "-";
-    document.getElementById("aclaracionClasificacion2").innerHTML = "-";
-    document.getElementById("nombreZona2").innerHTML = "-";
-    document.getElementById("observacion").value = "";
-}
-

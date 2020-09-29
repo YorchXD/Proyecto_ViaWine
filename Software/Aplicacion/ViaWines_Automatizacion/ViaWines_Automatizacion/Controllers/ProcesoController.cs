@@ -373,9 +373,9 @@ namespace ViaWines_Automatizacion.Controllers
         }
 
         [HttpPost]
-        public JsonResult FinalizarIncidencia(int IdOrden)
+        public JsonResult FinalizarIncidencia(int IdOrden, DateTime FechaHoraTermino)
         {
-            int validacion = ConsultaProceso.FinalizarIncidencia(IdOrden);
+            int validacion = ConsultaProceso.FinalizarIncidencia(IdOrden, FechaHoraTermino);
             return Json(validacion);
         }
 

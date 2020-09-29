@@ -353,12 +353,13 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             return -1;
         }
 
-        public static int FinalizarIncidencia(int IdOrden)
+        public static int FinalizarIncidencia(int IdOrden, DateTime FechaHoraTermino)
         {
             try
             {
                 var command = new SqlCommand() { CommandText = "Finalizar_Incidencia", CommandType = System.Data.CommandType.StoredProcedure };
                 command.Parameters.Add(new SqlParameter() { ParameterName = "IdOrden", Direction = System.Data.ParameterDirection.Input, Value = IdOrden });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "FechaHoraTermino", Direction = System.Data.ParameterDirection.Input, Value = FechaHoraTermino });
                 ContexDb.ExecuteProcedure(command);
                 return 1;
             }
