@@ -349,6 +349,7 @@ namespace ViaWines_Automatizacion.Controllers
             return Json(new object());
         }
 
+        [HttpPost]
         public JsonResult RegistrarIncidencia(int IdOrden, int IdIncidente, String EstadoOrden, DateTime FechaHoraInicio, String Observacion, double CantCajas, double CantCajasPlan /*double Progreso*/)
         {
             double Progreso = (CantCajas / CantCajasPlan) * 100;

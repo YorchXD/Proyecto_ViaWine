@@ -182,8 +182,6 @@ D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\Via
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\Razor\Views\Home\Index.cshtml.g.cs
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\Razor\Views\Home\Privacy.cshtml.g.cs
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\Razor\Views\Planificacion\Planificacion.cshtml.g.cs
-D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\Razor\Views\Problemas\DetalleProblema.cshtml.g.cs
-D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\Razor\Views\Problemas\Problemas.cshtml.g.cs
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\Razor\Views\Proceso\Proceso.cshtml.g.cs
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\Razor\Views\Reporte\Reporte.cshtml.g.cs
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\Razor\Views\Resumen\Resumen.cshtml.g.cs
@@ -201,3 +199,5 @@ D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\Via
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\ViaWines_Automatizacion.pdb
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\ViaWines_Automatizacion.genruntimeconfig.cache
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\ViaWines_Automatizacion.csproj.CopyComplete
+D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\Razor\Views\Incidente\DetalleIncidente.cshtml.g.cs
+D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\Razor\Views\Incidente\Incidente.cshtml.g.cs
