@@ -339,6 +339,7 @@ namespace ViaWines_Automatizacion.Controllers
             return Json(new object());
         }
 
+        [HttpPost]
         public JsonResult LeerIncidencias()
         {
             List<Incidente> incidencias = ConsultaProceso.LeerIncidencias();
@@ -350,11 +351,29 @@ namespace ViaWines_Automatizacion.Controllers
         }
 
         [HttpPost]
-        public JsonResult RegistrarIncidencia(int IdOrden, int IdIncidente, String EstadoOrden, DateTime FechaHoraInicio, String Observacion, double CantCajas, double CantCajasPlan /*double Progreso*/)
+        public JsonResult LeerAreas()
+        {
+            List<Area> areas = ConsultaProceso.LeerAreas();
+            Boolean validacion = false;
+            if (areas != null)
+            {
+                validacion = true;
+            }
+
+            var datos = new
+            {
+                validacion = validacion,
+                areas = areas
+            };
+            return Json(datos);
+        }
+
+        [HttpPost]
+        public JsonResult RegistrarIncidencia(int IdOrden, int IdIncidente, int IdArea, String EstadoOrden, DateTime FechaHoraInicio, String Observacion, double CantCajas, double CantCajasPlan /*double Progreso*/)
         {
             double Progreso = (CantCajas / CantCajasPlan) * 100;
             Progreso = Math.Round(Progreso, 2);
-            int IdIncidenteRegistrado = ConsultaProceso.RegistrarIncidencia(IdOrden, IdIncidente, EstadoOrden, FechaHoraInicio, Observacion, Progreso);
+            int IdIncidenteRegistrado = ConsultaProceso.RegistrarIncidencia(IdOrden, IdIncidente, IdArea, EstadoOrden, FechaHoraInicio, Observacion, Progreso);
             var resultado = new VistaModalIncidente();
 
             

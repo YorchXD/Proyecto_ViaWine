@@ -418,7 +418,13 @@
                     <!-- ./col -->
                     <!---------------------------fin incidencia por formulario---------------------------------->
 
-                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="observaciondiv">
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <select class="form-control select2" style="width: 100%;" id="areas">
+                            <option disabled selected value="-1">Seleccione el área responsable</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <input class="form-control" type="text" placeholder="Ingrese una observación clara de la falla..." id="observacion">
                     </div>
                 </div>
@@ -584,10 +590,11 @@
         /*var modelo = Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model,Newtonsoft.Json.Formatting.Indented));
         iniciarOrdenesSelect(modelo);*/
         document.getElementById("horaActualizacionIndicadoresOrden").innerHTML = obtenerHora();
-        $.fn.DataTable.ext.pager.numbers_length = 4;
+        $.fn.DataTable.ext.pager.numbers_length = 5;
         //cambiarTipo();
         obtenerOrdenesAbiertas();
         obtenerInicidencias();
+        obtenerAreas();
     });
 </script>
 

@@ -76,6 +76,24 @@ namespace ViaWines_Automatizacion.Controllers
         }
 
         [HttpPost]
+        public JsonResult LeerAreas()
+        {
+            List<Area> areas = ConsultaIncidente.LeerAreas();
+            Boolean validacion = false;
+            if (areas != null)
+            {
+                validacion = true;
+            }
+
+            var datos = new
+            {
+                validacion = validacion,
+                areas = areas
+            };
+            return Json(datos);
+        }
+
+        [HttpPost]
         public JsonResult LeerIncidencias(int IdIncidente)
         {
             Incidente incidencias = ConsultaIncidente.LeerIncidencia(IdIncidente);
@@ -95,9 +113,9 @@ namespace ViaWines_Automatizacion.Controllers
         }
 
         [HttpPost]
-        public JsonResult ActualizarObservacionIncidente(int IdIncidente, String Observacion)
+        public JsonResult ActualizarObservacionIncidente(int IdIncidente, int IdArea, String Observacion)
         {
-            int validacion = ConsultaIncidente.ActualizarObservacionIncidente(IdIncidente, Observacion);
+            int validacion = ConsultaIncidente.ActualizarObservacionIncidente(IdIncidente, IdArea, Observacion);
             return Json(validacion);
 
         }
@@ -114,9 +132,9 @@ namespace ViaWines_Automatizacion.Controllers
         }
 
         [HttpPost]
-        public JsonResult RegistrarIncidencia(int IdIncidente, DateTime FechaHoraInicio, String Observacion)
+        public JsonResult RegistrarIncidencia(int IdIncidente, int IdArea,DateTime FechaHoraInicio, String Observacion)
         {
-            int IdIncidenteRegistrado = ConsultaIncidente.RegistrarIncidencia(IdIncidente, FechaHoraInicio, Observacion);
+            int IdIncidenteRegistrado = ConsultaIncidente.RegistrarIncidencia(IdIncidente, IdArea, FechaHoraInicio, Observacion);
             var resultado = new VistaModalIncidente();
 
 

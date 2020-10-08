@@ -327,13 +327,45 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             return null;
         }
 
-        public static int RegistrarIncidencia(int IdOrden, int IdIncidente, string EstadoOrden, DateTime FechaHoraInicio, string Observacion, double Progreso)
+        public static List<Area> LeerAreas()
+        {
+            try
+            {
+                var command = new SqlCommand() { CommandText = "Leer_Areas", CommandType = System.Data.CommandType.StoredProcedure };
+                var datos = ContexDb.GetDataSet(command);
+                List<Area> Areas = new List<Area>();
+                if (datos.Tables[0].Rows.Count > 0)
+                {
+                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
+                    {
+                        var prodData = row;
+                        var area = new Area()
+                        {
+                            Id = Convert.ToInt32(prodData["id"]),
+                            Nombre = prodData["nombre"].ToString()
+                        };
+
+                        Areas.Add(area);
+                    }
+                    return Areas;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            return null;
+        }
+
+        public static int RegistrarIncidencia(int IdOrden, int IdIncidente, int IdArea, string EstadoOrden, DateTime FechaHoraInicio, string Observacion, double Progreso)
         {
             try
             {
                 var command = new SqlCommand() { CommandText = "InsertarIncidente", CommandType = System.Data.CommandType.StoredProcedure };
                 command.Parameters.Add(new SqlParameter() { ParameterName = "IdOrden", Direction = System.Data.ParameterDirection.Input, Value = IdOrden });
                 command.Parameters.Add(new SqlParameter() { ParameterName = "IdIncidente", Direction = System.Data.ParameterDirection.Input, Value = IdIncidente });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "IdArea", Direction = System.Data.ParameterDirection.Input, Value = IdArea });
                 command.Parameters.Add(new SqlParameter() { ParameterName = "EstadoOrden", Direction = System.Data.ParameterDirection.Input, Value = EstadoOrden });
                 command.Parameters.Add(new SqlParameter() { ParameterName = "FechaHoraInicio", Direction = System.Data.ParameterDirection.Input, Value = FechaHoraInicio });
                 command.Parameters.Add(new SqlParameter() { ParameterName = "Observacion", Direction = System.Data.ParameterDirection.Input, Value = Observacion });

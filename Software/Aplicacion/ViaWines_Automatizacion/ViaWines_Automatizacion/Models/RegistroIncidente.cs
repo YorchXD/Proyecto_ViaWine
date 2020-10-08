@@ -8,7 +8,7 @@ namespace ViaWines_Automatizacion.Models
     public class RegistroIncidente
     {
         public int Id { get; set; }
-        //public int RefIncidente { get; set; }
+        public String NombreArea { get; set; }
         public int RefOrden { get; set; }
         public DateTime FechaHoraInicio { get; set; }
         public DateTime FechaHoraTermino { get; set; }

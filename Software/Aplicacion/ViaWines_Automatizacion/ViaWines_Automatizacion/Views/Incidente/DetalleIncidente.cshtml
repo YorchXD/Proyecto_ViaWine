@@ -68,6 +68,7 @@
                                     <tr>
                                         <th data-priority="1">Id</th>
                                         <th data-priority="1">Orden</th>
+                                        <th>Área responsable</th>
                                         <th>Fecha y hora inicio</th>
                                         <th>Fecha y hora término</th>
                                         <th>Tiempo total (min.)</th>
@@ -202,6 +203,12 @@
                     <!-- ./col -->
                     <!---------------------------fin incidencia por codigo---------------------------------->
 
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <select class="form-control select2" style="width: 100%;" id="areas">
+                            <option disabled selected value="-1">Seleccione el área responsable</option>
+                        </select>
+                    </div>
+
                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="observaciondiv">
                         <input class="form-control" type="text" placeholder="Ingrese una observación clara de la falla..." id="observacion">
                     </div>
@@ -209,6 +216,28 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
                     <button type="button" id="btnConfirmModIncidencia" class="btn bg-black">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal fade" id="modal-alerta">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-red">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-alert"></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="body-alert"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-black" data-dismiss="modal">Aceptar</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -283,7 +312,8 @@
         }
     });
     $(document).ready(function () {
-        $.fn.DataTable.ext.pager.numbers_length = 4;
+        $.fn.DataTable.ext.pager.numbers_length = 5;
         obtenerRegistrosIncidentes();
+        obtenerAreas();
     });
 </script>

@@ -258,7 +258,6 @@ function tipoIngresoIncidencia() {
     $('#clasificacion').empty();
     $('#clasificacion').append('<option disabled selected value="-1">Seleccione la clasificación</option>');
     //observacion.style.display = 'none';
-
 }
 
 /**

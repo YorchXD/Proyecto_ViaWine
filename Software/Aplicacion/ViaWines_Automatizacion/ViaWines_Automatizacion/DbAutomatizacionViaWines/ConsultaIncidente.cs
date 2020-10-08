@@ -39,6 +39,37 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             return null;
         }
 
+        public static List<Area> LeerAreas()
+        {
+            try
+            {
+                var command = new SqlCommand() { CommandText = "Leer_Areas", CommandType = System.Data.CommandType.StoredProcedure };
+                var datos = ContexDb.GetDataSet(command);
+                List<Area> Areas = new List<Area>();
+                if (datos.Tables[0].Rows.Count > 0)
+                {
+                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
+                    {
+                        var prodData = row;
+                        var area = new Area()
+                        {
+                            Id = Convert.ToInt32(prodData["id"]),
+                            Nombre = prodData["nombre"].ToString()
+                        };
+
+                        Areas.Add(area);
+                    }
+                    return Areas;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            return null;
+        }
+
         public static List<IncidenteOPI> LeerOPIDia(String Fecha)
         {
             try
@@ -94,12 +125,13 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             return -1;
         }
 
-        public static int RegistrarIncidencia(int IdIncidente, DateTime FechaHoraInicio, string Observacion)
+        public static int RegistrarIncidencia(int IdIncidente, int IdArea, DateTime FechaHoraInicio, string Observacion)
         {
             try
             {
                 var command = new SqlCommand() { CommandText = "InsertarIncidenteSinOrden", CommandType = System.Data.CommandType.StoredProcedure };
                 command.Parameters.Add(new SqlParameter() { ParameterName = "IdIncidente", Direction = System.Data.ParameterDirection.Input, Value = IdIncidente });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "IdArea", Direction = System.Data.ParameterDirection.Input, Value = IdArea });
                 command.Parameters.Add(new SqlParameter() { ParameterName = "FechaHoraInicio", Direction = System.Data.ParameterDirection.Input, Value = FechaHoraInicio });
                 command.Parameters.Add(new SqlParameter() { ParameterName = "Observacion", Direction = System.Data.ParameterDirection.Input, Value = Observacion });
                 var datos = ContexDb.GetDataSet(command);
@@ -117,12 +149,13 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             return -1;
         }
 
-        public static int ActualizarObservacionIncidente(int idIncidente, String Observacion)
+        public static int ActualizarObservacionIncidente(int idIncidente, int IdArea, String Observacion)
         {
             try
             {
-                var command = new SqlCommand() { CommandText = "Actualizar_Observacion_Incidente", CommandType = System.Data.CommandType.StoredProcedure };
+                var command = new SqlCommand() { CommandText = "Actualizar_AreaObservacion_Incidente", CommandType = System.Data.CommandType.StoredProcedure };
                 command.Parameters.Add(new SqlParameter() { ParameterName = "IdIncidente", Direction = System.Data.ParameterDirection.Input, Value = idIncidente });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "IdArea", Direction = System.Data.ParameterDirection.Input, Value = IdArea });
                 command.Parameters.Add(new SqlParameter() { ParameterName = "Observacion", Direction = System.Data.ParameterDirection.Input, Value = Observacion });
                 ContexDb.ExecuteProcedure(command);
                 return 1;
@@ -231,6 +264,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                         {
                             Id = Convert.ToInt32(prodData["id"]),
                             RefOrden = Convert.ToInt32(prodData["refOrden"]),
+                            NombreArea = prodData["nombreArea"].ToString(),
                             FechaHoraInicio = Convert.ToDateTime(prodData["fechaHoraInicio"]),
                             FechaHoraTermino = Convert.ToDateTime(prodData["fechaHoraTermino"]),
                             CantMinutos = Convert.ToInt32(prodData["cantMinutos"]),
