@@ -1,5 +1,7 @@
 ﻿var fecha = "2020-10-01";
-var incidentes = null;
+var incidentes = [];
+var areas = [];
+var incidenteSeleccionado = [];
 
 function ObtenerFechaIncidentes() {
     $.ajax({
@@ -112,8 +114,6 @@ function ver(id) {
 }
 
 
-
-
 /**
  * Obtiene las incidencias de la base de datos para ser seleecionable al momento de registrar una de estas a las ordenes
  * */
@@ -208,6 +208,12 @@ function iniciarSelectPrincipalesIncidentes() {
     for (var i = 0; agrupacionTiempo != "" && i < agrupacionTiempo.length; i++) {
         $('#tiempo').append("<option  value='" + agrupacionTiempo[i]["idAgrupacionTiempo"] + "'>" + agrupacionTiempo[i]["nombreAgrupacionTiempo"] + "</option>");
     }
+
+    $('#areas').empty();
+    $('#areas').append("<option value='-1' selected>Seleccione el área responsable</option >");
+    for (var i = 0; i < areas.length; i++) {
+        $('#areas').append("<option value='" + areas[i]["id"] + "'>" + areas[i]["nombre"] + "</option >");
+    }
 }
 
 function mostrarIncidenciaCodigo() {
@@ -273,12 +279,18 @@ $('#btnAgregarIncidencia').click(function () {
 });
 
 $('#btnConfirmarIncidencia').click(function () {
-    if (incidenteSeleccionado.length != 0) {
+    var areaSelect = document.getElementById("areas");
+    var idArea = areaSelect.options[areaSelect.selectedIndex].value;
+    var codigoIncidenciaSelec = document.getElementById("codigoIncidencia");
+    var codigoIncidente = codigoIncidenciaSelec.options[codigoIncidenciaSelec.selectedIndex].value;
+    incidenteSeleccionado = incidentes.filter(incidente => incidente.idIncidente == codigoIncidente);
+    if (incidenteSeleccionado.length != 0 && idArea!=-1) {
         var datos = "";
 
         if ($("#observacion").val() != "") {
             datos = {
                 'IdIncidente': incidenteSeleccionado[0]["idIncidente"],
+                'IdArea': idArea,
                 'FechaHoraInicio': moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                 'Observacion': $("#observacion").val(),
             };
@@ -286,6 +298,7 @@ $('#btnConfirmarIncidencia').click(function () {
         else {
             datos = {
                 'IdIncidente': incidenteSeleccionado[0]["idIncidente"],
+                'IdArea': idArea,
                 'FechaHoraInicio': moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                 'Observacion': 'Sin Observación',
             };
@@ -320,6 +333,26 @@ function registrarIncidencia(datos) {
             else {
                 $('#title-alert').text(data.titulo);
                 $('#body-alert').text(data.contenido);
+                $("#modal-alerta").modal("show");
+            }
+        }
+    });
+}
+
+function obtenerAreas() {
+    $.ajax({
+        type: 'POST',
+        url: '/Incidente/LeerAreas',
+        data: {},
+        dataType: 'json',
+        async: false,
+        success: function (data) {
+            if (data.validacion == true) {
+                areas = data.areas;
+            }
+            else {
+                $('#title-alert').text("Alerta");
+                $('#body-alert').text("Problemas con obtener las áreas responsables en funcion obtenerAreas. Intente actualizar la página y si el problema persiste, favor de contactarse con TIBOX.");
                 $("#modal-alerta").modal("show");
             }
         }

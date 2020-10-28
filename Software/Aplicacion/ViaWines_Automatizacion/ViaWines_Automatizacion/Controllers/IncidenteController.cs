@@ -5,17 +5,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ViaWines_Automatizacion.DbAutomatizacionViaWines;
+using ViaWines_Automatizacion.Filtros;
 using ViaWines_Automatizacion.Models;
 
 namespace ViaWines_Automatizacion.Controllers
 {
     public class IncidenteController : Controller
     {
+        [PermisosUsuario(idOperacion: 8)]
         public IActionResult Incidente()
         {
             return View();
         }
 
+        [PermisosUsuario(idOperacion: 8)]
         public IActionResult DetalleIncidente(int Id, String Fecha)
         {
             return View();
@@ -104,6 +107,7 @@ namespace ViaWines_Automatizacion.Controllers
             return Json(new object());
         }
 
+        [PermisosUsuario(idOperacion: 9)]
         [HttpPost]
         public JsonResult FinalizarIncidenciaPorId(int IdIncidente, DateTime FechaHoraTermino)
         {
@@ -112,6 +116,7 @@ namespace ViaWines_Automatizacion.Controllers
 
         }
 
+        [PermisosUsuario(idOperacion: 9)]
         [HttpPost]
         public JsonResult ActualizarObservacionIncidente(int IdIncidente, int IdArea, String Observacion)
         {
@@ -131,6 +136,7 @@ namespace ViaWines_Automatizacion.Controllers
             return Json(new object());
         }
 
+        [PermisosUsuario(idOperacion: 7)]
         [HttpPost]
         public JsonResult RegistrarIncidencia(int IdIncidente, int IdArea,DateTime FechaHoraInicio, String Observacion)
         {

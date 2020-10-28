@@ -346,87 +346,121 @@ function Actualizar_Estado(estado)
             async:'false',
             type: 'POST',
             success: function (data) {
-
-                if (document.getElementById('modal-header-confirm').classList.contains('bg-purple')) {
-                    document.getElementById('modal-header-confirm').classList.toggle('bg-purple');
-                }
-                else if (document.getElementById('modal-header-confirm').classList.contains('bg-orange')) {
-                    document.getElementById('modal-header-confirm').classList.toggle('bg-orange');
-
-                }
-                else if (document.getElementById('modal-header-confirm').classList.contains('bg-maroon')) {
-                    document.getElementById('modal-header-confirm').classList.toggle('bg-maroon');
-                }
-                else if (document.getElementById('modal-header-confirm').classList.contains('bg-olive')) {
-                    document.getElementById('modal-header-confirm').classList.toggle('bg-olive');
-                }
-
-                switch (estado) {
-                    case 1:
+                if (data == true) {
+                    if (document.getElementById('modal-header-confirm').classList.contains('bg-purple')) {
                         document.getElementById('modal-header-confirm').classList.toggle('bg-purple');
-                        $('#modal-inicio').modal('hide');
-                        $('#title-confirm').text("Iniciar proceso");
-                        $('#body-confirm').text('El proceso se ha iniciado correctamente');
-                        $("#modal-confirm").modal("show");
-                        break;
-                    case 2:
-                        for (var i = 0; i < ordenes.length; i++) {
-                            if (ordenes[i]["id"] == idOrden) {
-                                ordenes[i]["estado"] = 2;
-                                break;
-                            }
-                        }
-                        $("#modal-pausar").modal('hide');
-                        resetearDatosIncidencia();
-                        tipoIngresoIncidencia();
-                        iniciarSelectPrincipalesIncidentes();
+                    }
+                    else if (document.getElementById('modal-header-confirm').classList.contains('bg-orange')) {
+                        document.getElementById('modal-header-confirm').classList.toggle('bg-orange');
 
-                        if (document.getElementById('modal-header-incicente').classList.contains('bg-maroon')) {
-                            document.getElementById('modal-header-incicente').classList.toggle('bg-maroon');
-                        }
-
-                        if (!document.getElementById('modal-header-incicente').classList.contains('bg-orange')) {
-                            document.getElementById('modal-header-incicente').classList.toggle('bg-orange');
-                        }
-
-                        $("#modal-Incidencia").modal("show");
-                        break;
-                    case 3:
-                        for (var i = 0; i < ordenes.length; i++) {
-                            if (ordenes[i]["id"] == idOrden) {
-                                ordenes[i]["estado"] = 3;
-                                break;
-                            }
-                        }
-                        $("#modal-posponer").modal('hide');
-                        resetearDatosIncidencia();
-                        tipoIngresoIncidencia();
-                        iniciarSelectPrincipalesIncidentes();
-
-                        if (document.getElementById('modal-header-incicente').classList.contains('bg-orange')) {
-                            document.getElementById('modal-header-incicente').classList.toggle('bg-orange');
-                        }
-
-                        if (!document.getElementById('modal-header-incicente').classList.contains('bg-maroon')) {
-                            document.getElementById('modal-header-incicente').classList.toggle('bg-maroon');
-                        }
-
-                        $("#modal-Incidencia").modal("show");
-                        
-                        break;
-                    default:
+                    }
+                    else if (document.getElementById('modal-header-confirm').classList.contains('bg-maroon')) {
+                        document.getElementById('modal-header-confirm').classList.toggle('bg-maroon');
+                    }
+                    else if (document.getElementById('modal-header-confirm').classList.contains('bg-olive')) {
                         document.getElementById('modal-header-confirm').classList.toggle('bg-olive');
-                        $("#modal-finalizar").modal('hide');
-                        $('#title-confirm').text("Finalizar proceso");
-                        $('#body-confirm').text('El proceso se ha finalizado correctamente');
-                        $("#modal-confirm").modal("show");
-                        break;
+                    }
+
+                    switch (estado) {
+                        case 1:
+                            document.getElementById('modal-header-confirm').classList.toggle('bg-purple');
+                            $('#modal-inicio').modal('hide');
+                            $('#title-confirm').text("Iniciar proceso");
+                            $('#body-confirm').text('El proceso se ha iniciado correctamente');
+                            $("#modal-confirm").modal("show");
+                            break;
+                        case 2:
+                            for (var i = 0; i < ordenes.length; i++) {
+                                if (ordenes[i]["id"] == idOrden) {
+                                    ordenes[i]["estado"] = 2;
+                                    break;
+                                }
+                            }
+                            $("#modal-pausar").modal('hide');
+                            resetearDatosIncidencia();
+                            tipoIngresoIncidencia();
+                            iniciarSelectPrincipalesIncidentes();
+
+                            if (document.getElementById('modal-header-incicente').classList.contains('bg-maroon')) {
+                                document.getElementById('modal-header-incicente').classList.toggle('bg-maroon');
+                            }
+
+                            if (!document.getElementById('modal-header-incicente').classList.contains('bg-orange')) {
+                                document.getElementById('modal-header-incicente').classList.toggle('bg-orange');
+                            }
+
+                            $("#modal-Incidencia").modal("show");
+                            break;
+                        case 3:
+                            for (var i = 0; i < ordenes.length; i++) {
+                                if (ordenes[i]["id"] == idOrden) {
+                                    ordenes[i]["estado"] = 3;
+                                    break;
+                                }
+                            }
+                            $("#modal-posponer").modal('hide');
+                            resetearDatosIncidencia();
+                            tipoIngresoIncidencia();
+                            iniciarSelectPrincipalesIncidentes();
+
+                            if (document.getElementById('modal-header-incicente').classList.contains('bg-orange')) {
+                                document.getElementById('modal-header-incicente').classList.toggle('bg-orange');
+                            }
+
+                            if (!document.getElementById('modal-header-incicente').classList.contains('bg-maroon')) {
+                                document.getElementById('modal-header-incicente').classList.toggle('bg-maroon');
+                            }
+
+                            $("#modal-Incidencia").modal("show");
+
+                            break;
+                        default:
+                            document.getElementById('modal-header-confirm').classList.toggle('bg-olive');
+                            $("#modal-finalizar").modal('hide');
+                            $('#title-confirm').text("Finalizar proceso");
+                            $('#body-confirm').text('El proceso se ha finalizado correctamente');
+                            $("#modal-confirm").modal("show");
+                            break;
+                    }
+
                 }
-                
+                else {
+                    $('#title-alert').text("Alerta");
+                    switch (estado) {
+                        case 1:
+                            $('#body-alert').text("El proceso no se ha iniciado correctamente. Intentelo mas tarde.");
+                            break;
+                        case 2:
+                            $('#body-alert').text("El proceso no se ha pausado correctamente. Intentelo mas tarde.");
+                            break;
+                        case 3:
+                            $('#body-alert').text("El proceso no se ha pospuesto correctamente. Intentelo mas tarde.");
+
+                            break;
+                        default:
+                            $('#body-alert').text("El proceso no se ha finalizado correctamente. Intentelo mas tarde.");
+                            break;
+                    }
+                    $("#modal-alerta").modal("show");
+                }
             },
             error: function () {
                 $('#title-alert').text("Alerta");
-                $('#body-alert').text("El proceso no se ha iniciado correctamente. Intentelo mas tarde.");
+                switch (estado) {
+                    case 1:
+                        $('#body-alert').text("El proceso no se ha iniciado correctamente. Intentelo mas tarde.");
+                        break;
+                    case 2:
+                        $('#body-alert').text("El proceso no se ha pausado correctamente. Intentelo mas tarde.");
+                        break;
+                    case 3:
+                        $('#body-alert').text("El proceso no se ha pospuesto correctamente. Intentelo mas tarde.");
+
+                        break;
+                    default:
+                        $('#body-alert').text("El proceso no se ha finalizado correctamente. Intentelo mas tarde.");
+                        break;
+                }
                 $("#modal-alerta").modal("show");
             }
         });
@@ -493,7 +527,6 @@ function exist_proces_ini(tipoAccion)
             $('#title-alert').text("Alerta");
             $('#body-alert').text("Error inesperado, vuelva a intentarlo más tarde o contáctese con Tibox para informar en detalle cuando ocurrió el error.");
             $("#modal-alerta").modal("show");
-            //alert("Error inesperado, vuelva a intentarlo más tarde o contáctese con Tibox para informar en detalle cuando ocurrió el error.");
         },
     });
 }

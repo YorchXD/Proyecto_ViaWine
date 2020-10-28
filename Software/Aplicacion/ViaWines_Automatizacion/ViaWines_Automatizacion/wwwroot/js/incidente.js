@@ -20,7 +20,7 @@ function ObtenerFechaIncidentes() {
 
             // datepicker
             if ($('#datepicker').val() != "") {
-                $('#datepicker').datepicker("destroy");;
+                $('#datepicker').datepicker("destroy");
             }
 
             $('#datepicker').datepicker({
@@ -87,7 +87,7 @@ function obtenerOPI() {
 function tablaOPI(OPI) {
     $('#OPI').DataTable({
         'data': OPI,
-        'order': [[5, "asc"]],
+        'order': [[6, "desc"]],
         'columns': [
             { "data": "codigoCorto" },
             { "data": "codigoLargo" },
@@ -106,7 +106,6 @@ function tablaOPI(OPI) {
             }
         ]
     });
-
 }
 
 function ver(id) {
@@ -126,7 +125,7 @@ function obtenerInicidencias() {
         dataType: 'json',
         async: false,
         success: function (data) {
-            console.log(data)
+            //console.log(data)
             if (data.length != 0) {
                 incidentes = data;
             }
@@ -212,7 +211,7 @@ function iniciarSelectPrincipalesIncidentes() {
     $('#areas').empty();
     $('#areas').append("<option value='-1' selected>Seleccione el área responsable</option >");
     for (var i = 0; i < areas.length; i++) {
-        $('#areas').append("<option value='" + areas[i]["id"] + "'>" + areas[i]["nombre"] + "</option >");
+        $('#areas').append("<option value='" + areas[i]["id"] + "'>" + areas[i]["name"] + "</option >");
     }
 }
 
@@ -358,4 +357,14 @@ function obtenerAreas() {
         }
     });
 }
+
+
+function actualizarTablaIncidentes() {
+    fecha = $("#datepicker").datepicker({ dateFormat: 'yy-mm-dd' }).val();
+    fechaActual = moment().format('YYYY-MM-DD');
+    if (fecha == fechaActual) {
+        obtenerOPI();
+    }
+}
+setInterval(actualizarTablaIncidentes, 60000*5);
 

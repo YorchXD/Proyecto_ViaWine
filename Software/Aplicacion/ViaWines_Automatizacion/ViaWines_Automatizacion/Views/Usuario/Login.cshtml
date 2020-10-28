@@ -1,0 +1,94 @@
+﻿@model ViaWines_Automatizacion.Models.Usuario
+@{
+    Layout = null;
+}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Meta -->
+    <meta name="description" content="Premium Quality and Responsive UI for Dashboard.">
+    <meta name="author" content="ThemePixels">
+
+    <title>Via Wines</title>
+
+    <!-- vendor css -->
+    <link href="~/lib/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="~/lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+
+    <!-- Bracket CSS -->
+    <link rel="stylesheet" href="~/css/bracket.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="d-flex align-items-center justify-content-center ht-100v">
+        <video id="headVideo" class="pos-absolute a-0 wd-100p ht-100p object-fit-cover" autoplay muted loop>
+            <source src="~/Video/ViaWines.mp4" type="video/mp4">
+        </video><!-- /video -->
+
+
+
+        <div class="overlay-body bg-black-3 d-flex align-items-center justify-content-center">
+
+
+            <div class="login-wrapper wd-300 wd-xs-350 pd-25 pd-xs-40 rounded bg-black-6" style="display:none" id="login">
+                <span class="logo-mini"><img src="https://viawines.com/wp-content/uploads/2018/11/logo_blanco.png" class="brandlogo-image" style="width:250px;"></span>
+
+                <!--div class="signin-logo tx-center tx-28 tx-bold tx-white" style="background: rgba(255, 255, 255, 0.2); border-radius: 25px;"><span class="tx-normal">[</span> Via<span class="tx-info">Wines</span> <span class="tx-normal">]</span></!-div-->
+
+                <div class="tx-white-5 tx-center mg-b-60"> </div>
+
+                <form action="@Url.Content("~/Usuario/Login")" method="post">
+
+                    <div class="form-group">
+                        <input type="email" class="form-control fc-outline-dark" name="email" placeholder="Ingrese su correo" autocomplete="off" required>
+                        <div class="alert-danger">
+                            @ViewBag.Error
+                        </div>
+                    </div><!-- form-group -->
+                    
+
+                    <!-- form-group -->
+                    <button type="submit" class="btn btn-info btn-block">Entrar</button>
+                </form>
+            </div><!-- login-wrapper -->
+
+
+        </div><!-- overlay-body -->
+    </div><!-- d-flex -->
+
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <!--script src="~/lib/jquery-ui/ui/widgets/datepicker.js"></script-->
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(function () {
+            'use strict';
+
+            // Check if video can play, and play it
+            var video = document.getElementById('headVideo');
+            video.addEventListener('canplay', function () {
+                video.play();
+            });
+
+        });
+    </script>
+
+    <script class="">
+        $(document).ready(function () {
+            setTimeout(function () {
+                $("#login").fadeIn(2000);
+            }, 2500);
+
+        });
+
+    </script>
+
+</body>
+</html>

@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+@{
     ViewData["Title"] = "Detalle del Problema";
 }
 
@@ -265,7 +267,21 @@
     }
 
     /* Modal Content */
-.modal-contentFP { background: url("~/../../../img/tenor.gif") no-repeat; background-color: rgba(254,254,254,0.4); margin: auto; padding: 20px; border: 1px solid #888; width: 340px; height: 340px; text-align: center; border-radius: 30px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+    .modal-contentFP {
+        background: url("~/../../../img/tenor.gif") no-repeat;
+        background-color: rgba(254,254,254,0.4);
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 340px;
+        height: 340px;
+        text-align: center;
+        border-radius: 30px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 </style>
 
 <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script-->
@@ -313,7 +329,8 @@
     });
     $(document).ready(function () {
         $.fn.DataTable.ext.pager.numbers_length = 5;
-        obtenerRegistrosIncidentes();
+        var actualizar = @ViaWines_Automatizacion.DbAutomatizacionViaWines.ConsultaUsuario.Leer_Rol_Operacion(@HttpContextAccessor.HttpContext.Session.GetString("Rol"), 9);
+        obtenerRegistrosIncidentes(actualizar);
         obtenerAreas();
     });
 </script>

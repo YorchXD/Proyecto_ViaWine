@@ -19,4 +19,12 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\fontawesome-free\less\" />
+    <Folder Include="wwwroot\lib\fontawesome-free\scss\" />
+    <Folder Include="wwwroot\lib\ionicons\less\" />
+    <Folder Include="wwwroot\lib\ionicons\scss\" />
+  </ItemGroup>
+
 </Project>

@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage;
 using ViaWines_Automatizacion.DbAutomatizacionViaWines;
+using ViaWines_Automatizacion.Filtros;
 using ViaWines_Automatizacion.Models;
 
 namespace ViaWines_Automatizacion.Controllers
 {
     public class ProcesoController : Controller
     {
+        [PermisosUsuario(idOperacion: 5)]
         public IActionResult Proceso()
         {
             return View();
@@ -63,32 +65,12 @@ namespace ViaWines_Automatizacion.Controllers
             return Json(new object());
         }
 
-        /*[HttpGet]
-        public JsonResult GetFechasOrdenesPlanificadas()
-        {
-            List<String> fechasOrden = ConsultaProceso.GetFechasOrdenesPlanificadas();
-            if (fechasOrden != null)
-            {
-                return Json(fechasOrden);
-            }
-            return Json(new object());
-        }
-
-        [HttpGet]
-        public JsonResult GetFechaOrdenesAbiertas()
-        {
-            List<String> fechasOrden = ConsultaProceso.LeerFechasOrdenesAbiertas();
-            if (fechasOrden != null)
-            {
-                return Json(fechasOrden);
-            }
-            return Json(new object());
-        }*/
-
+        [PermisosUsuario(idOperacion: 6)]
         [HttpPost]
         public JsonResult ActualizarEstadoProceso(int Id, int Estado, String Fecha)//ActualizarOrden orden)
         {
             //ConsultaProceso.InsertarLogEstadoOrden(Id, Estado);
+
             int actualizacion = ConsultaProceso.ActualizarEstadoOrden(Id, Estado, Fecha);
             if(actualizacion==1)
             {
@@ -206,8 +188,6 @@ namespace ViaWines_Automatizacion.Controllers
             }
             else
             {
-                //String fecha = "2020-05-08";
-                //String fecha = DateTime.Now.ToString("yyyy-MM-dd");
                 List<Orden> Ordenes = ConsultaProceso.LeerOrdenesAbiertas();
                 Orden orden = Ordenes.Find(ordenAux => ordenAux.Id == IdOrden);
                 Boolean ordenesIniciadasPausadas = OrdenesIniciadasPausadas(Ordenes);
@@ -368,6 +348,7 @@ namespace ViaWines_Automatizacion.Controllers
             return Json(datos);
         }
 
+        [PermisosUsuario(idOperacion: 4)]
         [HttpPost]
         public JsonResult RegistrarIncidencia(int IdOrden, int IdIncidente, int IdArea, String EstadoOrden, DateTime FechaHoraInicio, String Observacion, double CantCajas, double CantCajasPlan /*double Progreso*/)
         {
@@ -395,6 +376,7 @@ namespace ViaWines_Automatizacion.Controllers
             return Json(resultado);
         }
 
+        [PermisosUsuario(idOperacion: 6)]
         [HttpPost]
         public JsonResult FinalizarIncidencia(int IdOrden, DateTime FechaHoraTermino)
         {
@@ -402,117 +384,5 @@ namespace ViaWines_Automatizacion.Controllers
             return Json(validacion);
         }
 
-        /*[HttpPost]
-        public JsonResult GetMonitoreoBotellas(int OrdenFabricacion)
-        {
-            //String fecha = "2020-05-13";
-            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
-            List<Botella> botellas = ConsultaProceso.LeerBotellas(fecha, OrdenFabricacion);
-            if(botellas!=null)
-            {
-                return Json(botellas);
-            }
-            //Manda un objeto vacio para que se active zero records y muestre que no hay información en la tabla
-            return Json(new Object());
-        }*/
-
-        /*[HttpPost]
-        public JsonResult GetMonitoreoCajas(int OrdenFabricacion)
-        {
-            //String fecha = "2020-05-13";
-            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
-            List<Caja> caja = ConsultaProceso.LeerCajas(fecha, OrdenFabricacion);
-            if(caja != null)
-            {
-                return Json(caja);
-            }
-            //Manda un objeto vacio para que se active zero records y muestre que no hay información en la tabla
-            return Json(new Object());
-        }*/
-
-        /*[HttpPost]
-        public JsonResult GetCantCajas(int OrdenFabricacion, int CajasPlanificadas)
-        {
-            //String fecha = "2020-05-13";
-            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
-            List<Caja> caja = ConsultaProceso.LeerCajas(fecha, OrdenFabricacion);
-            //List<Orden> ordenes = ConsultaProceso.LeerOrdenes(fecha);
-            //int cajasPlanificadas = 0;
-            int cantCajas = 0;
-            double porcentaje = 0;
-            
-            if (caja != null)
-            {
-                cantCajas = caja.Count();
-                porcentaje = (double)((cantCajas * 100.0) / CajasPlanificadas);
-            }
-
-            var datosCaja = new
-            {
-                CantCajas = cantCajas,
-                Porcentaje = Math.Round(porcentaje,2)
-            };
-
-            return Json(datosCaja);
-        }*/
-
-
-
-        /*[HttpPost]
-        public JsonResult GetCantBotellas(int OrdenFabricacion, int BotellasPlanificadas)
-        {
-            //String fecha = "2020-05-13";
-            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
-            List<Botella> botellas = ConsultaProceso.LeerBotellas(fecha, OrdenFabricacion);
-            //List<Orden> ordenes = ConsultaProceso.LeerOrdenes(fecha);
-            //int botellasPlanificadas = 0;
-            int cantBotellas = 0;
-            double porcentaje = 0;
-
-            if (botellas!=null)
-            {
-                cantBotellas = botellas.Count();
-                porcentaje = (double)((cantBotellas * 100.0) / BotellasPlanificadas);   
-            }
-            var datosBotella = new
-            {
-                CantBotellas = cantBotellas,
-                Porcentaje = Math.Round(porcentaje,2)
-            };
-            return Json(datosBotella);
-        }*/
-
-
-
-
-
-
-        /*[HttpPost]
-        public JsonResult GetVelocidadBotellas(int OrdenFabricacion)
-        {
-            //String fecha = "2020-05-13";
-            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
-            String hora = DateTime.Now.AddMinutes(-1).ToString("HH:mm");
-            int cantBotellas = ConsultaProceso.LeerVelocidadBotellas(fecha, hora, OrdenFabricacion);
-            if (cantBotellas == -1)
-            {
-                cantBotellas = 0;
-            }
-            return Json(cantBotellas);
-        }*/
-
-        /*[HttpPost]
-        public JsonResult GetVelocidadCajas(int OrdenFabricacion)
-        {
-            //String fecha = "2020-05-13";
-            String fecha = DateTime.Now.ToString("yyyy-MM-dd");
-            String hora = DateTime.Now.AddMinutes(-1).ToString("HH:mm");
-            int cantCajas = ConsultaProceso.LeerVelocidadCajas(fecha, hora, OrdenFabricacion);
-            if(cantCajas == -1)
-            {
-                cantCajas = 0;
-            }
-            return Json(cantCajas);
-        }*/
     }
 }

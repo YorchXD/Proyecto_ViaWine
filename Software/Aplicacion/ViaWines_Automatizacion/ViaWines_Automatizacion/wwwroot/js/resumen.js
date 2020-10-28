@@ -16,9 +16,7 @@ function fechasOrdenes() {
             var eventDates = {};
 
             $.each(data, function (indice, elemento) {
-                //console.log('El elemento con el índice ' + indice + ' contiene ' + elemento);
                 eventDates[new Date(elemento)] = new Date(elemento);
-                //alert(elemento);
             });
 
             // datepicker
@@ -81,7 +79,7 @@ function buscarPlanificacion()
     });
 }
 
-function fechaActual()
+/*function fechaActual()
 {
     var hoy = new Date();
     var dd = hoy.getDate();
@@ -97,7 +95,7 @@ function fechaActual()
 
     hoy = yyyy + '-' + MM + '-' + dd;
     return hoy;
-}
+}*/
 
 function resetearDatosOrden() {
     document.getElementById("cliente").innerHTML = "-";
@@ -136,13 +134,13 @@ function iniciarOrdenesSelect(modelo)
 
             if (modelo[i]["estado"] == 1 || modelo[i]["estado"] == 2) {
 
-                opciones += "<option value='" + modelo[i]["ordenFabricacion"] + "'selected>" + modelo[i]["ordenFabricacion"] + "</option>";
-                //$('#numeroOrden').append("<option value='" + modelo[i]["ordenFabricacion"] + "'selected>" + modelo[i]["ordenFabricacion"] + "</option>");
+                //opciones += "<option value='" + modelo[i]["ordenFabricacion"] + "'selected>" + modelo[i]["ordenFabricacion"] + "</option>";
+                opciones += "<option value='" + modelo[i]["id"] + "'selected>" + modelo[i]["ordenFabricacion"] + "</option>";
                 Orden(modelo[i]);
             }
             else {
-                opciones += "<option value='" + modelo[i]["ordenFabricacion"] + "'>" + modelo[i]["ordenFabricacion"] + "</option>";
-                //$('#numeroOrden').append("<option value='" + modelo[i]["ordenFabricacion"] + "'>" + modelo[i]["ordenFabricacion"] + "</option>");
+                //opciones += "<option value='" + modelo[i]["ordenFabricacion"] + "'>" + modelo[i]["ordenFabricacion"] + "</option>";
+                opciones += "<option value='" + modelo[i]["id"] + "'>" + modelo[i]["ordenFabricacion"] + "</option>";
             }
         }
         $('#numeroOrden').empty().append(opciones);
@@ -160,13 +158,15 @@ function iniciarOrdenesSelect(modelo)
 
 function mostrarOrden()
 {
+    //var idOrden = $('#numeroOrden').children("option:selected").val();
     var ordenSelect = document.getElementById("numeroOrden");
-    var numeroOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
+    var idOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
     mensajeOrdenGraficoMin = 0;
 
     for (var i = 0; i < modelo.length; i++)
     {
-        if (modelo[i]["ordenFabricacion"] == numeroOrden)
+        //if (modelo[i]["ordenFabricacion"] == numeroOrden)
+        if (modelo[i]["id"] == idOrden)
         {
             Orden(modelo[i]);
             break;
@@ -203,7 +203,7 @@ function Orden(modelo) {
         default:
             document.getElementById("estado").innerHTML = 'Finalizada';
     }
-    monitoreo(modelo["ordenFabricacion"], fecha, modelo["fechaFabricacion"].split("T")[0], modelo["botellasPlanificadas"], modelo["cajasPlanificadas"], modelo["formato"]);
+    monitoreo(modelo["id"], modelo["botellasPlanificadas"], modelo["cajasPlanificadas"], modelo["formato"]);
 
 }
 
@@ -414,10 +414,9 @@ function mostrarTablaOrdenes() {
  * @param {int} botellasPlan
  * @param {int} cajasPlan
  */
-function monitoreo(ordenFabricacion, fechaActual, fechaFabricacion, botellasPlan, cajasPlan, formato) {
+function monitoreo(idOrden, botellasPlan, cajasPlan, formato) {
     var datos = {
-        'OrdenFabricacion': ordenFabricacion,
-        'Fecha': fechaActual
+        'IdOrden': idOrden
     };
     $.ajax({
         url: "/Resumen/GetMonitoreoMateriales",
@@ -442,14 +441,14 @@ function monitoreo(ordenFabricacion, fechaActual, fechaFabricacion, botellasPlan
             indicadorCantBotellas1(cantBotellas, botellasPlan);
             indicadorCantCajas1(cantCajas, cajasPlan);
             indicadorCantBotellasEquiv1(botellasEquiv, botellasPlan);
-            indicadorVelocidadPorMin(ordenFabricacion, 'Botella', fechaFabricacion);
-            indicadorVelocidadPorMin(ordenFabricacion, 'Caja', fechaFabricacion);
-            BotCajMinHelper.CargarGrafico(ordenFabricacion);
+            indicadorVelocidadPorMin(idOrden, 'Botella');
+            indicadorVelocidadPorMin(idOrden, 'Caja');
+            BotCajMinHelper.CargarGrafico(idOrden);
         }
     })
 }
 
-function obtenerHora() {
+/*function obtenerHora() {
     var today = new Date();
     var h = today.getHours();
     var m = today.getMinutes();
@@ -462,7 +461,7 @@ function obtenerHora() {
         m = '0' + m;
     }
     return h + ":" + m;
-}
+}*/
 
 /**
  * Redondea un numero decimal dejandolo con dos decimales
@@ -508,11 +507,10 @@ function indicadorCantBotellasEquiv1(cantBotellasEquiv, botellasPlan) {
     document.getElementById("porcentBotellasEquiv").innerHTML = "" + porcentaje + "% de avance";
 }
 
-function indicadorVelocidadPorMin(ordenFabricacion, tipoMaterial, fechaFabricacion) {
+function indicadorVelocidadPorMin(idOrden, tipoMaterial) {
     var datos = {
-        'OrdenFabricacion': ordenFabricacion,
-        'TipoMaterial': tipoMaterial,
-        'FechaFabricacion': fechaFabricacion
+        'IdOrden': idOrden,
+        'TipoMaterial': tipoMaterial
     };
     $.ajax({
         url: "/Resumen/GetVelocidadPorMin",
@@ -532,10 +530,10 @@ function indicadorVelocidadPorMin(ordenFabricacion, tipoMaterial, fechaFabricaci
 
 /*GRAFICO POR MINUTO */
 var AdministradorBotCajMin = {
-    GetChartData: function (ordenFabricacion) {
+    GetChartData: function (IdOrden) {
 
         var objProd = "";
-        var jsonParams = { 'Fecha': fecha , 'OrdenFabricacion': ordenFabricacion};
+        var jsonParams = { 'Fecha': fecha, 'IdOrden': IdOrden};
         var serviceUrl = "/Resumen/GetMonitoreo/";
         AdministradorBotCajMin.GetJsonResult(serviceUrl, jsonParams, false, false, onSuccess, onFailed);
 
@@ -658,7 +656,7 @@ var BotCajMinHelper = {
 var AdministradorBotCajHora = {
     GetChartData: function () {
         var objProd = "";
-        var jsonParams = { 'Fecha': fecha, 'OrdenFabricacion':-1 };
+        var jsonParams = { 'Fecha': fecha, 'IdOrden':-1 };
         var serviceUrl = "/Resumen/GetMonitoreo/";
         AdministradorBotCajHora.GetJsonResult(serviceUrl, jsonParams, false, false, onSuccess, onFailed);
 
@@ -767,20 +765,22 @@ var BotCajHoraHelper = {
 /*FIN GRAFICO POR HORA*/
 
 function actualizarIndicadores() {
-    var ordenSelect = document.getElementById("numeroOrden");
-    var numeroOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
-    var fechaAct = fechaActual();
+    //var idOrden = $('#numeroOrden').children("option:selected").val();
 
-    if (modelo.length > 0 && (modelo != null || modelo != "" || typeof modelo != 'undefined') && numeroOrden!='-1') {
-        var orden = modelo.filter(orden => (orden.estado == 1 || orden.estado == 2) && orden.ordenFabricacion == numeroOrden);
+    var ordenSelect = document.getElementById("numeroOrden");
+    var idOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
+    var fechaAct = moment().format('YYYY-MM-DD');//fechaActual();
+
+    if (modelo.length > 0 && (modelo != null || modelo != "" || typeof modelo != 'undefined') && idOrden!='-1') {
+        var orden = modelo.filter(orden => (orden.estado == 1 || orden.estado == 2) && orden.id == idOrden);
         buscarPlanificacionActualizada();
-        var ordenAux = modelo.filter(orden => orden.ordenFabricacion == numeroOrden);
+        var ordenAux = modelo.filter(orden => orden.id == idOrden);
         if (orden.length != 0 && ordenAux.length != 0) {
             if (ordenAux[0].estado != orden[0].estado) {
                 location.reload();
             }
             else {
-                monitoreo(numeroOrden, fechaAct,(orden[0]["fechaFabricacion"]).split('T')[0], orden[0]["botellasPlanificadas"], orden[0]["cajasPlanificadas"], orden[0]["formatoCaja"]);
+                monitoreo(idOrden, orden[0]["botellasPlanificadas"], orden[0]["cajasPlanificadas"], orden[0]["formatoCaja"]);
             }
         }
 
@@ -792,8 +792,10 @@ function actualizarIndicadores() {
             }
         }*/
         indicadoresDia();
-        document.getElementById("horaActualizacionIndicadoresOrden").innerHTML = obtenerHora();
-        document.getElementById("horaActualizacionIndicadoresDia").innerHTML = obtenerHora();
+        /*document.getElementById("horaActualizacionIndicadoresOrden").innerHTML = obtenerHora();
+        document.getElementById("horaActualizacionIndicadoresDia").innerHTML = obtenerHora();*/
+        document.getElementById("horaActualizacionIndicadoresOrden").innerHTML = moment().format('hh:mm'); 
+        document.getElementById("horaActualizacionIndicadoresDia").innerHTML = moment().format('hh:mm');
     }
 }
 setInterval(actualizarIndicadores, 60 * 1000);
@@ -833,9 +835,10 @@ function actualizarPagina() {
     if (!moviendo)
     {
         // No ha habido movimiento desde 50 un segundo
+        //var idOrden = $('#numeroOrden').children("option:selected").val();
         var ordenSelect = document.getElementById("numeroOrden");
-        var numeroOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
-        if (numeroOrden == '-1') {
+        var idOrden = ordenSelect.options[ordenSelect.selectedIndex].value;
+        if (idOrden == '-1') {
             location.reload();
         }
     }

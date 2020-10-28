@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ViaWines_Automatizacion.Filtros;
 
 namespace ViaWines_Automatizacion
 {
@@ -31,8 +32,24 @@ namespace ViaWines_Automatizacion
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                // Set a short timeout for easy testing.
+                //options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                // Make the session cookie essential
+                options.Cookie.IsEssential = true;
+            });
 
+            services.AddScoped<VerificarSesion>();
+            services.AddHttpContextAccessor();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddMvc().AddMvcOptions(options =>
+            {
+                options.Filters.Add(new Filtros.VerificarSesion());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,13 +68,16 @@ namespace ViaWines_Automatizacion
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseSession();
             app.UseCookiePolicy();
+
 
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Resumen}/{action=Resumen}/{id?}");
+                    template: "{controller=Usuario}/{action=Login}/{id?}");
+                //template: "{controller=Resumen}/{action=Resumen}/{id?}");
             });
         }
     }

@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ViaWines_Automatizacion.Models.Orden>
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
 
 @{
     ViewData["Title"] = "Problemas en el proceso de producción";
@@ -24,12 +25,15 @@
             </div>
         </div>
 
-
-        <div class="col-xs-12 col-md-6">
-            <p>
-                <button type="button" class="btn btn-block bg-green" data-toggle="modal" id="btnAgregarIncidencia">Agregar incidente</button>
-            </p>
-        </div>
+        @if (ViaWines_Automatizacion.DbAutomatizacionViaWines.ConsultaUsuario.Leer_Rol_Operacion(@HttpContextAccessor.HttpContext.Session.GetString("Rol"), 7) == 1)
+        { 
+            <div class="col-xs-12 col-md-6">
+                <p>
+                    <button type="button" class="btn btn-block bg-green" data-toggle="modal" id="btnAgregarIncidencia">Agregar incidente</button>
+                </p>
+            </div>
+        }
+        
     </div>
 </section>
 
@@ -224,7 +228,7 @@
 
 
 
-    
+
 
 <style>
     .fechaIncidente a {

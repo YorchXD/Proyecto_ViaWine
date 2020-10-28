@@ -61,6 +61,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                         var prodData = row;
                         var orden = new Orden()
                         {
+                            Id = Convert.ToInt32(prodData["id"]),
                             OrdenFabricacion = Convert.ToInt32(prodData["ordenFabricacion"]),
                             Version = prodData["version"].ToString(),
                             Cliente = prodData["cliente"].ToString(),
@@ -219,14 +220,13 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             return null;
         }
 
-        public static int LeerVelocidadMaterial(string FechaActual, string FechaFabricacion, string Hora, int OrdenFabricacion, string TipoMaterial)
+        public static int LeerVelocidadMaterial(string Fecha, string Hora, int OrdenFabricacion, string TipoMaterial)
         {
             try
             {
-                var command = new SqlCommand() { CommandText = "Leer_Velocidad_Material1", CommandType = System.Data.CommandType.StoredProcedure };
-                command.Parameters.Add(new SqlParameter() { ParameterName = "RefOrden", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
-                command.Parameters.Add(new SqlParameter() { ParameterName = "FechaFabricacion", Direction = System.Data.ParameterDirection.Input, Value = FechaFabricacion });
-                command.Parameters.Add(new SqlParameter() { ParameterName = "FechaActual", Direction = System.Data.ParameterDirection.Input, Value = FechaActual });
+                var command = new SqlCommand() { CommandText = "Leer_Velocidad_Material_Actualizada", CommandType = System.Data.CommandType.StoredProcedure };
+                command.Parameters.Add(new SqlParameter() { ParameterName = "IdOrden", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
+                command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
                 command.Parameters.Add(new SqlParameter() { ParameterName = "Hora", Direction = System.Data.ParameterDirection.Input, Value = Hora });
                 command.Parameters.Add(new SqlParameter() { ParameterName = "TipoMaterial", Direction = System.Data.ParameterDirection.Input, Value = TipoMaterial });
                 var datos = ContexDb.GetDataSet(command);
@@ -251,14 +251,12 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             return -1;
         }
 
-        public static List<Material> LeerMaterial(String Fecha, int OrdenFabricacion)
+        public static List<Material> LeerMaterial(int IdOrden)
         {
             try
             {
-                var command = new SqlCommand() { CommandText = "Leer_Material_Resumen", CommandType = System.Data.CommandType.StoredProcedure };
-                command.Parameters.Add(new SqlParameter() { ParameterName = "OrdenFabricacion", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
-                /*El parametro fecha se debe eliminar ya que ahora extraerá todos los materiales tanto de dias anteriores como del dia actual y así saber el avance que tiene una orden*/
-                command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
+                var command = new SqlCommand() { CommandText = "Leer_Material_1", CommandType = System.Data.CommandType.StoredProcedure };
+                command.Parameters.Add(new SqlParameter() { ParameterName = "IdOrden", Direction = System.Data.ParameterDirection.Input, Value = IdOrden });
                 var datos = ContexDb.GetDataSet(command);
                 List<Material> materiales = new List<Material>();
                 //string format = "yyyy-MM-dd HH:mm:ss";
@@ -290,21 +288,21 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
          * IMPLEMENTADA
          * Obtiene la cantidad de botellas y cajas contabilizada por minuto o por hora segun sea el caso
          * Para determinar si se obtiene la cantidad de material por minuto o por hora se considera la orden de fabricacion
-         * Si la orden de fabricacion es -1 significa que se pide la cantidad de material por hora
-         * Si la orden de fabricacion es distinta de -1 significa que se pide la cantidad de material por minuto
+         * Si el id de orden de fabricacion es -1 significa que se pide la cantidad de material por hora
+         * Si el id de la orden de fabricacion es distinta de -1 significa que se pide la cantidad de material por minuto
          */
-        public static List<Monitoreo> LeerMonitoreo (String Fecha, int OrdenFabricacion)
+        public static List<Monitoreo> LeerMonitoreo (String Fecha, int IdOrden)
         {
             
             try
             {
                 SqlCommand command;
 
-                if (OrdenFabricacion != -1)
+                if (IdOrden != -1)
                 {
-                    command = new SqlCommand() { CommandText = "Cant_Bot_Caj_Min_Orden", CommandType = System.Data.CommandType.StoredProcedure };
+                    command = new SqlCommand() { CommandText = "Cant_Bot_Caj_Min_Orden_Act", CommandType = System.Data.CommandType.StoredProcedure };
                     command.Parameters.Add(new SqlParameter() { ParameterName = "fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
-                    command.Parameters.Add(new SqlParameter() { ParameterName = "refOrden", Direction = System.Data.ParameterDirection.Input, Value = OrdenFabricacion });
+                    command.Parameters.Add(new SqlParameter() { ParameterName = "refOrden", Direction = System.Data.ParameterDirection.Input, Value = IdOrden });
                 }
                 else
                 {

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -54,7 +55,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                         var area = new Area()
                         {
                             Id = Convert.ToInt32(prodData["id"]),
-                            Nombre = prodData["nombre"].ToString()
+                            Name = prodData["nombre"].ToString()
                         };
 
                         Areas.Add(area);

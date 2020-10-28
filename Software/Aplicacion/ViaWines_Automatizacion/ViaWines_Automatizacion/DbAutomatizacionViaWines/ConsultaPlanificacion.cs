@@ -70,8 +70,6 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                             PorcentajeAvance = 0
                         };
 
-                    
-
                         int CantBotellas = LeerCantBotellas(fecha, orden.OrdenFabricacion);
                         int CantCajas = LeerCantCajas(fecha, orden.OrdenFabricacion);
 
@@ -99,66 +97,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             return null;
         }
 
-
-
-
-        public static List<String> LeerFechas()
-        {
-            try
-            {
-                var command = new SqlCommand() { CommandText = "Leer_Fechas_Planificadas", CommandType = System.Data.CommandType.StoredProcedure };
-                var datos = ContexDb.GetDataSet(command);
-                List<String> fechas = new List<String>();
-
-                if (datos.Tables[0].Rows.Count > 0)
-                {
-                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
-                    {
-                        var prodData = row;
-                        DateTime fecha = Convert.ToDateTime(prodData["fechaFabricacion"]);
-                        String FechaFabricacion = fecha.Month+"/"+fecha.Day+"/"+fecha.Year;
-                        fechas.Add(FechaFabricacion);
-                    }
-                    return fechas;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-
-            return null;
-        }
-
-        public static List<String> LeerFechasPasadas()
-        {
-            try
-            {
-                var command = new SqlCommand() { CommandText = "Leer_Fechas_Planificadas_Realizadas", CommandType = System.Data.CommandType.StoredProcedure };
-                var datos = ContexDb.GetDataSet(command);
-                List<String> fechas = new List<String>();
-
-                if (datos.Tables[0].Rows.Count > 0)
-                {
-                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
-                    {
-                        var prodData = row;
-                        DateTime fecha = Convert.ToDateTime(prodData["fechaFabricacion"]);
-                        String FechaFabricacion = fecha.Month + "/" + fecha.Day + "/" + fecha.Year;
-                        fechas.Add(FechaFabricacion);
-                    }
-                    return fechas;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-
-            return null;
-        }
+        
 
         public static int LeerCantCajas(String Fecha, int OrdenFabricacion)
         {
@@ -247,11 +186,28 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             return validar;
         }
 
-        public static List<String> LeerFechasOrdenesPlanificadas()
+        /*Lecturas de fechas*/
+        public static List<String> FechasOrdenes(int opcion)
         {
             try
             {
-                var command = new SqlCommand() { CommandText = "Leer_Fechas_Planificadas1", CommandType = System.Data.CommandType.StoredProcedure };
+                SqlCommand command;
+                switch (opcion)
+                {
+                    case 1:
+                        command = new SqlCommand() { CommandText = "Leer_Fechas_Planificadas1", CommandType = System.Data.CommandType.StoredProcedure };
+                        break;
+                    case 2:
+                        command = new SqlCommand() { CommandText = "Leer_Fechas_Planificadas", CommandType = System.Data.CommandType.StoredProcedure };
+                        break;
+                    case 3:
+                        command = new SqlCommand() { CommandText = "Leer_Fechas_Ordenes_Abiertas", CommandType = System.Data.CommandType.StoredProcedure };
+                        break;
+                    default:
+                        command = new SqlCommand() { CommandText = "Leer_Fechas_Planificadas_Realizadas", CommandType = System.Data.CommandType.StoredProcedure };
+                        break;
+                }
+
                 var datos = ContexDb.GetDataSet(command);
                 List<String> fechas = new List<String>();
 
@@ -266,45 +222,13 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                     }
                     return fechas;
                 }
-
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
-
-            return null;
-        }
-
-        public static List<String> LeerFechasOrdenesAbiertas()
-        {
-            try
-            {
-                var command = new SqlCommand() { CommandText = "Leer_Fechas_Ordenes_Abiertas", CommandType = System.Data.CommandType.StoredProcedure };
-                var datos = ContexDb.GetDataSet(command);
-                List<String> fechas = new List<String>();
-
-                if (datos.Tables[0].Rows.Count > 0)
-                {
-                    foreach (System.Data.DataRow row in datos.Tables[0].Rows)
-                    {
-                        var prodData = row;
-                        DateTime fecha = Convert.ToDateTime(prodData["fechaFabricacion"]);
-                        String FechaFabricacion = fecha.Month + "/" + fecha.Day + "/" + fecha.Year;
-                        fechas.Add(FechaFabricacion);
-                    }
-                    return fechas;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-
+            
             return null;
         }
     }
 }
-
-

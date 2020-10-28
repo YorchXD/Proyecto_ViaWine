@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Expires" content="0">
@@ -83,7 +87,7 @@
                 <span class="logo-lg"><img src="https://viawines.com/wp-content/uploads/2018/11/logo_blanco.png" class="brandlogo-image"></span>
             </a>
 
-            
+
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top">
                 <!-- Sidebar toggle button-->
@@ -91,13 +95,13 @@
                     <span class="sr-only">Toggle navigation</span>
                 </a>
 
-                <div class="navbar-custom-menu">
+                <div class="navbar-custom-menu" style="padding-right:2.3%">
                     <ul class="nav navbar-nav">
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <img src="~/AdminLTE/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-                                <span class="hidden-xs">Usuario ViaWines</span>
+                                <span class="hidden-xs">@HttpContextAccessor.HttpContext.Session.GetString("NombreUsuario")</span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
@@ -105,40 +109,21 @@
                                     <img src="~/AdminLTE/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
 
                                     <p>
-                                        Alexander Pierce - Web Developer
-                                        <small>Member since Nov. 2012</small>
+                                        @HttpContextAccessor.HttpContext.Session.GetString("NombreUsuario") - @HttpContextAccessor.HttpContext.Session.GetString("Cargo")
                                     </p>
-                                </li>
-                                <!-- Menu Body -->
-                                <li class="user-body">
-                                    <div class="row">
-                                        <div class="col-xs-4 text-center">
-                                            <a href="#">Followers</a>
-                                        </div>
-                                        <div class="col-xs-4 text-center">
-                                            <a href="#">Sales</a>
-                                        </div>
-                                        <div class="col-xs-4 text-center">
-                                            <a href="#">Friends</a>
-                                        </div>
-                                    </div>
-                                    <!-- /.row -->
                                 </li>
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
-                                    <div class="pull-left">
-                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
-                                    </div>
-                                    <div class="pull-right">
-                                        <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                    <div style="text-align:center">
+                                        <a class="btn btn-default btn-flat" asp-area="" asp-controller="Usuario" asp-action="Logout">Cerrar sesión</a>
                                     </div>
                                 </li>
                             </ul>
                         </li>
                         <!-- Control Sidebar Toggle Button -->
-                        <li>
+                        <!--li>
                             <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-                        </li>
+                        </li-->
                     </ul>
                 </div>
             </nav>
@@ -157,48 +142,61 @@
                 <ul class="sidebar-menu" data-widget="tree">
                     <!--li class="header">MAIN NAVIGATION</li-->
 
+                    @if (ViaWines_Automatizacion.DbAutomatizacionViaWines.ConsultaUsuario.Leer_Rol_Operacion(@HttpContextAccessor.HttpContext.Session.GetString("Rol"), 1) == 1)
+                    {
+                        <li>
+                            <a class="nav-link active" asp-area="" asp-controller="Resumen" asp-action="Resumen">
+                                <i class="fa fa-tachometer"></i> <span>Resumen</span>
+                            </a>
+                        </li>
+                    }
 
-                    <li>
-                        <a class="nav-link active" asp-area="" asp-controller="Resumen" asp-action="Resumen">
-                            <i class="fa fa-tachometer"></i> <span>Resumen</span>
-                        </a>
-                    </li>
+                    @if (ViaWines_Automatizacion.DbAutomatizacionViaWines.ConsultaUsuario.Leer_Rol_Operacion(@HttpContextAccessor.HttpContext.Session.GetString("Rol"), 3) == 1)
+                    {
+                        <li>
+                            <a class="nav-link active" asp-area="" asp-controller="Planificacion" asp-action="Planificacion">
+                                <i class="fa fa-calendar-check-o"></i> <span>Planificacion</span>
+                            </a>
+                        </li>
+                    }
 
-                    <li>
-                        <a class="nav-link active" asp-area="" asp-controller="Planificacion" asp-action="Planificacion">
-                            <i class="fa fa-calendar-check-o"></i> <span>Planificacion</span>
-                        </a>
-                    </li>
+                    @if (ViaWines_Automatizacion.DbAutomatizacionViaWines.ConsultaUsuario.Leer_Rol_Operacion(@HttpContextAccessor.HttpContext.Session.GetString("Rol"), 5) == 1)
+                    {
+                        <li>
+                            <a class="nav-link active" asp-area="" asp-controller="Proceso" asp-action="Proceso">
+                                <i class="fa fa-truck"></i> <span>Proceso</span>
+                            </a>
+                        </li>
+                    }
 
-                    <li>
-                        <a class="nav-link active" asp-area="" asp-controller="Proceso" asp-action="Proceso">
-                            <i class="fa fa-truck"></i> <span>Proceso</span>
-                        </a>
-                    </li>
+                    @if (ViaWines_Automatizacion.DbAutomatizacionViaWines.ConsultaUsuario.Leer_Rol_Operacion(@HttpContextAccessor.HttpContext.Session.GetString("Rol"), 8) == 1)
+                    {
+                        <li>
+                            <a class="nav-link active" asp-area="" asp-controller="Incidente" asp-action="Incidente">
+                                <i class="fa fa-wrench"></i> <span>Incidentes</span>
+                            </a>
+                        </li>
+                    }
 
-                    <li>
-                        <a class="nav-link active" asp-area="" asp-controller="Incidente" asp-action="Incidente">
-                            <i class="fa fa-wrench"></i> <span>Incidentes</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a class="nav-link active" asp-area="" asp-controller="Reporte" asp-action="Reporte">
-                            <i class="fa fa-book"></i> <span>Reporte de incidentes</span>
-                        </a>
-                    </li>
-
-                    <!--li>
-        <a class="nav-link active" asp-area="" asp-controller="Ejemplos" asp-action="Ejemplos">
-            <i class="fa fa-th"></i> <span>Ejemplos</span>
-        </a>
-    </li>
-    <li>
-        <a class="nav-link active" asp-area="" asp-controller="Contribucion" asp-action="Contribucion">
-            <i class="fa fa-th"></i> <span>Contribucion</span>
-        </a>
-    </li-->
-                </ul>
+                    @if (ViaWines_Automatizacion.DbAutomatizacionViaWines.ConsultaUsuario.Leer_Rol_Operacion(@HttpContextAccessor.HttpContext.Session.GetString("Rol"), 10) == 1)
+                    {
+                        <li>
+                            <a class="nav-link active" asp-area="" asp-controller="Reporte" asp-action="Reporte">
+                                <i class="fa fa-book"></i> <span>Reporte de incidentes</span>
+                            </a>
+                        </li>
+                    }
+                        <!--li>
+            <a class="nav-link active" asp-area="" asp-controller="Ejemplos" asp-action="Ejemplos">
+                <i class="fa fa-th"></i> <span>Ejemplos</span>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link active" asp-area="" asp-controller="Contribucion" asp-action="Contribucion">
+                <i class="fa fa-th"></i> <span>Contribucion</span>
+            </a>
+        </li-->
+                    </ul>
             </section>
             <!-- /.sidebar -->
         </aside>
@@ -456,8 +454,6 @@
     <script src="~/AdminLTE/dist/js/demo.js"></script>
 
     <!--script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.21/r-2.2.5/datatables.min.js"></script-->
-
-
     <!-- Page script -->
     <script>
         $(function () {
@@ -471,6 +467,7 @@
                 showInputs: false
             })
         })
+
     </script>
 
     <style>

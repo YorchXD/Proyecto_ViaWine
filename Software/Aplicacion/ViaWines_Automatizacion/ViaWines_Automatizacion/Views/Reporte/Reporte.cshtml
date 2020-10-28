@@ -5,9 +5,6 @@
 
 }
 
-
-
-
 <section class="content-header">
     <div class="">
         <h1>
@@ -16,54 +13,65 @@
     </div>
     <div class="row">
         <div class="col-xs-12 col-md-6">
-            <select class="form-control select2" id="numeroOrden">
+            <select class="form-control select2" id="tipoReporte" onchange="filtroReporte()" style="width: 100%;">
                 <option disabled selected value="null">Seleccione el tipo de reporte</option>
-                <option value="dia">Diaria</option>
-                <option value="semana">Semanal</option>
-                <option value="año">Anual</option>
+                <option value="1">Diario</option>
+                <option value="2">Semanal</option>
+                <option value="3">Mensual</option>
+                <option value="4">Anual</option>
             </select>
         </div>
 
 
         <div class="col-xs-12 col-md-6">
-            <div class="input-group date ">
-                <div class="input-group-addon">
-                    <i class="fa fa-calendar"></i>
+            <div class="datepicker" id="filtroDiario" style="display: none" width="100%">
+                <div class="input-group date ">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" class="form-control pull-right" id="datepicker" name="fecha" onload="obtenerFecha()" onchange="reporte()">
                 </div>
-                <input type="text" class="form-control pull-right" id="datepicker" name="fecha" onload="obtenerFecha()">
-                <div class="input-group-btn">
-                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+            </div>
+
+
+            <div class="row" id="filtroSemanal" style="display: none; width:100%" >
+                <div class="col-xs-12 col-md-4">
+                    <select class="form-control select2" id="anio1" style="width:100%" onchange="habilitarSelectMes()">
+                        <option disabled selected value="null">Seleccione el año</option>
+                    </select>
                 </div>
+                <div class="col-xs-12 col-md-4">
+                    <select class="form-control select2" id="mes1" style="width:100%" onchange="habilitarSelectSemana()">
+                        <option disabled selected value="null">Seleccione el mes</option>
+                    </select>
+                </div>
+                <div class="col-xs-12 col-md-4">
+                    <select class="form-control select2" id="semana" style="width:100%" onchange="reporte()">
+                        <option disabled selected value="null">Seleccione la semana</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row" id="filtroMensual" style="display: none">
+                <div class="col-xs-12 col-md-6">
+                    <select class="form-control select2" id="anio2" style="width:100%" onchange="habilitarSelectMes()">
+                        <option disabled selected value="null">Seleccione el año</option>
+                    </select>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <select class="form-control select2" id="mes2" style="width:100%" onchange="reporte()">
+                        <option disabled selected value="null">Seleccione el mes</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="filtroAnual" style="display: none">
+                <select class="form-control select2" id="anio3" style="width:100%" onchange="reporte()">
+                    <option disabled selected value="null">Seleccione el año</option>
+                </select>
             </div>
         </div>
     </div>
-
-
-
-
-    <!--div class="row">
-        <div class="col-xs-12 col-md-6">
-            <select class="form-control select2" id="numeroOrden">
-                <option disabled selected value="null">Seleccione el tipo de reporte</option>
-                <option value="dia">Diaria</option>
-                <option value="semana">Semanal</option>
-                <option value="año">Anual</option>
-            </select>
-        </div>
-
-
-        <div class="col-xs-12 col-md-6">
-            <div class="input-group date ">
-                <div class="input-group-addon">
-                    <i class="fa fa-calendar"></i>
-                </div>
-                <input type="text" class="form-control pull-right" id="datepicker" name="fecha" onload="obtenerFecha()">
-                <div class="input-group-btn">
-                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                </div>
-            </div>
-        </div>
-    </div-->
 
 </section>
 
@@ -74,174 +82,47 @@
             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                 <br />
                 <dl class="dl-horizontal">
-                    <dt>Total</dt>
-                    <dd id="Total">17</dd>
+                    <dt>Total de incidentes</dt>
+                    <dd id="Total">-</dd>
                     <dt>Tiempo total</dt>
-                    <dd id="TiempoTotal">14:01:30</dd>
-                    <dt>Promedio</dt>
-                    <dd id="horaTerminoPlan">00:09:54</dd>
+                    <dd id="TiempoTotal">-</dd>
+                    <dt>Tiempo prom. por incidencias</dt>
+                    <dd id="TiempoPromedio">-</dd>
                 </dl>
             </div>
 
             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                 <br />
                 <dl class="dl-horizontal">
-                    <dt>N° de ordenes</dt>
-                    <dd id="NumOrden">10</dd>
-                    <dt>N° de ordenes completadas</dt>
-                    <dd id="NumOrden">8</dd>
+                    <dt>N° de ordenes planificadas</dt>
+                    <dd id="OrdenPlan">-</dd>
+                    <dt>N° de ordenes finalizadas</dt>
+                    <dd id="OrdenFinalizadas">-</dd>
+                    <dt>N° de ordenes pospuestas</dt>
+                    <dd id="OrdenPospuestas">-</dd>
                     <dt>N° de ordenes pausadas</dt>
-                    <dd id="NumOrden">1</dd>
+                    <dd id="OrdenPausadas">-</dd>
                     <dt>N° de ordenes sin iniciar</dt>
-                    <dd id="NumOrden">1</dd>
+                    <dd id="OrdenNoIni">-</dd>
                 </dl>
             </div>
         </div>
 
     </div>
-    <!--div class="row">
-        <div class="col-md-4 col-sm-4 col-xs-12">
-            <div class="info-box">
-                <span class="info-box-icon"><i class="fa fa-star-o"></i></span>
-                <div class="info-box-content">
-                    <span class="info-box-text">Total</span>
-                    <span class="info-box-number">17</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 col-sm-4 col-xs-12">
-            <div class="info-box">
-                <span class="info-box-icon"><i class="fa fa-star-o"></i></span>
-                <div class="info-box-content">
-                    <span class="info-box-text">Tiempo total</span>
-                    <span class="info-box-number">14:01:30</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 col-sm-4 col-xs-12">
-            <div class="info-box">
-                <span class="info-box-icon"><i class="fa fa-star-o"></i></span>
-
-                <div class="info-box-content">
-                    <span class="info-box-text">Tiempo promedio</span>
-                    <span class="info-box-number">00:09:54</span>
-                </div>
-            </div>
-        </div>
-    </!-div>
-
-
-    <div class="row">
-        <div class="col-md-3 col-sm-6 col-xs-12">
-            <div class="info-box">
-                <span class="info-box-icon"><i class="fa fa-star-o"></i></span>
-
-                <div class="info-box-content">
-                    <span class="info-box-text">N° de ordenes</span>
-                    <span class="info-box-number">10</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3 col-sm-6 col-xs-12">
-            <div class="info-box">
-                <span class="info-box-icon"><i class="fa fa-star-o"></i></span>
-
-                <div class="info-box-content">
-                    <span class="info-box-text">N° de ordenes completadas</span>
-                    <span class="info-box-number">8</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3 col-sm-6 col-xs-12">
-            <div class="info-box">
-                <span class="info-box-icon"><i class="fa fa-star-o"></i></span>
-                <div class="info-box-content">
-                    <span class="info-box-text">N° de ordenes pausadas</span>
-                    <span class="info-box-number">1</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3 col-sm-6 col-xs-12">
-            <div class="info-box">
-                <span class="info-box-icon"><i class="fa fa-star-o"></i></span>
-                <div class="info-box-content">
-                    <span class="info-box-text">N° de ordenes sin iniciar</span>
-                    <span class="info-box-number">1</span>
-                </div>
-            </div>
-        </div>
-    </div-->
-
-
-
-
 
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <table id="tabla" class="table table-bordered display dt-responsive" cellspacing="0" width="100%">
+                    <table id="incidentesArea" class="table table-bordered display dt-responsive" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th>Área</th>
-                                <th>Tipo de incidente</th>
+                                <th>Tiempo total (min)</th>
                                 <th>Cantidad de incidentes</th>
                             </tr>
                         </thead>
-
-                        <tbody>
-                            <tr>
-                                <td>Bodega de insumos</td>
-                                <td>Paradas Externas</td>
-                                <td>1</td>
-                            </tr>
-                            <tr>
-                                <td>Calidad</td>
-                                <td>Rechazos y procesos</td>
-                                <td>1</td>
-                            </tr>
-                            <tr>
-                                <td>Enología</td>
-                                <td>Paradas Externas</td>
-                                <td>5</td>
-                            </tr>
-                            <tr>
-                                <td>Laboratorio</td>
-                                <td>Tiempos de Cambio</td>
-                                <td>4</td>
-                            </tr>
-                            <tr>
-                                <td>Linea Producción</td>
-                                <td>Fallas de equipo</td>
-                                <td>2</td>
-                            </tr>
-                            <tr>
-                                <td>Mantención</td>
-                                <td>Tiempos Planeados</td>
-                                <td>1</td>
-                            </tr>
-                            <tr>
-                                <td>Maquila</td>
-                                <td>Tiempos de Producción</td>
-                                <td>1</td>
-                            </tr>
-                            <tr>
-                                <td>Prevención</td>
-                                <td>Paradas Externas</td>
-                                <td>1</td>
-                            </tr>
-                            <tr>
-                                <td>Producción</td>
-                                <td>NoNa</td>
-                                <td>1</td>
-                            </tr>
-                        </tbody>
                     </table>
                 </div>
                 <!-- /.box-body -->
@@ -254,149 +135,75 @@
 
     <figure class="highcharts-figure">
         <div id="container"></div>
-        <!--p class="highcharts-description">
-            Variable radius pie charts can be used to visualize a
-            second dimension in a pie chart. In this chart, the more
-            densely populated countries are drawn further out, while the
-            slice width is determined by the size of the country.
-        </p-->
     </figure>
 
-
-
-
-
-
-
-
-
-
-
-
+    <div class="modal fade" id="modal-alerta">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-red">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-alert"></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="body-alert"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-black" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 
 
 </section>
 
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <!--   Datatables-->
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
 <!-- extension responsive -->
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="~/js/reporte.js"></script>
+
+
+
 <script>
-$(document).ready(function () {
-    var modelo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model,Newtonsoft.Json.Formatting.Indented));
-    var fecha = (modelo[0]["FechaFabricacion"]).split('T')[0];
-    $("#datepicker").datepicker({ format: 'yyyy-mm-dd' }).val(fecha);
-});
+    $(document).ready(function () {
+        ObtenerFechaIncidentes();
+        obtenerAnios();
+    });
 </script>
 
-
+<!--script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script-->
+<!--   Datatables-->
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
+<!-- extension responsive -->
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="https://unpkg.com/moment"></script>
 <!--Gráfico-->
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/variable-pie.js"></script>
-<!--script src="https://code.highcharts.com/modules/exporting.js"></script-->
-<!--script src="https://code.highcharts.com/modules/export-data.js"></script-->
-<!--script src="https://code.highcharts.com/modules/accessibility.js"></script-->
-
-
 
 <style>
-    #container {
-        height: 500px;
+    .fechaIncidente a {
+        background-color: #560f3d !important;
+        color: #ffffff !important;
     }
+</style>
 
-    .highcharts-figure, .highcharts-data-table table {
-        /*min-width: 320px;
-        max-width: 700px;*/
+<style>
+    #chartdiv {
         width: 100%;
-        margin: 1em auto;
-    }
-
-
-    .highcharts-data-table caption {
-        padding: 1em 0;
-        font-size: 1.2em;
-        color: #555;
-    }
-
-    .highcharts-data-table th {
-        font-weight: 600;
-        padding: 0.5em;
-    }
-
-    .highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
-        padding: 0.5em;
-    }
-
-    .highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
-        background: #f8f8f8;
-    }
-
-    .highcharts-data-table tr:hover {
-        background: #f1f7ff;
+        height: 350px;
     }
 </style>
 
 
-<script>
-    Highcharts.chart('container', {
-        chart: {
-            type: 'variablepie'
-        },
-        title: {
-            text: 'Cantidad de incidentes por área'
-        },
-        tooltip: {
-            headerFormat: '',
-            pointFormat: '<span style="color:{point.color}">\u25CF</span> <b> {point.name}</b><br/>' +
-                'Cantidad de incientes: <b>{point.y}</b><br/>' +
-                'Porcentaje: <b>{point.z}</b><br/>'
-        },
-        series: [{
-            minPointSize: 10,
-            innerSize: '20%',
-            zMin: 0,
-            name: 'countries',
-            data: [{
-                name: 'Bodega insumos',
-                y: 1,
-                z: 5.9
-            }, {
-                name: 'Calidad',
-                y: 1,
-                z: 5.9
-            }, {
-                name: 'Enología',
-                y: 5,
-                z: 29.4
-            }, {
-                name: 'Laboratorio',
-                y: 4,
-                z: 23.5
-            }, {
-                name: 'Linea Producción',
-                y: 2,
-                z: 11.8
-            }, {
-                name: 'Mantención',
-                y: 1,
-                z: 5.9
-            }, {
-                name: 'Maquila',
-                y: 1,
-                z: 5.9
-            }, {
-                name: 'Prevención',
-                y: 1,
-                z: 5.9
-            }, {
-                name: 'Producción',
-                y: 1,
-                z: 5.9
-            }]
-        }]
-    });
-</script>
+
+
+
 
 <!--Fin gráfico-->

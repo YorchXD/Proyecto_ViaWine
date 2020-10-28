@@ -5,7 +5,7 @@ var incidencia = null;
 var registros = null;
 
 
-function obtenerRegistrosIncidentes() {
+function obtenerRegistrosIncidentes(actualizar) {
     var modal = document.getElementById('myModal');
     modal.style.display = "block";
     let params = new URLSearchParams(location.search);
@@ -28,7 +28,13 @@ function obtenerRegistrosIncidentes() {
                 incidencia = data.incidente;
                 //console.log(registros);
                 datosIncidentes(data.incidente, registros.length);
-                tablaRegistroIncidentes(registros);
+                if (actualizar == 1) {
+                    tablaRegistroIncidentes(registros, true);
+                }
+                else {
+                    tablaRegistroIncidentes(registros, false);
+                }
+                
             }
             else {
                 $('#title-alert').text("Alerta");
@@ -55,11 +61,17 @@ function datosIncidentes(incidente, cantRegistros) {
     document.getElementById("cantIncidentes").innerHTML = cantRegistros;
 }
 
-function tablaRegistroIncidentes(registros) {
+function tablaRegistroIncidentes(registros, actualizar) {
     //console.log(registros);
     $('#OPI').DataTable({
         'data': registros,
         'order': [[0, "asc"]],
+        "columnDefs": [
+            {
+                "targets": [9],
+                "visible": actualizar
+            }
+        ],
         'columns': [
             { "data": "id" },
             //{ "data": "refOrden" },
@@ -128,13 +140,16 @@ function tablaRegistroIncidentes(registros) {
                 }
             },
             { "data": "observacion" },
+
+
             {
                 "render": function (data, type, full, meta) {
                     var acciones = "";
                     acciones = '<button class="btn bg-orange" onclick="editarObservacionIncidente(' + full.id + ')" title="Editar observacion"><div><i class="glyphicon glyphicon-pencil"></i></div></button>'
-                    if (moment(full.fechaHoraTermino).format("YYYY-MM-DD HH:mm:ss")=="2020-01-01 00:00:00") {
+                    if (moment(full.fechaHoraTermino).format("YYYY-MM-DD HH:mm:ss") == "2020-01-01 00:00:00") {
                         acciones += '<button class="btn btn-success" onclick="alertaFinalizarIncidente(' + full.id + ')" title="Finalizar Incidente"><div><i class="glyphicon glyphicon-ok"></i></div></button>';
                     }
+                    
 
                     return acciones;
                 }

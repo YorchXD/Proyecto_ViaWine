@@ -5,12 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ViaWines_Automatizacion.DbAutomatizacionViaWines;
+using ViaWines_Automatizacion.Filtros;
 using ViaWines_Automatizacion.Models;
 
 namespace ViaWines_Automatizacion.Controllers
 {
     public class ResumenController : Controller
     {
+        [PermisosUsuario(idOperacion: 1)]
         public IActionResult Resumen()
         {
             return View();
@@ -119,10 +121,9 @@ namespace ViaWines_Automatizacion.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetMonitoreoMateriales(int OrdenFabricacion, String Fecha)
+        public JsonResult GetMonitoreoMateriales(int IdOrden)
         {
-            //String fecha = DateTime.Now.ToString("yyyy-MM-dd");
-            List<Material> materiales = ConsultaResumen.LeerMaterial(Fecha, OrdenFabricacion);
+            List<Material> materiales = ConsultaResumen.LeerMaterial(IdOrden);
             if (materiales != null)
             {
                 return Json(materiales);
@@ -132,12 +133,12 @@ namespace ViaWines_Automatizacion.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetVelocidadPorMin(int OrdenFabricacion, string TipoMaterial, String FechaFabricacion)
+        public JsonResult GetVelocidadPorMin(int IdOrden, string TipoMaterial)
         {
             //String fecha = "2020-05-13";
             String FechaActual = DateTime.Now.ToString("yyyy-MM-dd");
             String Hora = DateTime.Now.AddMinutes(-1).ToString("HH:mm");
-            int cantTpoMaterial = ConsultaResumen.LeerVelocidadMaterial(FechaActual, FechaFabricacion, Hora, OrdenFabricacion, TipoMaterial);
+            int cantTpoMaterial = ConsultaResumen.LeerVelocidadMaterial(FechaActual, Hora, IdOrden, TipoMaterial);
             if (cantTpoMaterial == -1)
             {
                 cantTpoMaterial = 0;
@@ -146,9 +147,9 @@ namespace ViaWines_Automatizacion.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetMonitoreo(String Fecha, int OrdenFabricacion)
+        public JsonResult GetMonitoreo(String Fecha, int IdOrden)
         {
-            List<Monitoreo> monitoreo = ConsultaResumen.LeerMonitoreo(Fecha, OrdenFabricacion);
+            List<Monitoreo> monitoreo = ConsultaResumen.LeerMonitoreo(Fecha, IdOrden);
             if (monitoreo != null)
             {
                 return Json(monitoreo);

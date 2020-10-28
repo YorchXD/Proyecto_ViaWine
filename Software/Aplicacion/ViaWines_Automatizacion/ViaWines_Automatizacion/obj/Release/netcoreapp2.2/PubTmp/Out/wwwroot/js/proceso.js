@@ -4,7 +4,8 @@ var incidenteSeleccionado = "";
 var fecha = "";
 var modal = "";
 var cantCajasPlanAux = 0;
-var cantCajasAux=0
+var cantCajasAux = 0
+var areas = "";
 
 $('#btnInicio').click(function () { exist_proces_ini(1); });
 $('#btnInicioProceso').click(function () {
@@ -39,7 +40,10 @@ $('#btnConfirm').click(function () {
 });
 
 $('#btnConfirmarIncidencia').click(function () {
-    if (incidenteSeleccionado.length != 0) {
+    var areaSelect = document.getElementById("areas");
+    var idArea = areaSelect.options[areaSelect.selectedIndex].value;
+
+    if (incidenteSeleccionado.length != 0 && idArea!= -1) {
         //console.log(incidenteSeleccionado);
 
         var ordenSelect = document.getElementById("numeroOrden");
@@ -60,76 +64,35 @@ $('#btnConfirmarIncidencia').click(function () {
 
         var datos = "";
         var progresoOrden = (cantCajasAux / cantCajasPlanAux) * 100;
-        //var progresoOrden = parseFloat((cantCajasAux / cantCajasPlanAux) * 100).toFixed(2).replace(".", ",");
-        //var progresoOrden = Number(((cantCajasAux / cantCajasPlanAux) * 100).toFixed(2));
-        //console.log(progresoOrden);
 
         if ($("#observacion").val() != "") {
             datos = {
                 'IdOrden': numeroOrden,
                 'IdIncidente': incidenteSeleccionado[0]["idIncidente"],
+                'IdArea': idArea,
                 'EstadoOrden': estadoOrden,
                 'FechaHoraInicio': moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                 'Observacion': $("#observacion").val(),
                 'CantCajas': cantCajasAux,
                 'CantCajasPlan': cantCajasPlanAux
-                //'Progreso': progresoOrden
             };
         }
         else {
             datos = {
                 'IdOrden': numeroOrden,
                 'IdIncidente': incidenteSeleccionado[0]["idIncidente"],
+                'IdArea': idArea,
                 'EstadoOrden': estadoOrden,
                 'FechaHoraInicio': moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                 'Observacion': 'Sin Observación',
                 'CantCajas': cantCajasAux,
                 'CantCajasPlan': cantCajasPlanAux
-                //'Progreso': progresoOrden
             };
         }
         registrarIncidencia(datos);
         $("#modal-Incidencia").modal("hide");
         resetearDatosIncidencia();
         incidenteSeleccionado = "";
-
-        /*if (incidenteSeleccionado[0]["reqObservacion"] == 'No') {
-            datos = {
-                'IdOrden': numeroOrden,
-                'IdIncidente': incidenteSeleccionado[0]["idIncidente"],
-                'EstadoOrden': estadoOrden,
-                'FechaHoraInicio': moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-                'Observacion': 'Sin Observación',
-                'Progreso': progresoOrden,
-            };
-            //console.log(datos);
-            registrarIncidencia(datos);
-            $("#modal-Incidencia").modal("hide");
-            resetearDatosIncidencia();
-            incidenteSeleccionado = "";
-            
-        }
-        else {
-            if ($("#observacion").val() != "") {
-                datos = {
-                    'IdOrden': numeroOrden,
-                    'IdIncidente': incidenteSeleccionado[0]["idIncidente"],
-                    'EstadoOrden': estadoOrden,
-                    'FechaHoraInicio': moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-                    'Observacion': $("#observacion").val()
-                };
-                registrarIncidencia(datos);
-                $("#modal-Incidencia").modal("hide");
-                resetearDatosIncidencia();
-                incidenteSeleccionado = "";
-                //console.log(datos);
-            }
-            else {
-                $('#title-alert').text("Alerta");
-                $('#body-alert').text("Existen campos incompletos. Favor de completar el formulario de incidencia.");
-                $("#modal-alerta").modal("show");
-            }
-        }*/
     }
     else {
         $('#title-alert').text("Alerta");
@@ -138,8 +101,8 @@ $('#btnConfirmarIncidencia').click(function () {
     }
 });
 
-function registrarIncidencia(datos) {
-    //console.log(datos);
+function registrarIncidencia(datos)
+{
     $.ajax({
         url: "/Proceso/RegistrarIncidencia",
         method: "POST",
@@ -298,6 +261,12 @@ function iniciarSelectPrincipalesIncidentes() {
     for (var i = 0; agrupacionTiempo != "" && i < agrupacionTiempo.length; i++) {
         $('#tiempo').append("<option  value='" + agrupacionTiempo[i]["idAgrupacionTiempo"] + "'>" + agrupacionTiempo[i]["nombreAgrupacionTiempo"] + "</option>");
     }
+
+    $('#areas').empty();
+    $('#areas').append("<option value='-1' selected>Seleccione el área responsable</option >");
+    for (var i = 0; i < areas.length; i++) {
+        $('#areas').append("<option value='" + areas[i]["id"] + "'>" + areas[i]["nombre"] + "</option >");
+    }
 }
 
 function mostrarIncidenciaCodigo() {
@@ -309,14 +278,6 @@ function mostrarIncidenciaCodigo() {
     document.getElementById("descripcionClasificacion1").innerHTML = incidenteSeleccionado[0]["descripcionClasificacion"];
     document.getElementById("aclaracionClasificacion1").innerHTML = incidenteSeleccionado[0]["aclaracionClasificacion"];
     document.getElementById("nombreZona1").innerHTML = incidenteSeleccionado[0]["nombreZona"];
-
-    /*var observacion = document.getElementById('observaciondiv');
-    if (incidenteSeleccionado[0]["reqObservacion"] == "Si") {
-        observacion.style.display = 'block';
-    }
-    else {
-        observacion.style.display = 'none';
-    }*/
 }
 
 
@@ -337,8 +298,6 @@ function iniciarSelectClasificacionIncidencia() {
 
         }
     }
-    /*var observacion = document.getElementById('observaciondiv');
-    observacion.style.display = 'none';*/
     resetearDatosIncidencia();
 }
 
@@ -353,14 +312,6 @@ function mostrarIncidenciaCodigo1() {
 
     document.getElementById("aclaracionClasificacion2").innerHTML = incidenteSeleccionado[0]["aclaracionClasificacion"];
     document.getElementById("nombreZona2").innerHTML = incidenteSeleccionado[0]["nombreZona"];
-
-    /*var observacion = document.getElementById('observaciondiv');
-    if (incidenteSeleccionado[0]["reqObservacion"] == "Si") {
-        observacion.style.display = 'block';
-    }
-    else {
-        observacion.style.display = 'none';
-    }*/
 }
 
 function resetearDatosIncidencia() {
@@ -1042,3 +993,24 @@ function actualizarPagina() {
     }
 }
 setInterval(actualizarPagina, 60000 * 2);
+
+function obtenerAreas() {
+    $.ajax({
+        type: 'POST',
+        url: '/Proceso/LeerAreas',
+        data: {},
+        dataType: 'json',
+        async: false,
+        success: function (data) {
+            if (data.validacion == true) {
+                areas = data.areas;
+            }
+            else {
+                $('#title-alert').text("Alerta");
+                $('#body-alert').text("Problemas con obtener las áreas responsables en funcion obtenerAreas. Intente actualizar la página y si el problema persiste, favor de contactarse con TIBOX.");
+                $("#modal-alerta").modal("show");
+            }
+        }
+    });
+}
+

@@ -75,8 +75,7 @@ function tablaRegistroIncidentes(registros) {
                     return refOrden;
                 }
             },
-
-            
+            { "data": "nombreArea" },
             {
                 "data": "fechaHoraInicio", render: function (d) {
                     return moment(d).format("YYYY-MM-DD HH:mm:ss");
@@ -197,6 +196,18 @@ function editarObservacionIncidente(id) {
         refOrden = "Sin orden asociada";
     }
 
+    $('#areas').empty();
+    $('#areas').append("<option value='-1' selected disabled>Seleccione el área responsable</option >");
+    for (var i = 0; i < areas.length; i++) {
+        if (areas[i]["nombre"] == incidenteSeleccionado["nombreArea"]) {
+            $('#areas').append("<option value='" + areas[i]["id"] + "' selected>" + areas[i]["nombre"] + "</option >");
+        }
+        else {
+            $('#areas').append("<option value='" + areas[i]["id"] + "'>" + areas[i]["nombre"] + "</option >");
+        }
+
+    }
+
     document.getElementById("idIncidente").innerHTML = incidenteSeleccionado["id"];
     document.getElementById("numeroOrden").innerHTML = refOrden;
     document.getElementById("fechaHoraInicioDetalle").innerHTML = moment(incidenteSeleccionado["fechaHoraInicio"]).format("YYYY-MM-DD HH:mm:ss");
@@ -263,6 +274,8 @@ function alertaFinalizarIncidente(id) {
 }
 
 $('#btnConfirmModIncidencia').click(function () {
+    var areaSelect = document.getElementById("areas");
+    var idArea = areaSelect.options[areaSelect.selectedIndex].value;
     var observacion = $("#observacion").val();
     $.ajax({
         url: "/Incidente/ActualizarObservacionIncidente",
@@ -270,7 +283,8 @@ $('#btnConfirmModIncidencia').click(function () {
         async: "false",
         data: {
             "IdIncidente": idIncidenteRegistrado,
-            'Observacion': observacion
+            "IdArea": idArea,
+            "Observacion": observacion
         },
         success: function (data) {
             if (data == 1) {
@@ -291,9 +305,6 @@ $('#btnConfirmModIncidencia').click(function () {
     });
 
 });
-
-
-
 
 $('#btnConfirmFinalizar').click(function () {
     $('#modal-confirm-finalizar').modal('hide');
@@ -321,5 +332,24 @@ $('#btnConfirmFinalizar').click(function () {
             idIncidenteRegistrado = -1;
         }
     });
-    
 });
+
+function obtenerAreas() {
+    $.ajax({
+        type: 'POST',
+        url: '/Incidente/LeerAreas',
+        data: {},
+        dataType: 'json',
+        async: false,
+        success: function (data) {
+            if (data.validacion == true) {
+                areas = data.areas;
+            }
+            else {
+                $('#title-alert').text("Alerta");
+                $('#body-alert').text("Problemas con obtener las áreas responsables en funcion obtenerAreas. Intente actualizar la página y si el problema persiste, favor de contactarse con TIBOX.");
+                $("#modal-alerta").modal("show");
+            }
+        }
+    });
+}

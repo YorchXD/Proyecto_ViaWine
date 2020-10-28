@@ -342,7 +342,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                         var area = new Area()
                         {
                             Id = Convert.ToInt32(prodData["id"]),
-                            Nombre = prodData["nombre"].ToString()
+                            Name = prodData["nombre"].ToString()
                         };
 
                         Areas.Add(area);

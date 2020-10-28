@@ -143,7 +143,7 @@ function mostrarTablaOrdenes(fecha, opcion) {
     
 }
 
-function fechaActual() {
+/*function fechaActual() {
     var hoy = new Date();
     var dd = hoy.getDate();
     var MM = hoy.getMonth() + 1;
@@ -158,7 +158,7 @@ function fechaActual() {
 
     hoy = yyyy + '-' + MM + '-' + dd;
     return hoy;
-}
+}*/
 
 function agregarOrdenesNuevas() {
     $('#modal-agregar-ordenes').modal('hide');
@@ -200,26 +200,21 @@ function cambiarTipo() {
     modal = document.getElementById('myModal');
     modal.style.display = "block";
     var opcion = $('#tipoOrden').val();
-    switch (opcion) {
-        case '1':
-            var fecha = fechaActual();
-            fechasOrdenes(opcion, 'ordenesDia', fecha);
-            break;
-        case '2':
-            fechasOrdenes(opcion, 'ordenesFuturas', "");
-            break;
-
-        default:/*opcion==3*/
-            var fecha = fechaActual();
-            fechasOrdenes(opcion, 'ordenesDia', fecha);
-            break;
+    if (opcion == 1 || opcion == 3) {
+        var fecha = moment().format('YYYY-MM-DD');
+        fechasOrdenes(opcion, fecha);
     }
+    else if (opcion == 2) {
+        fechasOrdenes(opcion, "");
+    }
+
+
     fecha = $("#datepicker").datepicker({ dateFormat: 'yy-mm-dd' }).val();
     mostrarTablaOrdenes(fecha, opcion);
     modal.style.display = "none";
 }
 
-function fechasOrdenes(opcion, estilo, fecha) {
+function fechasOrdenes(opcion, fecha) {
     var fechaAux = "";
     $.ajax({
         type: 'POST',
@@ -247,13 +242,30 @@ function fechasOrdenes(opcion, estilo, fecha) {
             if ($('#datepicker').val() != "") {
                 $('#datepicker').datepicker("destroy");
             }
-
+            var fechaAux2 = new Date();
+            console.log("Fecha Actual: " + fechaAux2);
             $('#datepicker').datepicker({
                 destroy: true,
                 beforeShowDay: function (date) {
                     var highlight = eventDates[date];
                     if (highlight) {
-                        return [true, estilo];
+                        switch (opcion) {
+                            case 1:
+                                return [true, 'ordenesDia'];
+                                break;
+                            case 2:
+                                return [true, 'ordenesFuturas'];
+                                break;
+                            default:
+                                if (highlight <= fechaAux2) {
+                                    return [true, 'ordenesDia'];
+                                }
+                                else {
+                                    return [true, 'ordenesFuturas'];
+                                }
+                                break;
+                        }
+
                     } else {
                         return [false, '', ''];
                     }

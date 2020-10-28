@@ -7,13 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using ViaWines_Automatizacion.Models;
 using ViaWines_Automatizacion.DbAutomatizacionViaWines;
 using System.ComponentModel.DataAnnotations;
-
-
+using ViaWines_Automatizacion.Filtros;
 
 namespace ViaWines_Automatizacion.Controllers
 {
+    
     public class PlanificacionController : Controller
     {
+        [PermisosUsuario(idOperacion: 3)]
         public IActionResult Planificacion()
         {
             return View();
@@ -25,32 +26,11 @@ namespace ViaWines_Automatizacion.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        [PermisosUsuario(idOperacion: 2)]
         [HttpPost]
         public JsonResult AgregarOrdenesNuevas(int OrdenFabricacion, String Fecha)
         {
-            //String fecha = DateTime.Today.ToString("yyyy-MM-dd");
-            //int cantOrdenesActuales = 0;
-            //int cantOrdenesNuevas = 0;
-
-            //List<Orden> ordenesActuales = ConsultaPlanificacion.LeerOrdenes(fecha, 1);
             return Json(ConsultaPlanificacion.AgregarNuevasOrdenes(OrdenFabricacion, Fecha));
-            //List<Orden> ordenesNuevas = ConsultaPlanificacion.LeerOrdenes(fecha, 1);
-
-            /*if (ordenesActuales != null)
-            {
-                cantOrdenesActuales = ordenesActuales.Count();
-            }
-
-            if (ordenesNuevas != null)
-            {
-                cantOrdenesNuevas = ordenesNuevas.Count();
-            }
-
-            if (cantOrdenesNuevas > cantOrdenesActuales)
-            {
-                return true;
-            }
-            return false;*/
         }
 
         [HttpPost]
@@ -76,7 +56,6 @@ namespace ViaWines_Automatizacion.Controllers
             
         }
 
-
         [HttpPost]
         public JsonResult GetFechasTipo(int opcion)
         {
@@ -85,16 +64,20 @@ namespace ViaWines_Automatizacion.Controllers
             {
                 case 1:
                     /*Fecha de ordenes abiertas*/
-                    fechasAux = ConsultaPlanificacion.LeerFechasOrdenesAbiertas();
+                    fechasAux = ConsultaPlanificacion.FechasOrdenes(3);
+                    //fechasAux = ConsultaPlanificacion.LeerFechasOrdenesAbiertas();
                     break;
                 case 2:
                     /*Fechas de ordenes Planificadas (futuras)*/
-                    fechasAux = ConsultaPlanificacion.LeerFechasOrdenesPlanificadas();
+                    fechasAux = ConsultaPlanificacion.FechasOrdenes(1);
+                    //fechasAux = ConsultaPlanificacion.LeerFechasOrdenesPlanificadas();
                     break;
                 default:
                     /*Todas las fechas en donde existen ordenes*/
-                    List<String> fechasPasadas = ConsultaPlanificacion.LeerFechasPasadas();
-                    List<String> fechas = ConsultaPlanificacion.LeerFechas();
+                    //List<String> fechasPasadas = ConsultaPlanificacion.LeerFechasPasadas();
+                    //List<String> fechas = ConsultaPlanificacion.LeerFechas();
+                    List<String> fechasPasadas = ConsultaPlanificacion.FechasOrdenes(4);
+                    List<String> fechas = ConsultaPlanificacion.FechasOrdenes(2);
                     fechasAux = fechasPasadas.Union(fechas).ToList();
                     break;
             }
@@ -105,50 +88,5 @@ namespace ViaWines_Automatizacion.Controllers
             }
             return Json(new object());
         }
-
-
-
-
-
-
-
-
-
-
-        /*[HttpGet]
-        public JsonResult GetTodasFechasPlanificacion()
-        {
-            List<String> fechasPasadas = ConsultaPlanificacion.LeerFechasPasadas();
-            List<String> fechas = ConsultaPlanificacion.LeerFechas();
-
-            List<String> fechasAux = fechasPasadas.Union(fechas).ToList();
-            if (fechasAux != null)
-            {
-                return Json(fechasAux);
-            }
-            return Json(new object());
-        }
-
-        [HttpGet]
-        public JsonResult GetFechasOrdenesPlanificadas()
-        {
-            List<String> fechasOrden = ConsultaPlanificacion.LeerFechasOrdenesPlanificadas();
-            if (fechasOrden != null)
-            {
-                return Json(fechasOrden);
-            }
-            return Json(new object());
-        }
-
-        [HttpGet]
-        public JsonResult GetFechaOrdenesAbiertas()
-        {
-            List<String> fechasOrden = ConsultaPlanificacion.LeerFechasOrdenesAbiertas();
-            if (fechasOrden != null)
-            {
-                return Json(fechasOrden);
-            }
-            return Json(new object());
-        }*/
     }
 }
