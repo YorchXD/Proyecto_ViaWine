@@ -45,16 +45,21 @@
 
                 <div class="tx-white-5 tx-center mg-b-60"> </div>
 
-                <form action="@Url.Content("~/Usuario/Login")" method="post">
+                <!--form action="Url.Content("~/Usuario/Login")" method="post"-->
+                <form asp-controller="Usuario" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
 
                     <div class="form-group">
                         <input type="email" class="form-control fc-outline-dark" name="email" placeholder="Ingrese su correo" autocomplete="off" required>
                         <div class="alert-danger">
-                            @ViewBag.Error
                         </div>
                     </div><!-- form-group -->
-                    
-
+                    <div class="form-group">
+                        <input type="password" class="form-control fc-outline-dark" name="clave" placeholder="Ingrese su clave" autocomplete="off" required>
+                        <div class="alert-danger">
+                            @ViewBag.Error
+                        </div>
+                        <br>
+                    </div><!-- form-group -->
                     <!-- form-group -->
                     <button type="submit" class="btn btn-info btn-block">Entrar</button>
                 </form>
@@ -86,6 +91,12 @@
                 $("#login").fadeIn(2000);
             }, 2500);
 
+        });
+
+        $('input[type="password"]').on('focus', function () {
+            $('*').addClass('password');
+        }).on('focusout', function () {
+            $('*').removeClass('password');
         });
 
     </script>

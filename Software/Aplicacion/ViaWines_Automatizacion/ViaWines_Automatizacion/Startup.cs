@@ -4,12 +4,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ViaWines_Automatizacion.Filtros;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace ViaWines_Automatizacion
 {
@@ -25,6 +36,21 @@ namespace ViaWines_Automatizacion
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+          .AddMicrosoftIdentityWebApp(Configuration.GetSection("AzureAd"));
+
+            services.AddControllersWithViews(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });
+            services.AddRazorPages()
+                .AddMicrosoftIdentityUI();
+
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -49,7 +75,7 @@ namespace ViaWines_Automatizacion
             services.AddMvc().AddMvcOptions(options =>
             {
                 options.Filters.Add(new Filtros.VerificarSesion());
-                options.EnableEndpointRouting = false;
+                //options.EnableEndpointRouting = false;
             });
 
             
@@ -58,8 +84,9 @@ namespace ViaWines_Automatizacion
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.EnvironmentName.Equals("Development"))
+            if (env.IsDevelopment())
             {
+                
                 app.UseDeveloperExceptionPage();
             }
             else
@@ -76,12 +103,25 @@ namespace ViaWines_Automatizacion
             app.UseCookiePolicy();
 
 
-            app.UseMvc(routes =>
+            /*app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Usuario}/{action=Login}/{id?}");
                 //template: "{controller=Resumen}/{action=Resumen}/{id?}");
+            });*/
+
+            app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Usuario}/{action=Login}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }
