@@ -168,7 +168,6 @@ D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\Via
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\bin\Debug\netcoreapp2.2\ViaWines_Automatizacion.pdb
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\bin\Debug\netcoreapp2.2\ViaWines_Automatizacion.Views.dll
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\bin\Debug\netcoreapp2.2\ViaWines_Automatizacion.Views.pdb
-D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\ViaWines_Automatizacion.csprojAssemblyReference.cache
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\ViaWines_Automatizacion.AssemblyInfoInputs.cache
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\ViaWines_Automatizacion.AssemblyInfo.cs
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\ViaWines_Automatizacion.csproj.CoreCompileInputs.cache
@@ -203,3 +202,6 @@ D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\Via
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\Razor\Views\Incidente\Incidente.cshtml.g.cs
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\Razor\Views\Usuario\Login.cshtml.g.cs
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\Razor\Views\Error\OperacionNoAutorizada.cshtml.g.cs
+D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\Razor\Views\Usuario\ClaveTemporal.cshtml.g.cs
+D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\Razor\Views\Usuario\MiPerfil.cshtml.g.cs
+D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Debug\netcoreapp2.2\Razor\Views\Usuario\Usuarios.cshtml.g.cs

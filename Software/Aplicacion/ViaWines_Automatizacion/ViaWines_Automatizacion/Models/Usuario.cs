@@ -13,6 +13,7 @@ namespace ViaWines_Automatizacion.Models
         public int IdRol { get; set; }
         public string NombreRol { get; set; }
         public string Cargo { get; set; }
+        public string EstadoClave { get; set; }
 
     }
 }

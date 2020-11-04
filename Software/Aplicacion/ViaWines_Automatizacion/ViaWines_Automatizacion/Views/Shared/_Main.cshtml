@@ -100,13 +100,13 @@
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <img src="~/AdminLTE/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                                <img src="~/AdminLTE/dist/img/usuario.jpg" class="user-image" alt="User Image">
                                 <span class="hidden-xs">@HttpContextAccessor.HttpContext.Session.GetString("NombreUsuario")</span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header">
-                                    <img src="~/AdminLTE/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                    <img src="~/AdminLTE/dist/img/usuario.jpg" class="img-circle" alt="User Image">
 
                                     <p>
                                         @HttpContextAccessor.HttpContext.Session.GetString("NombreUsuario") - @HttpContextAccessor.HttpContext.Session.GetString("Cargo")
@@ -114,7 +114,11 @@
                                 </li>
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
-                                    <div style="text-align:center">
+                                    <div class="pull-left">
+                                        <a class="btn btn-default btn-flat" asp-area="" asp-controller="Usuario" asp-action="MiPerfil">Mi Perfil</a>
+                                    </div>
+
+                                    <div class="pull-right">
                                         <a class="btn btn-default btn-flat" asp-area="" asp-controller="Usuario" asp-action="Logout">Cerrar sesión</a>
                                     </div>
                                 </li>
@@ -186,17 +190,26 @@
                             </a>
                         </li>
                     }
-                        <!--li>
-            <a class="nav-link active" asp-area="" asp-controller="Ejemplos" asp-action="Ejemplos">
-                <i class="fa fa-th"></i> <span>Ejemplos</span>
-            </a>
-        </li>
-        <li>
-            <a class="nav-link active" asp-area="" asp-controller="Contribucion" asp-action="Contribucion">
-                <i class="fa fa-th"></i> <span>Contribucion</span>
-            </a>
-        </li-->
-                    </ul>
+
+                    @if (ViaWines_Automatizacion.DbAutomatizacionViaWines.ConsultaUsuario.Leer_Rol_Operacion(@HttpContextAccessor.HttpContext.Session.GetString("Rol"), 11) == 1)
+                    {
+                        <li>
+                            <a class="nav-link active" asp-area="" asp-controller="Usuario" asp-action="Usuarios">
+                                <i class="fa fa-book"></i> <span>Administración de usuarios</span>
+                            </a>
+                        </li>
+                    }
+                    <!--li>
+                        <a class="nav-link active" asp-area="" asp-controller="Ejemplos" asp-action="Ejemplos">
+                            <i class="fa fa-th"></i> <span>Ejemplos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link active" asp-area="" asp-controller="Contribucion" asp-action="Contribucion">
+                            <i class="fa fa-th"></i> <span>Contribucion</span>
+                        </a>
+                    </li-->
+                </ul>
             </section>
             <!-- /.sidebar -->
         </aside>

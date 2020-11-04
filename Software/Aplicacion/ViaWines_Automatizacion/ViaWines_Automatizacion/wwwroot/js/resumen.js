@@ -448,20 +448,6 @@ function monitoreo(idOrden, botellasPlan, cajasPlan, formato) {
     })
 }
 
-/*function obtenerHora() {
-    var today = new Date();
-    var h = today.getHours();
-    var m = today.getMinutes();
-
-    if (h < 10) {
-        h = '0' + h;
-    }
-
-    if (m < 10) {
-        m = '0' + m;
-    }
-    return h + ":" + m;
-}*/
 
 /**
  * Redondea un numero decimal dejandolo con dos decimales
@@ -599,7 +585,7 @@ var BotCajMinHelper = {
             series.dataFields.dateX = "hora";
             series.name = "Botellas";
             series.dataFields.valueY = "botellas";
-            series.tooltipHTML = "<img src='img/vino.png' style='vertical-align:bottom; margin-right: 10px; width:24px; height:24px;'><span style='font-size:14px; color:#000000;'><b>{valueY.value}</b></span>";
+            series.tooltipHTML = "<img src='/../img/vino.png' style='vertical-align:bottom; margin-right: 10px; width:24px; height:24px;'><span style='font-size:14px; color:#000000;'><b>{valueY.value}</b></span>";
             series.tooltipText = "[#000]{valueY.value}[/]";
             series.tooltip.background.fill = am4core.color("#FFF");
             series.tooltip.getStrokeFromObject = true;
@@ -618,7 +604,7 @@ var BotCajMinHelper = {
             series2.name = "Cajas";
             series2.dataFields.dateX = "hora";
             series2.dataFields.valueY = "cajas";
-            series2.tooltipHTML = "<img src='img/botellas-de-vino.png' style='vertical-align:bottom; margin-right: 10px; width:24px; height:24px;'><span style='font-size:14px; color:#000000;'><b>{valueY.value}</b></span>";
+            series2.tooltipHTML = "<img src='/../img/botellas-de-vino.png' style='vertical-align:bottom; margin-right: 10px; width:24px; height:24px;'><span style='font-size:14px; color:#000000;'><b>{valueY.value}</b></span>";
             series2.tooltipText = "[#000]{valueY.value}[/]";
             series2.tooltip.background.fill = am4core.color("#FFF");
             series2.tooltip.getFillFromObject = false;
@@ -715,7 +701,7 @@ var BotCajHoraHelper = {
             series.dataFields.dateX = "hora";
             series.name = "Botellas";
             series.dataFields.valueY = "botellas";
-            series.tooltipHTML = "<img src='img/vino.png' style='vertical-align:bottom; margin-right: 10px; width:24px; height:24px;'><span style='font-size:14px; color:#000000;'><b>{valueY.value}</b></span>";
+            series.tooltipHTML = "<img src='/../img/vino.png' style='vertical-align:bottom; margin-right: 10px; width:24px; height:24px;'><span style='font-size:14px; color:#000000;'><b>{valueY.value}</b></span>";
             series.tooltipText = "[#000]{valueY.value}[/]";
             series.tooltip.background.fill = am4core.color("#FFF");
             series.tooltip.getStrokeFromObject = true;
@@ -734,7 +720,7 @@ var BotCajHoraHelper = {
             series2.name = "Cajas";
             series2.dataFields.dateX = "hora";
             series2.dataFields.valueY = "cajas";
-            series2.tooltipHTML = "<img src='img/botellas-de-vino.png' style='vertical-align:bottom; margin-right: 10px; width:24px; height:24px;'><span style='font-size:14px; color:#000000;'><b>{valueY.value}</b></span>";
+            series2.tooltipHTML = "<img src='/../img/botellas-de-vino.png' style='vertical-align:bottom; margin-right: 10px; width:24px; height:24px;'><span style='font-size:14px; color:#000000;'><b>{valueY.value}</b></span>";
             series2.tooltipText = "[#000]{valueY.value}[/]";
             series2.tooltip.background.fill = am4core.color("#FFF");
             series2.tooltip.getFillFromObject = false;

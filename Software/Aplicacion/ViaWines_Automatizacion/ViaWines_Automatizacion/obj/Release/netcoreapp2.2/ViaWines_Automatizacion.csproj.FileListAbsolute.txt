@@ -125,3 +125,5 @@ D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\Via
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Release\netcoreapp2.2\ViaWines_Automatizacion.genruntimeconfig.cache
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Release\netcoreapp2.2\Razor\Views\Incidente\DetalleIncidente.cshtml.g.cs
 D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Release\netcoreapp2.2\Razor\Views\Incidente\Incidente.cshtml.g.cs
+D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Release\netcoreapp2.2\Razor\Views\Error\OperacionNoAutorizada.cshtml.g.cs
+D:\Repositorios\Proyecto_ViaWine\Software\Aplicacion\ViaWines_Automatizacion\ViaWines_Automatizacion\obj\Release\netcoreapp2.2\Razor\Views\Usuario\Login.cshtml.g.cs

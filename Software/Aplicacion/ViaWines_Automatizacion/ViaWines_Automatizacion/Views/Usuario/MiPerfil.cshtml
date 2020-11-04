@@ -1,0 +1,266 @@
+﻿@{
+    ViewData["Title"] = "Mi perfil";
+}
+
+
+<section class="content-header">
+    <h1>
+        Mi perfil
+    </h1>
+</section>
+
+<section class="content">
+    <div class="box">
+        <div class="box-body">
+            <div class="form-group col-lg-12">
+                <label>Email</label>
+                <input type="email" class="form-control" id="email-miPerfil" readonly>
+            </div>
+
+            <div class="form-group col-lg-12">
+                <label>Nombre</label>
+                <input type="text" class="form-control" id="nombre-miPerfil" readonly>
+            </div>
+
+            <div class="form-group col-lg-12">
+                <label>Cargo</label>
+                <input type="text" class="form-control" id="cargo-miPerfil" readonly>
+            </div>
+
+            <div class="form-group col-lg-12">
+                <label>Rol del usuario</label>
+                <input type="text" class="form-control" id="rolUsuario-miPerfil" readonly>
+            </div>
+        </div>
+        <div class="box-footer">
+            <div class="form-group col-lg-6 col-md-6 col-xs-12" style="text-align:center">
+                <button type="button" class="btn btn-success" id="btnModificarClave" style="width:100%">Modificar Clave</button>
+            </div>
+            <div class="form-group col-lg-6 col-md-6 col-xs-12" style="text-align:center">
+                <button type="button" class="btn bg-orange" id="btnModalModificarPerfil" style="width:100%">Modificar Perfil</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="modal-editar-perfil">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-orange">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-editar-usuario">Editar mi perfil</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label>Email</label>
+                            <input type="email" class="form-control" id="email-editar" readonly>
+                        </div>
+
+                        <div class="form-group col-lg-12">
+                            <label>Nombre</label>
+                            <input type="text" class="form-control" id="nombre-editar" placeholder="Ingrese el nombre del usuario">
+                        </div>
+
+                        <div class="form-group col-lg-12">
+                            <label>Cargo</label>
+                            <input type="text" class="form-control" id="cargo-editar" placeholder="Ingrese el cargo del usuario">
+                        </div>
+
+                        <div class="form-group col-lg-12">
+                            <label>Rol del usuario</label>
+                            <input type="text" class="form-control" id="rolUsuario-editar" readonly>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnModificarPerfil" class="btn bg-black">Editar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal fade" id="modal-confirmar-editar-perfil">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-orange">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-confirm-editar-perfil"></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="body-confirm-editar-perfil"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnConfirmarEditarUsuario" class="btn bg-black">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal fade" id="modal-confirm-editar-perfil-final">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-orange">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-confirm-reditar-perfil-final">Edición de perfil existoso</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="body-confirm-editar-perfil-final">Se han guardado los cambios del perfil correctamente.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-black" id="btnConfirmacion" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
+
+
+    <div class="modal fade" id="modal-cambiar-clave">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-green">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Cambiar clave</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label>Clave actual</label>
+                            <div class="input-group">
+                                <input type="password" id="claveActual" class="form-control" name="claveTemporal" placeholder="Ingrese su clave actual" autocomplete="off" required>
+                                <span class="input-group-btn">
+                                    <button type="button" id="verClaveActual" class="btn bg-black btn-flat" onclick="mostrarClaveActual()"><span id="iconoClaveActual" class="fa fa-eye-slash icon"></span></button>
+                                </span>
+                            </div>
+                        </div><!-- form-group -->
+
+                        <div class="form-group col-lg-12">
+                            <label>Nueva clave</label>
+                            <div class="input-group">
+                                <input type="password" id="nuevaClave" class="form-control" name="nuevaClave" placeholder="Ingrese su nueva clave" autocomplete="off" required>
+                                <span class="input-group-btn">
+                                    <button type="button" id="verNuevaClave" class="btn bg-black  btn-flat" onclick="mostrarNuevaClave()"><span id="iconoNuevaClave" class="fa fa-eye-slash icon"></span></button>
+                                </span>
+                            </div>
+                        </div><!-- form-group -->
+
+                        <div class="form-group col-lg-12">
+                            <label>Confirmación de nueva clave</label>
+                            <div class="input-group">
+                                <input type="password" id="nuevaClaveConfirmada" class="form-control" name="nuevaClaveConfirmada" placeholder="Ingrese nuevamente su clave" autocomplete="off" required>
+                                <span class="input-group-btn">
+                                    <button type="button" id="verNuevaConfirmada" class="btn bg-black  btn-flat" onclick="mostrarNuevaClaveConfirmada()"><span id="iconoNuevaClaveConfirmada" class="fa fa-eye-slash icon"></span></button>
+                                </span>
+                            </div>
+                        </div><!-- form-group -->
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnCambiarClave" class="btn bg-black">Cambiar clave</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal fade" id="modal-confirmar-cambiar-clave">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-green">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-confirm-cambiar-clave"></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="body-confirm-cambiar-clave"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnConfirmarCambiarClave" class="btn bg-black">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal fade" id="modal-clave-cambiada">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-green">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-clave-cambiada"></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="body-clave-cambiada"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-black" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+    <div class="modal fade" id="modal-alerta">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-red">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-alert"></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="body-alert"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-black" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+</section>
+
+
+<script src="~/js/miPerfil.js"></script>
+<script>
+    $(document).ready(function () {
+        obtenerRoles();
+        obtenerMiPerfil();
+    });
+</script>
