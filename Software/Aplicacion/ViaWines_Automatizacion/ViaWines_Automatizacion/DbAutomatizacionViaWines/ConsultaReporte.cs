@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
-using ViaWines_Automatizacion.Controllers;
 using ViaWines_Automatizacion.Models;
 
 namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
@@ -71,10 +68,10 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                 }
 
                 List<Area> areasAux = ConsultaIncidente.LeerAreas();
-                for(int i = 0; i<areasAux.Count; i++)
+                for (int i = 0; i < areasAux.Count; i++)
                 {
                     Boolean validar = areas.Exists(areaAux => areaAux.Id == areasAux[i].Id);
-                    if(!validar)
+                    if (!validar)
                     {
                         areas.Add(areasAux[i]);
                     }

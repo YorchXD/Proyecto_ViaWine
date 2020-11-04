@@ -1,10 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using ViaWines_Automatizacion.Controllers;
 using ViaWines_Automatizacion.Models;
 
 namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
@@ -49,9 +45,9 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             {
                 //var command = new SqlCommand() { CommandText = "Leer_Ordenes_Del_Día", CommandType = System.Data.CommandType.StoredProcedure };
                 var command = new SqlCommand() { CommandText = "Leer_Ordenes_Resumen", CommandType = System.Data.CommandType.StoredProcedure };
-                
+
                 command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = fecha });
-                
+
                 var datos = ContexDb.GetDataSet(command);
                 List<Orden> ordenes = new List<Orden>();
                 if (datos.Tables[0].Rows.Count > 0)
@@ -90,7 +86,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                         if (CantBotellas != -1)
                         {
                             orden.BotellasFabricadas = CantBotellas;
-                            
+
                         }
 
                         if (CantCajas != -1)
@@ -199,7 +195,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                 var command = new SqlCommand() { CommandText = "Leer_Cant_Ordenes_Finalizadas_Dia", CommandType = System.Data.CommandType.StoredProcedure };
                 command.Parameters.Add(new SqlParameter() { ParameterName = "Fecha", Direction = System.Data.ParameterDirection.Input, Value = Fecha });
                 var datos = ContexDb.GetDataSet(command);
-                List<int> indicadorOrdenesFinalizadas= new List<int> { 0, 0 };
+                List<int> indicadorOrdenesFinalizadas = new List<int> { 0, 0 };
 
                 if (datos.Tables[0].Rows.Count > 0)
                 {
@@ -291,9 +287,9 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
          * Si el id de orden de fabricacion es -1 significa que se pide la cantidad de material por hora
          * Si el id de la orden de fabricacion es distinta de -1 significa que se pide la cantidad de material por minuto
          */
-        public static List<Monitoreo> LeerMonitoreo (String Fecha, int IdOrden)
+        public static List<Monitoreo> LeerMonitoreo(String Fecha, int IdOrden)
         {
-            
+
             try
             {
                 SqlCommand command;

@@ -1,11 +1,8 @@
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Storage;
 using ViaWines_Automatizacion.DbAutomatizacionViaWines;
 using ViaWines_Automatizacion.Filtros;
 using ViaWines_Automatizacion.Models;
@@ -35,7 +32,8 @@ namespace ViaWines_Automatizacion.Controllers
                 ordenes = new List<Orden>();
             }
 
-            var datos = new { 
+            var datos = new
+            {
                 validacion = validacion,
                 ordenes = ordenes
             };
@@ -72,7 +70,7 @@ namespace ViaWines_Automatizacion.Controllers
             //ConsultaProceso.InsertarLogEstadoOrden(Id, Estado);
 
             int actualizacion = ConsultaProceso.ActualizarEstadoOrden(Id, Estado, Fecha);
-            if(actualizacion==1)
+            if (actualizacion == 1)
             {
                 return Json(true);
             }
@@ -160,9 +158,9 @@ namespace ViaWines_Automatizacion.Controllers
         {
             var resultado = new VistaModalIniciarProceso();
 
-            if(IdOrden == -1)
+            if (IdOrden == -1)
             {
-                switch(OpcionAccion)
+                switch (OpcionAccion)
                 {
                     case 1:
                         resultado.Titulo = "Falló iniciar proceso";
@@ -210,7 +208,7 @@ namespace ViaWines_Automatizacion.Controllers
                             resultado.ExisteProceso = true;
                         }
                         /*Se puede reanudar una orden en particular si se encuentra pospuesta o pausada*/
-                        else if((pausada || pospuesta) && !ordenIniciadasPausadasDiferente )
+                        else if ((pausada || pospuesta) && !ordenIniciadasPausadasDiferente)
                         {
                             resultado.Titulo = "Reanudar proceso";
                             resultado.Contenido = "¿Está seguro que desea reaundar el proceso de la orden N°" + orden.OrdenFabricacion + " ?";
@@ -357,8 +355,8 @@ namespace ViaWines_Automatizacion.Controllers
             int IdIncidenteRegistrado = ConsultaProceso.RegistrarIncidencia(IdOrden, IdIncidente, IdArea, EstadoOrden, FechaHoraInicio, Observacion, Progreso);
             var resultado = new VistaModalIncidente();
 
-            
-            if(IdIncidenteRegistrado!=-1)
+
+            if (IdIncidenteRegistrado != -1)
             {
                 resultado.Titulo = "Registro exitoso";
                 resultado.Contenido = "La incidencia se ha registrado exitosamente.";
@@ -369,7 +367,7 @@ namespace ViaWines_Automatizacion.Controllers
                 resultado.Titulo = "Falló ingresar la incidencia";
                 resultado.Contenido = "No se ha podido ingresar la orden. Intentelo nuevamente.";
                 resultado.RegistroExitoso = false;
-                
+
             }
             resultado.IdIncidente = IdIncidenteRegistrado;
 

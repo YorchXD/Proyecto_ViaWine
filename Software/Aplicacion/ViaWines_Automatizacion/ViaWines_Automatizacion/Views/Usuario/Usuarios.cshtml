@@ -1,0 +1,478 @@
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+
+@{
+    ViewData["Title"] = "Administración de usuarios";
+}
+
+
+<section class="content-header">
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+            <h1>
+                Administración
+                <small>de usuarios</small>
+            </h1>
+        </div>
+    </div>
+</section>
+
+
+<section class="content">
+    <div class="row">
+        @if (ViaWines_Automatizacion.DbAutomatizacionViaWines.ConsultaUsuario.Leer_Rol_Operacion(@HttpContextAccessor.HttpContext.Session.GetString("Rol"), 12) == 1)
+        {
+            <div class="form-group col-md-4 col-xs-12" style="float:right">
+                <p>
+                    <button type="button" id="btnAgregarUsuario" class="btn btn-block bg-purple">Agregar nuevo usuario</button>
+                </p>
+            </div>
+        }
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <!--table id="tabla" class="table table-bordered table-striped table-hover display-1 nowrap"-->
+                    <table id="tablaUsuarios" class="table table-bordered display dt-responsive" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>Cargo</th>
+                                <th>Rol</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+
+
+    <div class="modal fade" id="modal-agregar-usuario">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-purple">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-ini-process">Agregrar usuario</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label>Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="Ingrese el email del usuario">
+                        </div>
+
+                        <div class="form-group col-lg-12">
+                            <label>Nombre</label>
+                            <input type="text" class="form-control" id="nombre" placeholder="Ingrese el nombre del usuario">
+                        </div>
+
+                        <div class="form-group col-lg-12">
+                            <label>Cargo</label>
+                            <input type="text" class="form-control" id="cargo" placeholder="Ingrese el cargo del usuario">
+                        </div>
+
+                        <div class="form-group col-lg-12">
+                            <label>Rol del usuario</label>
+                            <select class="form-control select2" style="width: 100%;" id="rolUsuario" onchange="">
+                                <option disabled selected value="null">Seleccione el rol del usuario</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnAgregarNuevoUsuario" class="btn bg-black">Agregar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal fade" id="modal-confirm">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-purple">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-confirm"></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="body-confirm"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-black" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal fade" id="modal-confirm-reseteo-clave">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-green">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-confirm-reseteo-clave">Reseteo de clave existoso</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="body-confirm-reseteo-clave">Se ha reseteado la clave del usuario correctamente.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-black" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal fade" id="modal-confirm-eliminacion-usuario">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-red">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-eliminacion-usuario">Eliminación de usuario existoso</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="body-confirm-eliminacion-usuario">Se ha eliminado al usuario correctamente..</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-black" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal fade" id="modal-confirmar-agregar-usuario">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-purple">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-confirm-agregar-usuario"></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="body-confirm-agregar-usuario"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnConfirmarAgregarUsuario" class="btn bg-black">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal fade" id="modal-confirmar-eliminar-usuario">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-red">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-confirm-eliminar-usuario"></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="body-confirm-eliminar-usuario"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnConfirmarEliminarUsuario" class="btn bg-black">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal fade" id="modal-confirmar-resetear-clave">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-green">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-confirm-resetear-clave"></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="body-confirm-resetear-clave"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnConfirmarResetearClave" class="btn bg-black">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal fade" id="modal-alerta">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-red">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-alert"></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="body-alert"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-black" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
+    <div class="modal fade" id="modal-editar-usuario">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-orange">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-editar-usuario">Editar usuario</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label>Email</label>
+                            <input type="email" class="form-control" id="email-editar" placeholder="Ingrese el email del usuario">
+                        </div>
+
+                        <div class="form-group col-lg-12">
+                            <label>Nombre</label>
+                            <input type="text" class="form-control" id="nombre-editar" placeholder="Ingrese el nombre del usuario">
+                        </div>
+
+                        <div class="form-group col-lg-12">
+                            <label>Cargo</label>
+                            <input type="text" class="form-control" id="cargo-editar" placeholder="Ingrese el cargo del usuario">
+                        </div>
+
+                        <div class="form-group col-lg-12">
+                            <label>Rol del usuario</label>
+                            <select class="form-control select2" style="width: 100%;" id="rolUsuario-editar" onchange="">
+                                <option disabled selected value="null">Seleccione el rol del usuario</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnEditarUsuario" class="btn bg-black">Editar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal fade" id="modal-confirmar-editar-perfil">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-orange">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-confirm-editar-perfil"></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="body-confirm-editar-perfil"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnConfirmarEditarUsuario" class="btn bg-black">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal fade" id="modal-confirm-editar-perfil-final">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-orange">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title-confirm-reditar-perfil-final">Edición de perfil de usuario existoso</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="body-confirm-editar-perfil-final">Se han guardado los cambios del perfil del usuario correctamente.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-black" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div id="myModal" class="modalFP" style="display: none;">
+        <!-- Modal content -->
+        <div class="modal-contentFP">
+            <img src="~/img/cargando1.gif" style="opacity:0.8; width:40%; height:30%; margin-top: 30%;" />
+        </div>
+    </div>
+
+</section>
+<!-- /.content -->
+
+<style>
+    .modalFP {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 100000; /* Sit on top */
+        padding-top: 150px; /* Location of the box */
+        padding-bottom: 150px;
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0,0,0, 0.4); /* Fallback color */
+        background-color: rgba(0,0,0,0.8); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-contentFP {
+        background: url("~/../../img/tenor.gif") no-repeat;
+        background-color: rgba(254,254,254,0.4);
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 340px;
+        height: 340px;
+        text-align: center;
+        border-radius: 30px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+</style>
+
+<style>
+    .ordenesDia a {
+        background-color: #560f3d !important;
+        color: #ffffff !important;
+    }
+</style>
+
+<style>
+    .ordenesFuturas a {
+        background-color: #78981a !important;
+        color: #ffffff !important;
+    }
+
+    .clsDatePicker {
+        z-index: 1600 !important;
+    }
+</style>
+
+<script src="https://unpkg.com/moment"></script>
+<!--   Datatables-->
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
+<!-- extension responsive -->
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="~/js/usuario.js"></script>
+
+
+<script>
+    $('#btnAgregarUsuario').click(function () {
+        resetearCampos();
+        $('#modal-agregar-usuario').modal('show');
+    });
+
+    $('#btnAgregarNuevoUsuario').click(function () {
+        $('#title-confirm-agregar-usuario').text("Agregrar nuevo usuario");
+        $('#body-confirm-agregar-usuario').text("¿Está seguro que desea agregar al nuevo usuario?");
+        $("#modal-confirmar-agregar-usuario").modal("show");
+    });
+
+    $('#btnConfirmarAgregarUsuario').click(function () {
+        $("#modal-confirmar-agregar-usuario").modal("hide");
+        agregarUsuario();
+    });
+
+    $('#btnConfirmarEliminarUsuario').click(function () {
+        $("#modal-confirmar-eliminar-usuario").modal("hide");
+        eliminarUsuario();
+    });
+
+    $('#btnConfirmarResetearClave').click(function () {
+        $("#modal-confirmar-resetear-clave").modal("hide");
+        resetearClave();
+    });
+
+    $('#btnEditarUsuario').click(function () {
+        $('#title-confirm-editar-perfil').text("Editar usuario");
+        $('#body-confirm-editar-perfil').text("¿Está seguro que desea guardar los cambios del perfil?");
+        $("#modal-confirmar-editar-perfil").modal("show");
+    });
+
+    $('#btnConfirmarEditarUsuario').click(function () {
+        $("#modal-confirmar-editar-perfil").modal("hide");
+        guardarDatosPerfil();
+    });
+
+    $(document).ready(function () {
+        var actualizarUsuarios = @ViaWines_Automatizacion.DbAutomatizacionViaWines.ConsultaUsuario.Leer_Rol_Operacion(@HttpContextAccessor.HttpContext.Session.GetString("Rol"), 13);
+        var eliminarUsuarios = @ViaWines_Automatizacion.DbAutomatizacionViaWines.ConsultaUsuario.Leer_Rol_Operacion(@HttpContextAccessor.HttpContext.Session.GetString("Rol"), 14);
+        obtenerUsuarios(actualizarUsuarios, eliminarUsuarios);
+        obtenerRoles();
+
+    });
+</script>
+
+
+
+
+
+
+
+

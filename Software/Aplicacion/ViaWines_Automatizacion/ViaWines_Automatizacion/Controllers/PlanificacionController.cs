@@ -1,17 +1,15 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using ViaWines_Automatizacion.Models;
 using ViaWines_Automatizacion.DbAutomatizacionViaWines;
-using System.ComponentModel.DataAnnotations;
 using ViaWines_Automatizacion.Filtros;
+using ViaWines_Automatizacion.Models;
 
 namespace ViaWines_Automatizacion.Controllers
 {
-    
+
     public class PlanificacionController : Controller
     {
         [PermisosUsuario(idOperacion: 3)]
@@ -39,7 +37,7 @@ namespace ViaWines_Automatizacion.Controllers
             bool validacion = true;
             List<Orden> ordenes = ConsultaPlanificacion.LeerOrdenes(fecha, opcion);
             /*Manda un objeto vacio para que se active zero records y muestre que no hay información en la tabla*/
-            if (ordenes==null)
+            if (ordenes == null)
             {
                 ordenes = new List<Orden>();
                 validacion = false;
@@ -51,9 +49,9 @@ namespace ViaWines_Automatizacion.Controllers
                 ordenes = ordenes
             };
 
-            
+
             return Json(planificacion);
-            
+
         }
 
         [HttpPost]

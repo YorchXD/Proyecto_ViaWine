@@ -149,8 +149,6 @@ function tablaRegistroIncidentes(registros, actualizar) {
                     if (moment(full.fechaHoraTermino).format("YYYY-MM-DD HH:mm:ss") == "2020-01-01 00:00:00") {
                         acciones += '<button class="btn btn-success" onclick="alertaFinalizarIncidente(' + full.id + ')" title="Finalizar Incidente"><div><i class="glyphicon glyphicon-ok"></i></div></button>';
                     }
-                    
-
                     return acciones;
                 }
             },

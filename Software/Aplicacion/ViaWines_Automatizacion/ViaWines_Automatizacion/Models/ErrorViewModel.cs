@@ -1,5 +1,3 @@
-using System;
-
 namespace ViaWines_Automatizacion.Models
 {
     public class ErrorViewModel

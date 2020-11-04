@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ViaWines_Automatizacion.Models
 {
@@ -15,6 +12,6 @@ namespace ViaWines_Automatizacion.Models
         public String Observacion { get; set; }
         public String EstadoOrden { get; set; }
         public double ProgresoOrden { get; set; }
-        public int CantMinutos {get; set;}
+        public int CantMinutos { get; set; }
     }
 }

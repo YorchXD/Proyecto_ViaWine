@@ -1,17 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 
 namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
 {
     public class ContexDb
     {
         private static string connStr = "server=190.171.160.83;database=Automatizacion_ViaWines3.0;UID=sa;PASSWORD=J1h4m3b012*;";
-
         public static DataSet GetDataSet(SqlCommand command)
         {
             var ds = new DataSet();
@@ -57,7 +52,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                 }
             }
             return command;
-        }  
-    } 
+        }
+    }
 }
 

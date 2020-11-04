@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ViaWines_Automatizacion.Controllers;
 using ViaWines_Automatizacion.Models;
 
@@ -27,7 +23,7 @@ namespace ViaWines_Automatizacion.Filtros
                         filterContext.HttpContext.Response.Redirect("/Usuario/Login");
                     }
                 }
-                
+
             }
             catch (Exception)
             {

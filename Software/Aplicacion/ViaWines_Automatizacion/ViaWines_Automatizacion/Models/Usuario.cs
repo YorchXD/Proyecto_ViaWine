@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ViaWines_Automatizacion.Models
+﻿namespace ViaWines_Automatizacion.Models
 {
     public class Usuario
     {
@@ -13,6 +8,7 @@ namespace ViaWines_Automatizacion.Models
         public int IdRol { get; set; }
         public string NombreRol { get; set; }
         public string Cargo { get; set; }
+        public string EstadoClave { get; set; }
 
     }
 }

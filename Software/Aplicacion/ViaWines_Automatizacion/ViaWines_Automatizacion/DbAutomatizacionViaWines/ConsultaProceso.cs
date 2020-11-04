@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
 using ViaWines_Automatizacion.Models;
-using System.Globalization;
 
 namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
 {
@@ -230,7 +227,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             try
             {
                 String consulta = "";
-                switch(opcion)
+                switch (opcion)
                 {
                     case 1:
                         consulta = "Leer_Ordenes_Del_Día_Abierta";
@@ -375,10 +372,10 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                 {
                     var prodData = datos.Tables[0].Rows[0];
                     return Convert.ToInt32(prodData["id"]);
-                    
+
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
@@ -395,7 +392,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                 ContexDb.ExecuteProcedure(command);
                 return 1;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }

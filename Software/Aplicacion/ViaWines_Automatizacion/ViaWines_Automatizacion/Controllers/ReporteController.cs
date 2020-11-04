@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using ViaWines_Automatizacion.DbAutomatizacionViaWines;
 using ViaWines_Automatizacion.Filtros;
 using ViaWines_Automatizacion.Models;
@@ -34,7 +32,7 @@ namespace ViaWines_Automatizacion.Controllers
         {
             Boolean validar = false;
             List<Area> areas = ConsultaReporte.Reporte(Opcion, Fecha, Semana, Mes, Anio);
-            if(areas!=null)
+            if (areas != null)
             {
                 validar = true;
             }

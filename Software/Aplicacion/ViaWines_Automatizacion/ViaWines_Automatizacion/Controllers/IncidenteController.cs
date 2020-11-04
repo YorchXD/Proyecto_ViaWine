@@ -1,9 +1,7 @@
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using ViaWines_Automatizacion.DbAutomatizacionViaWines;
 using ViaWines_Automatizacion.Filtros;
 using ViaWines_Automatizacion.Models;
@@ -19,7 +17,7 @@ namespace ViaWines_Automatizacion.Controllers
         }
 
         [PermisosUsuario(idOperacion: 8)]
-        public IActionResult DetalleIncidente(int Id, String Fecha)
+        public IActionResult DetalleIncidente()
         {
             return View();
         }
@@ -138,7 +136,7 @@ namespace ViaWines_Automatizacion.Controllers
 
         [PermisosUsuario(idOperacion: 7)]
         [HttpPost]
-        public JsonResult RegistrarIncidencia(int IdIncidente, int IdArea,DateTime FechaHoraInicio, String Observacion)
+        public JsonResult RegistrarIncidencia(int IdIncidente, int IdArea, DateTime FechaHoraInicio, String Observacion)
         {
             int IdIncidenteRegistrado = ConsultaIncidente.RegistrarIncidencia(IdIncidente, IdArea, FechaHoraInicio, Observacion);
             var resultado = new VistaModalIncidente();

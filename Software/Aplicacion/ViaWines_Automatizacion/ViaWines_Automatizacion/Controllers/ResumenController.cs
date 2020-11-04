@@ -1,9 +1,7 @@
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using ViaWines_Automatizacion.DbAutomatizacionViaWines;
 using ViaWines_Automatizacion.Filtros;
 using ViaWines_Automatizacion.Models;
@@ -42,7 +40,7 @@ namespace ViaWines_Automatizacion.Controllers
         [HttpPost]
         public JsonResult GetCantMaterialDia(String Fecha, String Tipo)
         {
-            List<int> indicador =  ConsultaResumen.LeerCantMaterialDia(Fecha, Tipo);
+            List<int> indicador = ConsultaResumen.LeerCantMaterialDia(Fecha, Tipo);
 
             double porcentaje = 0;
             int cantMaterial = 0;
@@ -90,7 +88,7 @@ namespace ViaWines_Automatizacion.Controllers
             {
                 cantOrdenes = indicador[0];
                 total = indicador[1];
-                if(total!=0)
+                if (total != 0)
                 {
                     porcentaje = (double)((cantOrdenes * 100.0) / total);
                 }
@@ -98,7 +96,7 @@ namespace ViaWines_Automatizacion.Controllers
                 {
                     porcentaje = 0;
                 }
-                
+
             }
 
             var datosOrdenes = new
@@ -113,7 +111,7 @@ namespace ViaWines_Automatizacion.Controllers
         public JsonResult getOrdenes(String fecha)
         {
             List<Orden> ordenes = ConsultaResumen.LeerOrdenes(fecha);
-            if(ordenes!=null)
+            if (ordenes != null)
             {
                 return Json(ordenes);
             }

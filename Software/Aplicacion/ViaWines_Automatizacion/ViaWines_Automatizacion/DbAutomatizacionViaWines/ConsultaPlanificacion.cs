@@ -1,10 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using ViaWines_Automatizacion.Controllers;
 using ViaWines_Automatizacion.Models;
 
 namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
@@ -16,7 +12,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             try
             {
                 String PA = null;
-                switch(opcion)
+                switch (opcion)
                 {
                     case 1:
                         PA = "Leer_Ordenes_Del_Día_Abierta";
@@ -27,7 +23,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                     default:
                         DateTime fechaConsulta = Convert.ToDateTime(fecha).Date;
                         DateTime fechaActual = DateTime.Now.Date;
-                        if (fechaConsulta<=fechaActual)
+                        if (fechaConsulta <= fechaActual)
                         {
                             PA = "Leer_Ordenes_Del_Día";
                         }
@@ -78,7 +74,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                             orden.BotellasFabricadas = CantBotellas;
                         }
 
-                        if (CantCajas!=-1)
+                        if (CantCajas != -1)
                         {
                             orden.CajasFabricadas = CantCajas;
                             orden.PorcentajeAvance = Math.Round((double)((CantCajas * 100.0) / orden.CajasPlanificadas), 2);
@@ -97,7 +93,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
             return null;
         }
 
-        
+
 
         public static int LeerCantCajas(String Fecha, int OrdenFabricacion)
         {
@@ -116,7 +112,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                         var prodData = row;
                         cantCajas = Convert.ToInt32(prodData["cantCajas"]);
                     }
-                    
+
                 }
                 return cantCajas;
 
@@ -172,7 +168,7 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                 {
                     var prodData = datos.Tables[0].Rows[0];
                     int refOrden = Convert.ToInt32(prodData["refOrden"]);
-                    if(refOrden==OrdenFabricacion)
+                    if (refOrden == OrdenFabricacion)
                     {
                         validar = true;
                     }
@@ -223,11 +219,11 @@ namespace ViaWines_Automatizacion.DbAutomatizacionViaWines
                     return fechas;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
-            
+
             return null;
         }
     }

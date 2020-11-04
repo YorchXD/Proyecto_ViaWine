@@ -1,11 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using ViaWines_Automatizacion.Controllers;
 using ViaWines_Automatizacion.Models;
 
 namespace ViaWines_Automatizacion.DbAutomatizacionViaWines

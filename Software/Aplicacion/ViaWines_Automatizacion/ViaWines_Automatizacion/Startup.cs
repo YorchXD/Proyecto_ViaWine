@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -52,7 +47,7 @@ namespace ViaWines_Automatizacion
                 options.EnableEndpointRouting = false;
             });
 
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,8 +75,9 @@ namespace ViaWines_Automatizacion
             {
                 routes.MapRoute(
                     name: "default",
+                    //template: "{controller=Usuario}/{action=ClaveTemporal}/{id?}");
                     template: "{controller=Usuario}/{action=Login}/{id?}");
-                //template: "{controller=Resumen}/{action=Resumen}/{id?}");
+                    //template: "{controller=Resumen}/{action=Resumen}/{id?}");
             });
         }
     }
